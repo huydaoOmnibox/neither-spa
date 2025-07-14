@@ -1,0 +1,232 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap');
+
+@layer components {
+  .all-\[unset\] {
+    all: unset;
+  }
+}
+
+:root {
+  --app-primary: rgba(66, 42, 60, 1);
+  --gray: rgba(85, 85, 85, 1);
+  --main-text: rgba(66, 42, 60, 1);
+  --title: rgba(66, 42, 60, 1);
+  font-family: "Montserrat", system-ui, -apple-system, sans-serif;
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 351 100% 98%;
+    --foreground: 330 30% 15%;
+
+    --muted: 351 60% 95%;
+    --muted-foreground: 330 15% 45%;
+
+    --popover: 351 100% 98%;
+    --popover-foreground: 330 30% 15%;
+
+    --border: 351 40% 90%;
+    --input: 351 40% 90%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 330 30% 15%;
+
+    --primary: 348 83% 81%;
+    --primary-foreground: 330 30% 15%;
+
+    --secondary: 351 60% 95%;
+    --secondary-foreground: 330 30% 15%;
+
+    --accent: 351 60% 95%;
+    --accent-foreground: 330 30% 15%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 210 40% 98%;
+
+    --ring: 348 83% 81%;
+
+    --radius: 1rem;
+  }
+
+  .dark {
+    --background: 330 30% 8%;
+    --foreground: 351 100% 95%;
+
+    --muted: 330 20% 15%;
+    --muted-foreground: 351 30% 65%;
+
+    --accent: 330 25% 18%;
+    --accent-foreground: 351 100% 95%;
+
+    --popover: 330 30% 8%;
+    --popover-foreground: 351 100% 95%;
+
+    --border: 330 25% 18%;
+    --input: 330 25% 18%;
+
+    --card: 330 25% 12%;
+    --card-foreground: 351 100% 95%;
+
+    --primary: 348 83% 81%;
+    --primary-foreground: 330 30% 8%;
+
+    --secondary: 330 20% 15%;
+    --secondary-foreground: 351 100% 95%;
+
+    --destructive: 0 63% 31%;
+    --destructive-foreground: 210 40% 98%;
+
+    --ring: 348 83% 81%;
+
+    --radius: 1rem;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+}
+
+@layer utilities {
+  .animate-float {
+    animation: float 3s ease-in-out infinite;
+  }
+  
+  .animate-bounce-gentle {
+    animation: bounce-gentle 2s infinite;
+  }
+  
+  .animate-pulse-gentle {
+    animation: pulse-gentle 2s infinite;
+  }
+  
+  .animate-shimmer {
+    animation: shimmer 2s infinite;
+  }
+  
+  .animate-fade-in-up {
+    animation: fade-in-up 0.8s ease-out forwards;
+  }
+  
+  .animate-blob {
+    animation: blob 7s infinite;
+  }
+  
+  .animate-pulse-slow {
+    animation: pulse-slow 4s ease-in-out infinite;
+  }
+  
+  .animate-twinkle {
+    animation: twinkle 2s ease-in-out infinite;
+  }
+  
+  .bg-gradient-radial {
+    background: radial-gradient(circle, var(--tw-gradient-stops));
+  }
+  
+  .animation-delay-200 {
+    animation-delay: 200ms;
+  }
+  
+  .animation-delay-400 {
+    animation-delay: 400ms;
+  }
+  
+  .animation-delay-1000 {
+    animation-delay: 1000ms;
+  }
+  
+  .animation-delay-1500 {
+    animation-delay: 1500ms;
+  }
+  
+  .animation-delay-2000 {
+    animation-delay: 2000ms;
+  }
+  
+  .animation-delay-3000 {
+    animation-delay: 3000ms;
+  }
+  
+  .animation-delay-4000 {
+    animation-delay: 4000ms;
+  }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes bounce-gentle {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+@keyframes pulse-gentle {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.8; transform: scale(1.05); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200px 0; }
+  100% { background-position: calc(200px + 100%) 0; }
+}
+
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes blob {
+  0% {
+    transform: translate(0px, 0px) scale(1);
+  }
+  33% {
+    transform: translate(30px, -50px) scale(1.1);
+  }
+  66% {
+    transform: translate(-20px, 20px) scale(0.9);
+  }
+  100% {
+    transform: translate(0px, 0px) scale(1);
+  }
+}
+
+@keyframes pulse-slow {
+  0%, 100% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(1.1);
+  }
+}
+
+@keyframes twinkle {
+  0%, 100% {
+    opacity: 0.2;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+}

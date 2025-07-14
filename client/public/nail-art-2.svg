@@ -1,0 +1,39 @@
+<svg width="200" height="250" viewBox="0 0 200 250" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="200" height="250" fill="url(#grad2)" rx="15"/>
+  
+  <!-- Multiple nails -->
+  <ellipse cx="60" cy="180" rx="20" ry="35" fill="#fdf2f8" stroke="#ec4899" stroke-width="1.5"/>
+  <ellipse cx="100" cy="170" rx="22" ry="40" fill="#fdf2f8" stroke="#ec4899" stroke-width="1.5"/>
+  <ellipse cx="140" cy="180" rx="20" ry="35" fill="#fdf2f8" stroke="#ec4899" stroke-width="1.5"/>
+  
+  <!-- Ombre effect -->
+  <ellipse cx="60" cy="200" rx="18" ry="15" fill="#f472b6" opacity="0.3"/>
+  <ellipse cx="100" cy="195" rx="20" ry="18" fill="#f472b6" opacity="0.3"/>
+  <ellipse cx="140" cy="200" rx="18" ry="15" fill="#f472b6" opacity="0.3"/>
+  
+  <!-- Nail art patterns -->
+  <circle cx="100" cy="160" r="2" fill="#ec4899"/>
+  <circle cx="95" cy="170" r="1.5" fill="#f472b6"/>
+  <circle cx="105" cy="175" r="1.5" fill="#f472b6"/>
+  
+  <!-- Glitter effect -->
+  <circle cx="65" cy="170" r="1" fill="#fbbf24" opacity="0.8"/>
+  <circle cx="135" cy="165" r="1" fill="#fbbf24" opacity="0.8"/>
+  <circle cx="58" cy="185" r="0.8" fill="#fbbf24" opacity="0.6"/>
+  <circle cx="142" cy="185" r="0.8" fill="#fbbf24" opacity="0.6"/>
+  
+  <!-- Polish bottles -->
+  <rect x="30" y="40" width="12" height="25" fill="#ec4899" rx="2"/>
+  <rect x="28" y="35" width="16" height="8" fill="#64748b" rx="3"/>
+  
+  <rect x="160" y="45" width="10" height="20" fill="#f472b6" rx="2"/>
+  <rect x="158" y="40" width="14" height="7" fill="#64748b" rx="2"/>
+  
+  <defs>
+    <linearGradient id="grad2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#fef7ff"/>
+      <stop offset="100%" style="stop-color:#fdf2f8"/>
+    </linearGradient>
+  </defs>
+</svg>
