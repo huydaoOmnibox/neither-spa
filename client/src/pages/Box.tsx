@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Heart, Sparkles, Star, MapPin, Phone, Mail, Clock, Menu, X, CheckCircle } from "lucide-react";
+import { Heart, Sparkles, Star, MapPin, Phone, Mail, Clock, Menu, X, CheckCircle, Instagram, Facebook } from "lucide-react";
 import { Link } from "wouter";
 import logoPath from "@assets/image_1752511415001.png";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -118,7 +118,9 @@ export const Box = (): JSX.Element => {
         title: "GESTYLED DOOR ONS, GEDRAGEN DOOR JOU",
         subtitle: "Echte klanten, echte resultaten",
         tagUs: "Tag ons @nailsofthenetherlands om in beeld te komen!",
-        followUs: "VOLG ONS"
+        followUs: "VOLG ONS",
+        instagram: "Volg op Instagram",
+        facebook: "Volg op Facebook"
       },
       testimonials: {
         title: "KLANTENFEEDBACK",
@@ -242,7 +244,9 @@ export const Box = (): JSX.Element => {
         title: "STYLED BY US, WORN BY YOU",
         subtitle: "Real clients, real results",
         tagUs: "Tag us @nailsofthenetherlands to be featured!",
-        followUs: "FOLLOW US"
+        followUs: "FOLLOW US",
+        instagram: "Follow on Instagram",
+        facebook: "Follow on Facebook"
       },
       testimonials: {
         title: "CUSTOMER FEEDBACK",
@@ -362,7 +366,7 @@ export const Box = (): JSX.Element => {
               
               {/* Language Flags */}
               <div className="flex items-center space-x-2">
-                <button 
+              <button 
                   onClick={() => setCurrentLanguage('en')}
                   className={`w-8 h-8 rounded-full overflow-hidden border-2 transition-all duration-200 hover:scale-110 ${
                     currentLanguage === 'en' ? 'border-beige-500 shadow-md' : 'border-gray-300 hover:border-beige-400'
@@ -376,8 +380,8 @@ export const Box = (): JSX.Element => {
                     <path d="M30 0V40M0 20H60" stroke="white" strokeWidth="12"/>
                     <path d="M30 0V40M0 20H60" stroke="#C8102E" strokeWidth="8"/>
                   </svg>
-                </button>
-                <button 
+              </button>
+              <button 
                   onClick={() => setCurrentLanguage('nl')}
                   className={`w-8 h-8 rounded-full overflow-hidden border-2 transition-all duration-200 hover:scale-110 ${
                     currentLanguage === 'nl' ? 'border-beige-500 shadow-md' : 'border-gray-300 hover:border-beige-400'
@@ -389,7 +393,7 @@ export const Box = (): JSX.Element => {
                     <rect y="13.33" width="60" height="13.33" fill="white"/>
                     <rect y="26.66" width="60" height="13.34" fill="#21468B"/>
                   </svg>
-                </button>
+              </button>
               </div>
             </div>
 
@@ -423,20 +427,20 @@ export const Box = (): JSX.Element => {
                   </button>
                 </Link>
                 <Link href="/gallery">
-                  <button 
+                <button 
                     onClick={() => setMobileMenuOpen(false)}
                     className="text-beige-700 dark:text-beige-300 hover:text-beige-500 dark:hover:text-beige-400 font-medium text-left transition-colors duration-200"
-                  >
+                >
                     {t.nav.gallery}
-                  </button>
+                </button>
                 </Link>
                 <Link href="/products">
-                  <button 
+                <button 
                     onClick={() => setMobileMenuOpen(false)}
                     className="text-beige-700 dark:text-beige-300 hover:text-beige-500 dark:hover:text-beige-400 font-medium text-left transition-colors duration-200"
-                  >
+                >
                     {t.nav.products}
-                  </button>
+                </button>
                 </Link>
                 <Link href="/contact">
                   <button 
@@ -505,8 +509,8 @@ export const Box = (): JSX.Element => {
               <img 
                 src={image}
                 alt={`Luxury nail spa background ${index + 1}`} 
-                className="w-full h-full object-cover"
-              />
+            className="w-full h-full object-cover"
+          />
             </div>
           ))}
         </div>
@@ -935,97 +939,97 @@ export const Box = (): JSX.Element => {
             )}
 
             {activeTab === 'pricing' && (
-              <div className="space-y-8">
-                <div className="grid md:grid-cols-2 gap-12 items-start">
-                  <div className="space-y-6">
-                    <Card className="bg-white dark:bg-gray-800 border-none shadow-2xl hover:shadow-3xl transition-all duration-300 hover:scale-102">
+            <div className="space-y-8">
+              <div className="grid md:grid-cols-2 gap-12 items-start">
+                <div className="space-y-6">
+                  <Card className="bg-white dark:bg-gray-800 border-none shadow-2xl hover:shadow-3xl transition-all duration-300 hover:scale-102">
                       <CardHeader className="bg-gradient-to-r from-beige-500 to-beige-600 text-white rounded-t-xl">
                         <CardTitle className="text-2xl font-bold text-center">{t.servicesSection.nailCare}</CardTitle>
-                      </CardHeader>
-                      <CardContent className="p-6">
-                        <div className="space-y-4">
+                    </CardHeader>
+                    <CardContent className="p-6">
+                      <div className="space-y-4">
                           <div className="flex justify-between items-center py-3 border-b border-beige-200 dark:border-gray-600">
-                            <div>
+                          <div>
                               <span className="text-beige-700 dark:text-beige-300 font-medium">{t.servicesSection.newAcryl}</span>
                               <p className="text-sm text-gray-500 dark:text-gray-400">{t.servicesSection.newAcrylDesc}</p>
-                            </div>
-                            <Badge className="bg-beige-500 text-white text-lg px-3 py-1">€30</Badge>
                           </div>
+                            <Badge className="bg-beige-500 text-white text-lg px-3 py-1">€30</Badge>
+                        </div>
                           <div className="flex justify-between items-center py-3 border-b border-beige-200 dark:border-gray-600">
-                            <div>
+                          <div>
                               <span className="text-beige-700 dark:text-beige-300 font-medium">{t.servicesSection.fillAcryl}</span>
                               <p className="text-sm text-gray-500 dark:text-gray-400">{t.servicesSection.fillAcrylDesc}</p>
-                            </div>
-                            <Badge className="bg-beige-500 text-white text-lg px-3 py-1">€35</Badge>
                           </div>
+                            <Badge className="bg-beige-500 text-white text-lg px-3 py-1">€35</Badge>
+                        </div>
                           <div className="flex justify-between items-center py-3 border-b border-beige-200 dark:border-gray-600">
-                            <div>
+                          <div>
                               <span className="text-beige-700 dark:text-beige-300 font-medium">{t.servicesSection.ombreFrench}</span>
                               <p className="text-sm text-gray-500 dark:text-gray-400">{t.servicesSection.ombreFrenchDesc}</p>
-                            </div>
-                            <Badge className="bg-beige-500 text-white text-lg px-3 py-1">€45</Badge>
                           </div>
+                            <Badge className="bg-beige-500 text-white text-lg px-3 py-1">€45</Badge>
+                        </div>
                           <div className="flex justify-between items-center py-3 border-b border-beige-200 dark:border-gray-600">
-                            <div>
+                          <div>
                               <span className="text-beige-700 dark:text-beige-300 font-medium">{t.servicesSection.pedicureShellac}</span>
                               <p className="text-sm text-gray-500 dark:text-gray-400">{t.servicesSection.pedicureShellacDesc}</p>
-                            </div>
-                            <Badge className="bg-beige-500 text-white text-lg px-3 py-1">€15</Badge>
                           </div>
-                          <div className="flex justify-between items-center py-3">
-                            <div>
+                            <Badge className="bg-beige-500 text-white text-lg px-3 py-1">€15</Badge>
+                        </div>
+                        <div className="flex justify-between items-center py-3">
+                          <div>
                               <span className="text-beige-700 dark:text-beige-300 font-medium">{t.servicesSection.manicureShellac}</span>
                               <p className="text-sm text-gray-500 dark:text-gray-400">{t.servicesSection.manicureShellacDesc}</p>
-                            </div>
-                            <Badge className="bg-beige-500 text-white text-lg px-3 py-1">+€5</Badge>
                           </div>
+                            <Badge className="bg-beige-500 text-white text-lg px-3 py-1">+€5</Badge>
                         </div>
-                      </CardContent>
-                    </Card>
+                      </div>
+                    </CardContent>
+                  </Card>
 
                     <Card className="bg-gradient-to-br from-beige-500 to-beige-600 text-white border-none shadow-2xl">
-                      <CardContent className="p-6 text-center">
+                    <CardContent className="p-6 text-center">
                         <h3 className="text-2xl font-bold mb-4">{t.servicesSection.specialPackage}</h3>
                         <p className="text-beige-100 mb-4">
                           {t.servicesSection.specialDesc}
-                        </p>
-                        <div className="flex items-center justify-center space-x-2 mb-4">
+                      </p>
+                      <div className="flex items-center justify-center space-x-2 mb-4">
                           <span className="text-lg line-through opacity-70"></span>
                           <span className="text-3xl font-bold">Public Soon</span>
-                        </div>
+                      </div>
                         <Button className="bg-white text-beige-500 hover:bg-beige-50 font-semibold px-6 py-2 rounded-full transition-all duration-300 hover:scale-105">
                           {t.servicesSection.bookSave}
-                        </Button>
-                      </CardContent>
-                    </Card>
-                  </div>
-
-                  <div className="space-y-6">
-                    <div className="relative animate-fade-in-up">
+                      </Button>
+                    </CardContent>
+                  </Card>
+                </div>
+                
+                <div className="space-y-6">
+                  <div className="relative animate-fade-in-up">
                       <div className="w-full h-80 bg-gradient-to-br from-beige-200 to-beige-300 rounded-3xl shadow-2xl overflow-hidden">
-                        <img 
+                      <img 
                           src={NO_IMAGE} 
-                          alt="Elegant spa room with modern décor and relaxing ambiance" 
-                          className="w-full h-full object-cover"
-                        />
-                        {/* Elegant overlay with spa room details */}
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
-                        <div className="absolute bottom-6 left-6 text-white">
+                        alt="Elegant spa room with modern décor and relaxing ambiance" 
+                        className="w-full h-full object-cover"
+                      />
+                      {/* Elegant overlay with spa room details */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+                      <div className="absolute bottom-6 left-6 text-white">
                           <h3 className="text-2xl font-bold mb-2 drop-shadow-lg">Title</h3>
                           <p className="text-beige-100 drop-shadow-md">Sub-Title</p>
-                        </div>
                       </div>
                     </div>
+                  </div>
 
-                    <div className="text-center">
+                  <div className="text-center">
                       <Button className="bg-gradient-to-r from-beige-500 to-beige-600 hover:from-beige-600 hover:to-beige-700 text-white px-12 py-4 rounded-full text-lg font-semibold transition-all duration-300 hover:scale-105 shadow-2xl">
-                        <Clock className="w-5 h-5 mr-2" />
-                        BOOK APPOINTMENT
-                      </Button>
-                    </div>
+                      <Clock className="w-5 h-5 mr-2" />
+                      BOOK APPOINTMENT
+                    </Button>
                   </div>
                 </div>
               </div>
+            </div>
             )}
           </div>
         </div>
@@ -1256,10 +1260,24 @@ export const Box = (): JSX.Element => {
           </div>
           
           <div className="text-center mt-12">
-            <p className="text-beige-600 dark:text-beige-400 mb-6">{t.styledBy.tagUs}</p>
-            <Button className="bg-beige-500 hover:bg-beige-600 text-white px-8 py-3 rounded-full font-semibold">
-              {t.styledBy.followUs}
-            </Button>
+            <p className="text-beige-600 dark:text-beige-400 mb-4">{t.styledBy.tagUs}</p>
+            <h3 className="text-xl font-bold text-beige-800 dark:text-beige-200 mb-2">{t.styledBy.followUs}</h3>
+            <div className="flex justify-center gap-4">
+              <Button
+                onClick={() => window.open('https://www.instagram.com/nailsofthenetherlands/', '_blank')}
+                className="bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white p-3 rounded-full transition-all duration-300 hover:scale-110 hover:shadow-lg"
+                title="Follow on Instagram"
+              >
+                <Instagram className="w-6 h-6" />
+              </Button>
+              <Button
+                onClick={() => window.open('https://www.facebook.com/share/199bqR8uAA/?mibextid=wwXIfr', '_blank')}
+                className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white p-3 rounded-full transition-all duration-300 hover:scale-110 hover:shadow-lg"
+                title="Follow on Facebook"
+              >
+                <Facebook className="w-6 h-6" />
+              </Button>
+            </div>
           </div>
         </div>
       </section>
@@ -1323,7 +1341,7 @@ export const Box = (): JSX.Element => {
               <div className="space-y-3">
                 <div className="flex items-center gap-3">
                   <Mail className="w-5 h-5" />
-                  <span className="text-beige-200">info@nailsnetherlands.nl</span>
+                  <span className="text-beige-200">nailofthenetherlands@gmail.com</span>
                 </div>
                 <div className="flex items-center gap-3">
                   <Phone className="w-5 h-5" />

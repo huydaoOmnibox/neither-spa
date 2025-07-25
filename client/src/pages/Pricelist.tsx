@@ -638,8 +638,8 @@ export const Pricelist = (): JSX.Element => {
                 <div className="space-y-3">
                   {priceData.gellak.map((item, index) => (
                     <div key={index} className="flex justify-between items-center py-2 border-b border-beige-200 dark:border-gray-600 last:border-b-0">
-                      <span className="text-gray-700 dark:text-gray-300">{t.services[item.service as keyof typeof t.services]}</span>
-                      <Badge className="bg-beige-500 text-white font-semibold">{item.price}</Badge>
+                      <span className="text-gray-700 dark:text-gray-300 flex-1 pr-4">{t.services[item.service as keyof typeof t.services]}</span>
+                      <Badge className="bg-beige-500 text-white font-semibold whitespace-nowrap">{item.price}</Badge>
                     </div>
                   ))}
                 </div>
@@ -658,8 +658,8 @@ export const Pricelist = (): JSX.Element => {
                 <div className="space-y-3">
                   {priceData.biab.map((item, index) => (
                     <div key={index} className="flex justify-between items-center py-2 border-b border-beige-200 dark:border-gray-600 last:border-b-0">
-                      <span className="text-gray-700 dark:text-gray-300">{t.services[item.service as keyof typeof t.services]}</span>
-                      <Badge className="bg-beige-500 text-white font-semibold">{item.price}</Badge>
+                      <span className="text-gray-700 dark:text-gray-300 flex-1 pr-4">{t.services[item.service as keyof typeof t.services]}</span>
+                      <Badge className="bg-beige-500 text-white font-semibold whitespace-nowrap">{item.price}</Badge>
                     </div>
                   ))}
                 </div>
@@ -678,8 +678,8 @@ export const Pricelist = (): JSX.Element => {
                 <div className="space-y-3">
                   {priceData.pedicure.map((item, index) => (
                     <div key={index} className="flex justify-between items-center py-2 border-b border-beige-200 dark:border-gray-600 last:border-b-0">
-                      <span className="text-gray-700 dark:text-gray-300">{t.services[item.service as keyof typeof t.services]}</span>
-                      <Badge className="bg-beige-500 text-white font-semibold">{item.price}</Badge>
+                      <span className="text-gray-700 dark:text-gray-300 flex-1 pr-4">{t.services[item.service as keyof typeof t.services]}</span>
+                      <Badge className="bg-beige-500 text-white font-semibold whitespace-nowrap">{item.price}</Badge>
                     </div>
                   ))}
                 </div>
@@ -698,8 +698,8 @@ export const Pricelist = (): JSX.Element => {
                 <div className="space-y-3">
                   {priceData.gelBuilder.map((item, index) => (
                     <div key={index} className="flex justify-between items-center py-2 border-b border-beige-200 dark:border-gray-600 last:border-b-0">
-                      <span className="text-gray-700 dark:text-gray-300">{t.services[item.service as keyof typeof t.services]}</span>
-                      <Badge className="bg-beige-500 text-white font-semibold">{item.price}</Badge>
+                      <span className="text-gray-700 dark:text-gray-300 flex-1 pr-4">{t.services[item.service as keyof typeof t.services]}</span>
+                      <Badge className="bg-beige-500 text-white font-semibold whitespace-nowrap">{item.price}</Badge>
                     </div>
                   ))}
                 </div>
@@ -718,8 +718,8 @@ export const Pricelist = (): JSX.Element => {
                 <div className="space-y-3">
                   {priceData.acrylic.map((item, index) => (
                     <div key={index} className="flex justify-between items-center py-2 border-b border-beige-200 dark:border-gray-600 last:border-b-0">
-                      <span className="text-gray-700 dark:text-gray-300">{t.services[item.service as keyof typeof t.services]}</span>
-                      <Badge className="bg-beige-500 text-white font-semibold">{item.price}</Badge>
+                      <span className="text-gray-700 dark:text-gray-300 flex-1 pr-4">{t.services[item.service as keyof typeof t.services]}</span>
+                      <Badge className="bg-beige-500 text-white font-semibold whitespace-nowrap">{item.price}</Badge>
                     </div>
                   ))}
                 </div>
@@ -738,8 +738,8 @@ export const Pricelist = (): JSX.Element => {
                 <div className="space-y-3">
                   {priceData.other.map((item, index) => (
                     <div key={index} className="flex justify-between items-center py-2 border-b border-beige-200 dark:border-gray-600 last:border-b-0">
-                      <span className="text-gray-700 dark:text-gray-300">{t.services[item.service as keyof typeof t.services]}</span>
-                      <Badge className="bg-beige-500 text-white font-semibold">{item.price}</Badge>
+                      <span className="text-gray-700 dark:text-gray-300 flex-1 pr-4">{t.services[item.service as keyof typeof t.services]}</span>
+                      <Badge className="bg-beige-500 text-white font-semibold whitespace-nowrap">{item.price}</Badge>
                     </div>
                   ))}
                 </div>

@@ -418,15 +418,15 @@ export const Contact = (): JSX.Element => {
                 {/* Email */}
                 <Card className="border-none shadow-lg hover:shadow-xl transition-all duration-300">
                   <CardContent className="p-6">
-                    <div className="flex items-center gap-3">
-                      <div className="bg-beige-100 p-2 rounded-full">
+                    <div className="flex items-start gap-3">
+                      <div className="bg-beige-100 p-2 rounded-full flex-shrink-0">
                         <Mail className="w-5 h-5 text-beige-600" />
                       </div>
-                      <div>
+                      <div className="min-w-0">
                         <h3 className="font-semibold text-beige-800 dark:text-beige-200 text-sm">
                           {t.contactInfo.email.title}
                         </h3>
-                        <p className="text-gray-600 dark:text-gray-300 text-sm">
+                        <p className="text-gray-600 dark:text-gray-300 text-sm break-all">
                           {t.contactInfo.email.address}
                         </p>
                       </div>
