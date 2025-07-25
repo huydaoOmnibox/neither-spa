@@ -46,9 +46,9 @@ export const Box = (): JSX.Element => {
        },
       safety: {
         title: "JE BENT IN\nVEILIGE HANDEN",
-        description1: "Onze gediplomeerde nageltechnici gebruiken alleen de hoogste kwaliteit, gesteriliseerde gereedschappen en premium producten. Wij hanteren de strengste hygiënenormen om uw veiligheid en welzijn te waarborgen.",
+        description1: "Onze gediplomeerde nageltechnici gebruiken alleen de hoogste kwaliteit, gesteriliseerde gereedschappen en hoogwaardig producten. Wij hanteren de strengste hygiënenormen om uw veiligheid en welzijn te waarborgen.",
         description2: "Van ons ziekenhuiswaardige sterilisatieproces tot onze milieuvriendelijke nagellakken, elk detail wordt zorgvuldig overwogen voor uw gezondheid en het milieu.",
-        licensed: "Gelicentieerd & Gecertificeerd",
+        licensed: "Gediplomeerd & Gecertificeerd",
         licensedDesc: "Al onze technici zijn professioneel opgeleid en gecertificeerd",
         experience: "Jaar Ervaring"
       },
