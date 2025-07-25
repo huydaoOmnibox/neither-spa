@@ -5,12 +5,13 @@ import { Badge } from "@/components/ui/badge";
 import { Heart, Sparkles, Star, MapPin, Phone, Mail, Clock, Menu, X, CheckCircle } from "lucide-react";
 import { Link } from "wouter";
 import logoPath from "@assets/image_1752511415001.png";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export const Box = (): JSX.Element => {
   const [activeTab, setActiveTab] = useState<'services' | 'pricing'>('services');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const [currentLanguage, setCurrentLanguage] = useState<'nl' | 'en'>('nl');
+  const { currentLanguage, setCurrentLanguage } = useLanguage();
 
   // Translation content
   const translations = {
@@ -330,9 +331,9 @@ export const Box = (): JSX.Element => {
               >
                 {t.nav.home}
               </button>
-              <Link href="/products">
+              <Link href="/pricelist">
                 <button className="text-beige-700 dark:text-beige-300 hover:text-beige-500 dark:hover:text-beige-400 font-medium transition-colors duration-200">
-                  {t.nav.products}
+                  {t.nav.pricelist}
                 </button>
               </Link>
               <Link href="/gallery">
@@ -340,9 +341,9 @@ export const Box = (): JSX.Element => {
                   {t.nav.gallery}
                 </button>
               </Link>
-              <Link href="/pricelist">
+              <Link href="/products">
                 <button className="text-beige-700 dark:text-beige-300 hover:text-beige-500 dark:hover:text-beige-400 font-medium transition-colors duration-200">
-                  {t.nav.pricelist}
+                  {t.nav.products}
                 </button>
               </Link>
               <Link href="/contact">
@@ -412,12 +413,12 @@ export const Box = (): JSX.Element => {
                 >
                   {t.nav.home}
                 </button>
-                <Link href="/products">
+                <Link href="/pricelist">
                   <button 
                     onClick={() => setMobileMenuOpen(false)}
                     className="text-beige-700 dark:text-beige-300 hover:text-beige-500 dark:hover:text-beige-400 font-medium text-left transition-colors duration-200"
                   >
-                    {t.nav.products}
+                    {t.nav.pricelist}
                   </button>
                 </Link>
                 <Link href="/gallery">
@@ -428,18 +429,12 @@ export const Box = (): JSX.Element => {
                     {t.nav.gallery}
                   </button>
                 </Link>
-                <button 
-                  onClick={() => scrollToSection('pricing')}
-                  className="text-beige-700 dark:text-beige-300 hover:text-beige-500 dark:hover:text-beige-400 font-medium text-left transition-colors duration-200"
-                >
-                  {t.nav.pricing}
-                </button>
-                <Link href="/pricelist">
+                <Link href="/products">
                   <button 
                     onClick={() => setMobileMenuOpen(false)}
                     className="text-beige-700 dark:text-beige-300 hover:text-beige-500 dark:hover:text-beige-400 font-medium text-left transition-colors duration-200"
                   >
-                    {t.nav.pricelist}
+                    {t.nav.products}
                   </button>
                 </Link>
                 <Link href="/contact">

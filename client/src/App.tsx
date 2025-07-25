@@ -10,6 +10,7 @@ import { Products } from "@/pages/Products";
 import { Gallery } from "@/pages/Gallery";
 import { Pricelist } from "@/pages/Pricelist";
 import { Contact } from "@/pages/Contact";
+import { LanguageProvider } from "@/contexts/LanguageContext";
 
 function Router() {
   return (
@@ -30,8 +31,10 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
-        <Toaster />
-        <Router />
+        <LanguageProvider>
+          <Toaster />
+          <Router />
+        </LanguageProvider>
       </TooltipProvider>
     </QueryClientProvider>
   );
