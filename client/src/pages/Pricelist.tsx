@@ -107,52 +107,64 @@ export const Pricelist = (): JSX.Element => {
         babyboom: "Babyboom"
       },
       detailedServices: {
-        premiumNail: {
-          title: "Premium Nagelzorg",
-          subtitle: "Complete Nageltransformatie",
-          description: "Ervaar onze kenmerkende nagelzorgservice met professionele manicures, nagelkunstontwerpen en langdurige gelapplicaties. Onze bekwame technici gebruiken premium producten om ervoor te zorgen dat uw nagels er vlekkeloos en gezond uitzien.",
+        nailCare: {
+          title: "Nagelzorg",
+          subtitle: "Professionele verzorging voor natuurlijke nagels",
+          description: "Uitgebreide nagelzorg met focus op de gezondheid en schoonheid van uw natuurlijke nagels. Van basis manicure tot gellak behandelingen, wij zorgen voor het beste resultaat.",
           features: [
-            "Nagelvorm geven en nagelriemverzorging",
-            "Handmassage en hydraterende behandeling",
-            "Keuze uit gewone lak of gelapplicatie",
-            "Op maat gemaakte nagelkunstontwerpen beschikbaar",
-            "Nagelversterkende behandelingen"
+            "Professionele manicure behandelingen",
+            "Gellak applicaties",
+            "Nagelversterking",
+            "Nagelriem verzorging",
+            "Handverzorging en massage"
           ]
         },
-        luxuryPedicure: {
-          title: "Luxe Pedicure Spa",
-          subtitle: "Ontspanning voor Uw Voeten",
-          description: "Geniet van onze luxueuze pedicure-ervaring met voetbad, scrub en massage. Perfect voor vermoeide voeten die verwenning en professionele zorg nodig hebben in een ontspannende spa-omgeving.",
+        footCare: {
+          title: "Voetverzorging",
+          subtitle: "Complete pedicure en voetverzorging",
+          description: "Uitgebreide voetverzorging voor gezonde en verzorgde voeten. Onze pedicure behandelingen combineren professionele zorg met ontspanning.",
           features: [
-            "Warm voetbad met essentiële oliën",
-            "Eeltverwijdering en scrub",
-            "Ontspannende voet- en beenmassage",
-            "Teennagel vormen en lakken",
-            "Hydraterende behandeling"
+            "Professionele pedicure",
+            "Eeltverwijdering",
+            "Voetmassage",
+            "Nagelverzorging",
+            "Gellak voor teennagels"
           ]
         },
-        eyelashExtensions: {
-          title: "Wimperextensies",
-          subtitle: "Mooie, Dramatische Wimpers",
-          description: "Versterk uw natuurlijke schoonheid met onze professionele wimperextensie service. Kies uit klassieke, volume of mega volume wimpers voor een prachtig, langdurig resultaat dat de behoefte aan mascara wegneemt.",
+        acrylGel: {
+          title: "Acryl/Gel",
+          subtitle: "Kunstnagels en verlengingen",
+          description: "Professionele kunstnagels met acryl of gel systemen. Perfect voor sterke, duurzame en natuurlijk ogende nagels met de gewenste lengte en vorm.",
           features: [
-            "Individuele wimperapplicatie",
-            "Keuze uit krul, lengte en dikte",
-            "Natuurlijke of dramatische volume opties",
-            "Wimperveilige lijm",
-            "Nazorg instructies inbegrepen"
+            "Nieuwe sets acryl of gel",
+            "Navullingen",
+            "French manicure optie",
+            "Natuurlijke look mogelijk",
+            "Reparaties en onderhoud"
           ]
         },
-        professionalWaxing: {
-          title: "Professioneel Harsen",
-          subtitle: "Gladde, Haarvrije Huid",
-          description: "Ervaar zachte maar effectieve haarverwijdering met onze professionele harsservices. Met gebruik van hoogwaardige warme was bieden wij comfortabele behandelingen voor verschillende lichaamsdelen met langdurige resultaten.",
+        biab: {
+          title: "BIAB",
+          subtitle: "Builder In A Bottle techniek",
+          description: "BIAB is de perfecte oplossing voor natuurlijke nagelversterking. Deze innovatieve techniek biedt bescherming en versteviging zonder de natuurlijke nagel te beschadigen.",
           features: [
-            "Premium warme was applicatie",
-            "Voor- en nabehandeling",
-            "Verschillende lichaamsdelen beschikbaar",
-            "Kalmerende nazorg producten",
-            "Professionele hygiënestandaarden"
+            "Natuurlijke versterking",
+            "Duurzame bescherming",
+            "Flexibel en sterk",
+            "Ideaal voor zwakke nagels",
+            "Makkelijk te onderhouden"
+          ]
+        },
+        nailArt: {
+          title: "Nagelkunst",
+          subtitle: "Creatieve en unieke designs",
+          description: "Laat uw nagels spreken met onze artistieke nagelkunst. Van subtiele accenten tot uitgebreide designs, wij maken uw nagelkunst wensen werkelijkheid.",
+          features: [
+            "Hand-geschilderde designs",
+            "Swarovski kristallen",
+            "Chrome en glitter effecten",
+            "Seizoensgebonden designs",
+            "Gepersonaliseerde artwork"
           ]
         }
       },
@@ -255,52 +267,64 @@ export const Pricelist = (): JSX.Element => {
         babyboom: "Baby boom"
       },
       detailedServices: {
-        premiumNail: {
-          title: "Premium Nail Care",
-          subtitle: "Complete Nail Transformation",
-          description: "Experience our signature nail care service featuring professional manicures, nail art designs, and long-lasting gel applications. Our skilled technicians use premium products to ensure your nails look flawless and healthy.",
+        nailCare: {
+          title: "Nail Care",
+          subtitle: "Professional care for natural nails",
+          description: "Comprehensive nail care focusing on the health and beauty of your natural nails. From basic manicures to gel polish treatments, we ensure the best results.",
           features: [
-            "Nail shaping and cuticle care",
-            "Hand massage and moisturizing treatment",
-            "Choice of regular polish or gel application",
-            "Custom nail art designs available",
-            "Nail strengthening treatments"
+            "Professional manicure treatments",
+            "Gel polish applications",
+            "Nail strengthening",
+            "Cuticle care",
+            "Hand care and massage"
           ]
         },
-        luxuryPedicure: {
-          title: "Luxury Pedicure Spa",
-          subtitle: "Relaxation for Your Feet",
-          description: "Indulge in our luxurious pedicure experience with foot soaking, exfoliation, and massage. Perfect for tired feet that need pampering and professional care in a relaxing spa environment.",
+        footCare: {
+          title: "Foot Care",
+          subtitle: "Complete pedicure and foot care",
+          description: "Comprehensive foot care for healthy and well-maintained feet. Our pedicure treatments combine professional care with relaxation.",
           features: [
-            "Warm foot soak with essential oils",
-            "Callus removal and exfoliation",
-            "Relaxing foot and leg massage",
-            "Toenail shaping and polish",
-            "Moisturizing treatment"
+            "Professional pedicure",
+            "Callus removal",
+            "Foot massage",
+            "Nail care",
+            "Gel polish for toenails"
           ]
         },
-        eyelashExtensions: {
-          title: "Eyelash Extensions",
-          subtitle: "Beautiful, Dramatic Lashes",
-          description: "Enhance your natural beauty with our professional eyelash extension service. Choose from classic, volume, or mega volume lashes for a stunning, long-lasting result that eliminates the need for mascara.",
+        acrylGel: {
+          title: "Acrylic/Gel",
+          subtitle: "Artificial nails and extensions",
+          description: "Professional artificial nails with acrylic or gel systems. Perfect for strong, durable, and natural-looking nails with desired length and shape.",
           features: [
-            "Individual lash application",
-            "Choice of curl, length, and thickness",
-            "Natural or dramatic volume options",
-            "Lash-safe adhesive",
-            "Aftercare instructions included"
+            "New sets acrylic or gel",
+            "Refills",
+            "French manicure option",
+            "Natural look available",
+            "Repairs and maintenance"
           ]
         },
-        professionalWaxing: {
-          title: "Professional Waxing",
-          subtitle: "Smooth, Hair-Free Skin",
-          description: "Experience gentle yet effective hair removal with our professional waxing services. Using high-quality warm wax, we provide comfortable treatments for various body areas with long-lasting results.",
+        biab: {
+          title: "BIAB",
+          subtitle: "Builder In A Bottle technique",
+          description: "BIAB is the perfect solution for natural nail strengthening. This innovative technique provides protection and reinforcement without damaging the natural nail.",
           features: [
-            "Premium warm wax application",
-            "Pre and post-treatment care",
-            "Various area options available",
-            "Soothing aftercare products",
-            "Professional hygiene standards"
+            "Natural strengthening",
+            "Durable protection",
+            "Flexible and strong",
+            "Ideal for weak nails",
+            "Easy to maintain"
+          ]
+        },
+        nailArt: {
+          title: "Nail Art",
+          subtitle: "Creative and unique designs",
+          description: "Let your nails speak with our artistic nail designs. From subtle accents to elaborate designs, we make your nail art dreams come true.",
+          features: [
+            "Hand-painted designs",
+            "Swarovski crystals",
+            "Chrome and glitter effects",
+            "Seasonal designs",
+            "Personalized artwork"
           ]
         }
       },
@@ -775,13 +799,13 @@ export const Pricelist = (): JSX.Element => {
               <div className="space-y-6">
                 <div>
                   <h3 className="text-4xl font-bold text-beige-800 dark:text-beige-200 mb-2">
-                    {t.detailedServices.premiumNail.title}
+                    {t.detailedServices.nailCare.title}
                   </h3>
                   <p className="text-xl text-beige-600 dark:text-beige-300 font-medium mb-4">
-                    {t.detailedServices.premiumNail.subtitle}
+                    {t.detailedServices.nailCare.subtitle}
                   </p>
                   <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed">
-                    {t.detailedServices.premiumNail.description}
+                    {t.detailedServices.nailCare.description}
                   </p>
                 </div>
 
@@ -791,7 +815,7 @@ export const Pricelist = (): JSX.Element => {
                     {currentLanguage === 'nl' ? "Wat is inbegrepen:" : "What's Included:"}
                   </h4>
                   <ul className="space-y-2">
-                    {t.detailedServices.premiumNail.features.map((feature, idx) => (
+                    {t.detailedServices.nailCare.features.map((feature, idx) => (
                       <li key={idx} className="flex items-center gap-3 text-gray-700 dark:text-gray-300">
                         <CheckCircle className="w-5 h-5 text-beige-500 flex-shrink-0" />
                         <span>{feature}</span>
@@ -834,13 +858,13 @@ export const Pricelist = (): JSX.Element => {
               <div className="space-y-6 lg:col-start-1 lg:row-start-1">
                 <div>
                   <h3 className="text-4xl font-bold text-beige-800 dark:text-beige-200 mb-2">
-                    {t.detailedServices.luxuryPedicure.title}
+                    {t.detailedServices.footCare.title}
                   </h3>
                   <p className="text-xl text-beige-600 dark:text-beige-300 font-medium mb-4">
-                    {t.detailedServices.luxuryPedicure.subtitle}
+                    {t.detailedServices.footCare.subtitle}
                   </p>
                   <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed">
-                    {t.detailedServices.luxuryPedicure.description}
+                    {t.detailedServices.footCare.description}
                   </p>
                 </div>
 
@@ -850,7 +874,7 @@ export const Pricelist = (): JSX.Element => {
                     {currentLanguage === 'nl' ? "Wat is inbegrepen:" : "What's Included:"}
                   </h4>
                   <ul className="space-y-2">
-                    {t.detailedServices.luxuryPedicure.features.map((feature, idx) => (
+                    {t.detailedServices.footCare.features.map((feature, idx) => (
                       <li key={idx} className="flex items-center gap-3 text-gray-700 dark:text-gray-300">
                         <CheckCircle className="w-5 h-5 text-beige-500 flex-shrink-0" />
                         <span>{feature}</span>
@@ -899,13 +923,13 @@ export const Pricelist = (): JSX.Element => {
               <div className="space-y-6">
                 <div>
                   <h3 className="text-4xl font-bold text-beige-800 dark:text-beige-200 mb-2">
-                    {t.detailedServices.eyelashExtensions.title}
+                    {t.detailedServices.acrylGel.title}
                   </h3>
                   <p className="text-xl text-beige-600 dark:text-beige-300 font-medium mb-4">
-                    {t.detailedServices.eyelashExtensions.subtitle}
+                    {t.detailedServices.acrylGel.subtitle}
                   </p>
                   <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed">
-                    {t.detailedServices.eyelashExtensions.description}
+                    {t.detailedServices.acrylGel.description}
                   </p>
                 </div>
 
@@ -915,7 +939,7 @@ export const Pricelist = (): JSX.Element => {
                     {currentLanguage === 'nl' ? "Wat is inbegrepen:" : "What's Included:"}
                   </h4>
                   <ul className="space-y-2">
-                    {t.detailedServices.eyelashExtensions.features.map((feature, idx) => (
+                    {t.detailedServices.acrylGel.features.map((feature, idx) => (
                       <li key={idx} className="flex items-center gap-3 text-gray-700 dark:text-gray-300">
                         <CheckCircle className="w-5 h-5 text-beige-500 flex-shrink-0" />
                         <span>{feature}</span>
@@ -958,13 +982,13 @@ export const Pricelist = (): JSX.Element => {
               <div className="space-y-6 lg:col-start-1 lg:row-start-1">
                 <div>
                   <h3 className="text-4xl font-bold text-beige-800 dark:text-beige-200 mb-2">
-                    {t.detailedServices.professionalWaxing.title}
+                    {t.detailedServices.biab.title}
                   </h3>
                   <p className="text-xl text-beige-600 dark:text-beige-300 font-medium mb-4">
-                    {t.detailedServices.professionalWaxing.subtitle}
+                    {t.detailedServices.biab.subtitle}
                   </p>
                   <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed">
-                    {t.detailedServices.professionalWaxing.description}
+                    {t.detailedServices.biab.description}
                   </p>
                 </div>
 
@@ -974,7 +998,72 @@ export const Pricelist = (): JSX.Element => {
                     {currentLanguage === 'nl' ? "Wat is inbegrepen:" : "What's Included:"}
                   </h4>
                   <ul className="space-y-2">
-                    {t.detailedServices.professionalWaxing.features.map((feature, idx) => (
+                    {t.detailedServices.biab.features.map((feature, idx) => (
+                      <li key={idx} className="flex items-center gap-3 text-gray-700 dark:text-gray-300">
+                        <CheckCircle className="w-5 h-5 text-beige-500 flex-shrink-0" />
+                        <span>{feature}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div className="flex flex-col sm:flex-row gap-4 pt-6">
+                  <Button className="bg-gradient-to-r from-beige-500 to-beige-600 hover:from-beige-600 hover:to-beige-700 text-white px-8 py-3 rounded-full font-semibold transition-all duration-300 hover:scale-105 shadow-lg">
+                    <Heart className="w-4 h-4 mr-2" />
+                    {currentLanguage === 'nl' ? 'Boek Deze Service' : 'Book This Service'}
+                  </Button>
+                </div>
+              </div>
+            </div>
+
+            {/* Eyelash Extensions */}
+            <div className="grid lg:grid-cols-2 gap-12 items-center">
+              <div className="relative group">
+                <div className="relative overflow-hidden rounded-3xl shadow-2xl">
+                  <img 
+                    src={NO_IMAGE}
+                    alt="Eyelash Extensions"
+                    className="w-full h-96 object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+                  <div className="absolute top-6 left-6">
+                    <Badge className="bg-beige-500 text-white px-4 py-2 text-sm font-semibold">
+                      <Star className="w-4 h-4 mr-1" />
+                      Popular
+                    </Badge>
+                  </div>
+                  <div className="absolute bottom-6 left-6 text-white">
+                    <div className="flex items-center gap-4 mb-2">
+                      <div className="flex items-center gap-1">
+                        <Clock className="w-4 h-4" />
+                        <span className="text-sm">90-120 min</span>
+                      </div>
+                      <div className="text-2xl font-bold">€55 - €120</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="space-y-6">
+                <div>
+                  <h3 className="text-4xl font-bold text-beige-800 dark:text-beige-200 mb-2">
+                    {t.detailedServices.nailArt.title}
+                  </h3>
+                  <p className="text-xl text-beige-600 dark:text-beige-300 font-medium mb-4">
+                    {t.detailedServices.nailArt.subtitle}
+                  </p>
+                  <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed">
+                    {t.detailedServices.nailArt.description}
+                  </p>
+                </div>
+
+                <div className="space-y-3">
+                  <h4 className="text-xl font-semibold text-beige-800 dark:text-beige-200 flex items-center gap-2">
+                    <Sparkles className="w-5 h-5" />
+                    {currentLanguage === 'nl' ? "Wat is inbegrepen:" : "What's Included:"}
+                  </h4>
+                  <ul className="space-y-2">
+                    {t.detailedServices.nailArt.features.map((feature, idx) => (
                       <li key={idx} className="flex items-center gap-3 text-gray-700 dark:text-gray-300">
                         <CheckCircle className="w-5 h-5 text-beige-500 flex-shrink-0" />
                         <span>{feature}</span>

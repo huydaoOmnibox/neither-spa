@@ -29,7 +29,7 @@ export const Box = (): JSX.Element => {
       },
       hero: {
         title: "NAILS OF THE NETHERLANDS",
-        subtitle: "De Beste in Leeuwarden",
+        subtitle: "Een moderne nagelsalon in Leeuwarden",
         description: "Kwaliteit – Prestige – Verantwoordelijkheid definiëren ons merk",
         bookAppointment: "AFSPRAAK MAKEN"
       },
