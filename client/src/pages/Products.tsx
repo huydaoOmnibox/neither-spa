@@ -2,13 +2,14 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Clock, Star, Heart, Sparkles, CheckCircle, Menu, X } from "lucide-react";
+import { Clock, Star, Heart, Sparkles, CheckCircle, Menu, X, ShoppingCart, Filter } from "lucide-react";
 import { Link } from "wouter";
 import logoPath from "@assets/image_1752511415001.png";
 
 export const Products = (): JSX.Element => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [currentLanguage, setCurrentLanguage] = useState<'nl' | 'en'>('nl');
+  const [activeFilter, setActiveFilter] = useState<string>('all');
 
   // Translation content
   const translations = {
@@ -26,6 +27,15 @@ export const Products = (): JSX.Element => {
       header: {
         title: "ONZE PRODUCTEN",
         subtitle: "Ontdek onze premium nagelzorgproducten die gebruikt worden in onze salon. Hoogwaardige producten voor professionele resultaten thuis of voor gebruik door professionals."
+      },
+      filters: {
+        all: "Alles",
+        gelPolish: "Gellak",
+        nailCare: "Nagelzorg", 
+        acrylicSystems: "Acryl Systemen",
+        nailArt: "Nail Art",
+        tools: "Tools",
+        treatments: "Behandelingen"
       },
       products: {
         gelPolishCollection: {
@@ -79,7 +89,7 @@ export const Products = (): JSX.Element => {
       },
       cta: {
         title: "Klaar om te Bestellen?",
-        description: "Shop vandaag nog onze premium nagelzorgproducten en ervaar professionele kwaliteit thuis. Ontdek waarom professionals onze producten vertrouwen voor uitstekende resultaten.",
+        description: "Shop vandaag nog onze premium nagelzorgproducten en ervaar professionele kwaliteit thuis. Gratis verzending bij bestellingen boven €50.",
         shopNow: "SHOP NU"
       }
     },
@@ -97,6 +107,15 @@ export const Products = (): JSX.Element => {
       header: {
         title: "OUR PRODUCTS",
         subtitle: "Discover our premium nail care products used in our salon. High-quality products for professional results at home or for use by professionals."
+      },
+      filters: {
+        all: "All",
+        gelPolish: "Gel Polish",
+        nailCare: "Nail Care",
+        acrylicSystems: "Acrylic Systems", 
+        nailArt: "Nail Art",
+        tools: "Tools",
+        treatments: "Treatments"
       },
       products: {
         gelPolishCollection: {
@@ -150,7 +169,7 @@ export const Products = (): JSX.Element => {
       },
       cta: {
         title: "Ready to Shop?",
-        description: "Shop our premium nail care products today and experience professional quality at home. Discover why professionals trust our products for excellent results.",
+        description: "Shop our premium nail care products today and experience professional quality at home. Free shipping on orders over €50.",
         shopNow: "SHOP NOW"
       }
     }
@@ -174,51 +193,173 @@ export const Products = (): JSX.Element => {
 
 
 
+  // Products organized by categories like the Gallery
   const products = [
+    // Gel Polish Products
     {
       id: 1,
-      title: t.products.gelPolishCollection.title,
-      subtitle: t.products.gelPolishCollection.subtitle,
+      category: "gelPolish",
       image: "https://images.unsplash.com/photo-1632345031435-8727f6897d53?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
-      price: "€12 - €45",
-      duration: "Professional Quality",
-      description: t.products.gelPolishCollection.description,
-      features: t.products.gelPolishCollection.features,
+      title: currentLanguage === 'nl' ? "Premium Gellak Set" : "Premium Gel Polish Set",
+      description: currentLanguage === 'nl' ? "Complete gellak collectie met 12 populaire kleuren" : "Complete gel polish collection with 12 popular colors",
+      price: "€45.99",
+      originalPrice: "€59.99",
       popular: true
     },
     {
       id: 2,
-      title: t.products.nailCareEssentials.title,
-      subtitle: t.products.nailCareEssentials.subtitle,
-      image: "https://images.unsplash.com/photo-1596462502278-27bfdc403348?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
-      price: "€15 - €35",
-      duration: "Complete Set",
-      description: t.products.nailCareEssentials.description,
-      features: t.products.nailCareEssentials.features,
+      category: "gelPolish",
+      image: "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
+      title: currentLanguage === 'nl' ? "Rode Klassiekers" : "Red Classics",
+      description: currentLanguage === 'nl' ? "5 tijdloze rode gellak kleuren" : "5 timeless red gel polish colors",
+      price: "€24.99",
+      originalPrice: "",
       popular: false
     },
     {
       id: 3,
-      title: t.products.acrylicSystem.title,
-      subtitle: t.products.acrylicSystem.subtitle,
+      category: "gelPolish",
       image: "https://images.unsplash.com/photo-1604654894610-df63bc536371?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
-      price: "€75 - €150",
-      duration: "Professional Kit",
-      description: t.products.acrylicSystem.description,
-      features: t.products.acrylicSystem.features,
+      title: currentLanguage === 'nl' ? "Franse Manicure Kit" : "French Manicure Kit",
+      description: currentLanguage === 'nl' ? "Professionele kit voor perfecte Franse manicure" : "Professional kit for perfect French manicure",
+      price: "€18.99",
+      originalPrice: "",
+      popular: false
+    },
+
+    // Nail Care Products
+    {
+      id: 4,
+      category: "nailCare",
+      image: "https://images.unsplash.com/photo-1596462502278-27bfdc403348?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
+      title: currentLanguage === 'nl' ? "Nagelzorg Essentials" : "Nail Care Essentials",
+      description: currentLanguage === 'nl' ? "Complete set met nagelriemolie, handcrème en versterkingsbehandeling" : "Complete set with cuticle oil, hand cream and strengthening treatment",
+      price: "€32.99",
+      originalPrice: "€39.99",
       popular: true
     },
     {
-      id: 4,
-      title: t.products.nailArtSupplies.title,
-      subtitle: t.products.nailArtSupplies.subtitle,
-      image: "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
-      price: "€5 - €25",
-      duration: "Creative Tools",
-      description: t.products.nailArtSupplies.description,
-      features: t.products.nailArtSupplies.features,
+      id: 5,
+      category: "nailCare",
+      image: "https://images.unsplash.com/photo-1560869713-bf17eeb44aca?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
+      title: currentLanguage === 'nl' ? "Nagelriemolie Set" : "Cuticle Oil Set",
+      description: currentLanguage === 'nl' ? "3 verschillende nagelriemoliën met vitamine E" : "3 different cuticle oils with vitamin E",
+      price: "€16.99",
+      originalPrice: "",
+      popular: false
+    },
+
+    // Acrylic Systems
+    {
+      id: 6,
+      category: "acrylicSystems",
+      image: "https://images.unsplash.com/photo-1562904732-a5d6d57bb203?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
+      title: currentLanguage === 'nl' ? "Professioneel Acryl Systeem" : "Professional Acrylic System",
+      description: currentLanguage === 'nl' ? "Complete acryl kit met poeder, vloeistof en tips" : "Complete acrylic kit with powder, liquid and tips",
+      price: "€149.99",
+      originalPrice: "€189.99",
+      popular: true
+    },
+    {
+      id: 7,
+      category: "acrylicSystems",
+      image: "https://images.unsplash.com/photo-1519014816548-bf5fe059798b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
+      title: currentLanguage === 'nl' ? "Acryl Starterskit" : "Acrylic Starter Kit",
+      description: currentLanguage === 'nl' ? "Ideaal voor beginners in acryl nagelverlenging" : "Ideal for beginners in acrylic nail extensions",
+      price: "€79.99",
+      originalPrice: "",
+      popular: false
+    },
+
+    // Nail Art
+    {
+      id: 8,
+      category: "nailArt",
+      image: "https://images.unsplash.com/photo-1610992015732-2449b76344bc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
+      title: currentLanguage === 'nl' ? "Nail Art Mega Set" : "Nail Art Mega Set",
+      description: currentLanguage === 'nl' ? "Grote collectie glitters, rhinestones en decoraties" : "Large collection of glitters, rhinestones and decorations",
+      price: "€24.99",
+      originalPrice: "€34.99",
+      popular: true
+    },
+    {
+      id: 9,
+      category: "nailArt",
+      image: "https://images.unsplash.com/photo-1594736797933-d0df8d6e5d8d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
+      title: currentLanguage === 'nl' ? "Chrome Poeders" : "Chrome Powders",
+      description: currentLanguage === 'nl' ? "5 verschillende chrome poeders voor spiegeleffect" : "5 different chrome powders for mirror effect",
+      price: "€12.99",
+      originalPrice: "",
+      popular: false
+    },
+    {
+      id: 10,
+      category: "nailArt",
+      image: "https://images.unsplash.com/photo-1600334129128-685c5582fd35?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
+      title: currentLanguage === 'nl' ? "Transfer Foils Set" : "Transfer Foils Set",
+      description: currentLanguage === 'nl' ? "20 verschillende transfer foils voor unieke ontwerpen" : "20 different transfer foils for unique designs",
+      price: "€8.99",
+      originalPrice: "",
+      popular: false
+    },
+
+    // Tools
+    {
+      id: 11,
+      category: "tools",
+      image: "https://images.unsplash.com/photo-1513594736602-b21ab73eba6a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
+      title: currentLanguage === 'nl' ? "Professionele Nagelvijlen Set" : "Professional Nail Files Set",
+      description: currentLanguage === 'nl' ? "10 verschillende nagelvijlen voor alle nageltypen" : "10 different nail files for all nail types",
+      price: "€14.99",
+      originalPrice: "",
+      popular: false
+    },
+    {
+      id: 12,
+      category: "tools",
+      image: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
+      title: currentLanguage === 'nl' ? "UV/LED Lamp" : "UV/LED Lamp",
+      description: currentLanguage === 'nl' ? "36W professionele lamp voor perfecte uitharding" : "36W professional lamp for perfect curing",
+      price: "€89.99",
+      originalPrice: "€109.99",
+      popular: true
+    },
+
+    // Treatments
+    {
+      id: 13,
+      category: "treatments",
+      image: "https://images.unsplash.com/photo-1595187729633-5ee2d3604e59?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
+      title: currentLanguage === 'nl' ? "BIAB Behandeling Kit" : "BIAB Treatment Kit",
+      description: currentLanguage === 'nl' ? "Complete kit voor nagelversterking met BIAB techniek" : "Complete kit for nail strengthening with BIAB technique",
+      price: "€67.99",
+      originalPrice: "",
+      popular: false
+    },
+    {
+      id: 14,
+      category: "treatments",
+      image: "https://images.unsplash.com/photo-1609205883892-98a9de7ae739?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
+      title: currentLanguage === 'nl' ? "Nagelverharder Behandeling" : "Nail Hardener Treatment",
+      description: currentLanguage === 'nl' ? "Intensieve kuur voor zwakke en breekbare nagels" : "Intensive treatment for weak and brittle nails",
+      price: "€19.99",
+      originalPrice: "",
       popular: false
     }
+  ];
+
+  const filteredProducts = activeFilter === 'all' 
+    ? products 
+    : products.filter(product => product.category === activeFilter);
+
+  const filters = [
+    { key: 'all', label: t.filters.all },
+    { key: 'gelPolish', label: t.filters.gelPolish },
+    { key: 'nailCare', label: t.filters.nailCare },
+    { key: 'acrylicSystems', label: t.filters.acrylicSystems },
+    { key: 'nailArt', label: t.filters.nailArt },
+    { key: 'tools', label: t.filters.tools },
+    { key: 'treatments', label: t.filters.treatments }
   ];
 
   return (
@@ -431,83 +572,105 @@ export const Products = (): JSX.Element => {
         </div>
       </div>
 
+      {/* Filter Section */}
+      <section className="py-8 bg-beige-50 dark:bg-gray-800">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="flex items-center justify-center mb-6">
+            <Filter className="w-5 h-5 text-beige-600 mr-2" />
+            <span className="text-lg font-semibold text-beige-800 dark:text-beige-200">
+              {currentLanguage === 'nl' ? 'Filter op Categorie' : 'Filter by Category'}
+            </span>
+          </div>
+          <div className="flex flex-wrap justify-center gap-3">
+            {filters.map((filter) => (
+              <button
+                key={filter.key}
+                onClick={() => setActiveFilter(filter.key)}
+                className={`px-6 py-2 rounded-full font-medium transition-all duration-200 hover:scale-105 ${
+                  activeFilter === filter.key
+                    ? 'bg-beige-500 text-white shadow-md'
+                    : 'bg-white text-beige-700 border border-beige-300 hover:bg-beige-100'
+                }`}
+              >
+                {filter.label}
+              </button>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Products Grid */}
       <section className="py-20">
         <div className="max-w-7xl mx-auto px-6">
-          <div className="space-y-16">
-            {products.map((product, index) => (
-              <div key={product.id} className={`grid lg:grid-cols-2 gap-12 items-center ${index % 2 === 1 ? 'lg:grid-flow-col-dense' : ''}`}>
-                {/* Image */}
-                <div className={`relative group ${index % 2 === 1 ? 'lg:col-start-2' : ''}`}>
-                  <div className="relative overflow-hidden rounded-3xl shadow-2xl">
-                    <img 
-                      src={product.image}
-                      alt={product.title}
-                      className="w-full h-96 object-cover transition-transform duration-500 group-hover:scale-105"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
-                    
-                    {product.popular && (
-                      <div className="absolute top-6 left-6">
-                        <Badge className="bg-beige-500 text-white px-4 py-2 text-sm font-semibold">
-                          <Star className="w-4 h-4 mr-1" />
-                          Most Popular
-                        </Badge>
-                      </div>
-                    )}
-                    
-                    <div className="absolute bottom-6 left-6 text-white">
-                      <div className="flex items-center gap-4 mb-2">
-                        <div className="flex items-center gap-1">
-                          <Clock className="w-4 h-4" />
-                          <span className="text-sm">{product.duration}</span>
-                        </div>
-                        <div className="text-2xl font-bold">{product.price}</div>
-                      </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {filteredProducts.map((product) => (
+              <Card key={product.id} className="group overflow-hidden border-none shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-105">
+                <div className="relative">
+                  <img 
+                    src={product.image}
+                    alt={product.title}
+                    className="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-110"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <div className="absolute bottom-4 left-4 right-4">
+                      <h3 className="text-white font-bold text-lg mb-2">{product.title}</h3>
+                      <p className="text-white/90 text-sm">{product.description}</p>
                     </div>
                   </div>
-                </div>
-
-                {/* Content */}
-                <div className={`space-y-6 ${index % 2 === 1 ? 'lg:col-start-1 lg:row-start-1' : ''}`}>
-                  <div>
-                    <h2 className="text-4xl font-bold text-beige-800 dark:text-beige-200 mb-2">
-                      {product.title}
-                    </h2>
-                    <p className="text-xl text-beige-600 dark:text-beige-300 font-medium mb-4">
-                      {product.subtitle}
-                    </p>
-                    <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed">
-                      {product.description}
-                    </p>
+                  
+                  {product.popular && (
+                    <div className="absolute top-3 left-3">
+                      <Badge className="bg-beige-500 text-white px-3 py-1 text-xs font-semibold">
+                        <Star className="w-3 h-3 mr-1" />
+                        {currentLanguage === 'nl' ? 'Populair' : 'Popular'}
+                      </Badge>
+                    </div>
+                  )}
+                  
+                  <div className="absolute top-3 right-3">
+                    <Badge className="bg-beige-500/90 text-white">
+                      {t.filters[product.category as keyof typeof t.filters]}
+                    </Badge>
                   </div>
-
-                  <div className="space-y-3">
-                    <h3 className="text-xl font-semibold text-beige-800 dark:text-beige-200 flex items-center gap-2">
-                      <Sparkles className="w-5 h-5" />
-                      {currentLanguage === 'nl' ? "Wat is inbegrepen:" : "What's Included:"}
-                    </h3>
-                    <ul className="space-y-2">
-                      {product.features.map((feature, idx) => (
-                        <li key={idx} className="flex items-center gap-3 text-gray-700 dark:text-gray-300">
-                          <CheckCircle className="w-5 h-5 text-beige-500 flex-shrink-0" />
-                          <span>{feature}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-
-                  <div className="flex flex-col sm:flex-row gap-4 pt-6">
-                    <Button className="bg-gradient-to-r from-beige-500 to-beige-600 hover:from-beige-600 hover:to-beige-700 text-white px-8 py-3 rounded-full font-semibold transition-all duration-300 hover:scale-105 shadow-lg">
-                      <Heart className="w-4 h-4 mr-2" />
-                      {currentLanguage === 'nl' ? 'Koop Dit Product' : 'Buy This Product'}
-                    </Button>
-                    <Button variant="outline" className="border-beige-400 text-beige-700 hover:bg-beige-50 dark:hover:bg-gray-700 px-8 py-3 rounded-full font-semibold">
-                      {currentLanguage === 'nl' ? 'Meer Info' : 'Learn More'}
-                    </Button>
+                  
+                  {/* Price Badge */}
+                  <div className="absolute bottom-3 right-3 bg-white/90 backdrop-blur-sm rounded-lg px-3 py-1">
+                    {product.originalPrice && (
+                      <span className="text-xs text-gray-500 line-through mr-2">{product.originalPrice}</span>
+                    )}
+                    <span className="font-bold text-beige-600">{product.price}</span>
                   </div>
                 </div>
-              </div>
+                <CardContent className="p-4">
+                  <h3 className="font-semibold text-beige-800 dark:text-beige-200 mb-2">{product.title}</h3>
+                  <p className="text-gray-600 dark:text-gray-300 text-sm mb-3 line-clamp-2">{product.description}</p>
+                  
+                  <div className="flex items-center justify-between mb-3">
+                    <div className="flex items-center">
+                      {product.originalPrice && (
+                        <span className="text-sm text-gray-500 line-through mr-2">{product.originalPrice}</span>
+                      )}
+                      <span className="text-lg font-bold text-beige-600">{product.price}</span>
+                    </div>
+                    {product.originalPrice && (
+                      <Badge className="bg-red-100 text-red-600 text-xs">
+                        {currentLanguage === 'nl' ? 'Korting' : 'Sale'}
+                      </Badge>
+                    )}
+                  </div>
+                  
+                  <div className="flex items-center justify-between">
+                    <Button variant="outline" size="sm" className="text-beige-600 border-beige-300 hover:bg-beige-50">
+                      <Heart className="w-4 h-4 mr-1" />
+                      {currentLanguage === 'nl' ? 'Bewaren' : 'Save'}
+                    </Button>
+                    <Button size="sm" className="bg-beige-500 hover:bg-beige-600 text-white">
+                      <ShoppingCart className="w-4 h-4 mr-1" />
+                      {currentLanguage === 'nl' ? 'Kopen' : 'Buy'}
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
             ))}
           </div>
         </div>
@@ -524,7 +687,7 @@ export const Products = (): JSX.Element => {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button className="bg-gradient-to-r from-beige-500 to-beige-600 hover:from-beige-600 hover:to-beige-700 text-white px-12 py-4 rounded-full text-lg font-semibold transition-all duration-300 hover:scale-105 shadow-xl">
-              <Clock className="w-5 h-5 mr-2" />
+              <ShoppingCart className="w-5 h-5 mr-2" />
               {t.cta.shopNow}
             </Button>
           </div>
