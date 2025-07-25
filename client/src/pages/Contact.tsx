@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Menu, X, MapPin, Clock, Phone, Mail, Calendar, Navigation } from "lucide-react";
+import { Menu, X, MapPin, Clock, Phone, Mail, Calendar, Navigation, Sparkles } from "lucide-react";
 import { Link } from "wouter";
 import logoPath from "@assets/image_1752511415001.png";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -197,7 +197,7 @@ export const Contact = (): JSX.Element => {
               </Link>
               
               <Button 
-                onClick={() => scrollToSection('contact')}
+                onClick={() => window.open('https://wa.me/31628699827', '_blank')}
                 className="bg-gradient-to-r from-beige-500 to-beige-600 hover:from-beige-600 hover:to-beige-700 text-white px-6 py-2 rounded-full font-semibold"
               >
                 {t.nav.bookNow}
@@ -291,7 +291,7 @@ export const Contact = (): JSX.Element => {
                 </Link>
                 
                 <Button 
-                  onClick={() => scrollToSection('contact')}
+                  onClick={() => window.open('https://wa.me/31628699827', '_blank')}
                   className="bg-gradient-to-r from-beige-500 to-beige-600 hover:from-beige-600 hover:to-beige-700 text-white px-6 py-2 rounded-full font-semibold w-full"
                 >
                   {t.nav.bookNow}
@@ -488,7 +488,10 @@ export const Contact = (): JSX.Element => {
                     <p className="text-sm text-gray-600 dark:text-gray-400">
                       {t.bookingInfo.emergency}
                     </p>
-                    <Button className="w-full bg-gradient-to-r from-beige-500 to-beige-600 hover:from-beige-600 hover:to-beige-700 text-white py-3 rounded-full font-semibold transition-all duration-300 hover:scale-105 shadow-lg">
+                    <Button 
+                      onClick={() => window.open('https://wa.me/31628699827', '_blank')}
+                      className="w-full bg-gradient-to-r from-beige-500 to-beige-600 hover:from-beige-600 hover:to-beige-700 text-white py-3 rounded-full font-semibold transition-all duration-300 hover:scale-105 shadow-lg"
+                    >
                       <Calendar className="w-5 h-5 mr-2" />
                       {t.bookingInfo.bookButton}
                     </Button>
@@ -568,9 +571,12 @@ export const Contact = (): JSX.Element => {
             }
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button className="bg-gradient-to-r from-beige-500 to-beige-600 hover:from-beige-600 hover:to-beige-700 text-white px-12 py-4 rounded-full text-lg font-semibold transition-all duration-300 hover:scale-105 shadow-xl">
-              <Phone className="w-5 h-5 mr-2" />
-              {currentLanguage === 'nl' ? 'BEL NU' : 'CALL NOW'}
+            <Button 
+              onClick={() => window.open('https://wa.me/31628699827', '_blank')}
+              className="bg-gradient-to-r from-beige-500 to-beige-600 hover:from-beige-600 hover:to-beige-700 text-white px-12 py-4 rounded-full text-lg font-semibold transition-all duration-300 hover:scale-105 shadow-xl"
+            >
+              <Sparkles className="w-5 h-5 mr-2" />
+              {currentLanguage === 'nl' ? 'AFSPRAAK MAKEN' : 'BOOK APPOINTMENT'}
             </Button>
             <Button 
               variant="outline" 

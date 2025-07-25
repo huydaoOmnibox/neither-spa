@@ -1,178 +1,45 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Clock, Star, Heart, Sparkles, CheckCircle, Menu, X, ShoppingCart, Filter } from "lucide-react";
+import { Card } from "@/components/ui/card";
+import { Menu, X, Sparkles } from "lucide-react";
 import { Link } from "wouter";
 import logoPath from "@assets/image_1752511415001.png";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { NO_IMAGE } from "@/lib/constants";
 
 export const Products = (): JSX.Element => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { currentLanguage, setCurrentLanguage } = useLanguage();
-  const [activeFilter, setActiveFilter] = useState<string>('all');
 
   // Translation content
   const translations = {
     nl: {
-             nav: {
-         home: "Home",
-         services: "Diensten",
-         products: "Producten",
-         gallery: "Galerij",
-         pricing: "Prijzen",
-         pricelist: "Prijslijst",
-         contact: "Contact",
-         bookNow: "AFSPRAAK MAKEN"
-       },
+      nav: {
+        home: "Home",
+        products: "Producten",
+        gallery: "Galerij",
+        pricing: "Prijzen",
+        pricelist: "Prijslijst",
+        contact: "Contact",
+        bookNow: "AFSPRAAK MAKEN"
+      },
       header: {
-        title: "ONZE PRODUCTEN",
-        subtitle: "Ontdek onze premium nagelzorgproducten die gebruikt worden in onze salon. Hoogwaardige producten voor professionele resultaten thuis of voor gebruik door professionals."
-      },
-      filters: {
-        all: "Alles",
-        gelPolish: "Gellak",
-        nailCare: "Nagelzorg", 
-        acrylicSystems: "Acryl Systemen",
-        nailArt: "Nail Art",
-        tools: "Tools",
-        treatments: "Behandelingen"
-      },
-      products: {
-        gelPolishCollection: {
-          title: "Gellak Collectie",
-          subtitle: "Langdurige Kleur & Glans",
-          description: "Onze premium gellak collectie biedt langdurige kleur tot 3 weken. Professionele kwaliteit met UV/LED aushärting voor een perfecte finish die niet afbladdert of vervaagt.",
-          features: [
-            "Tot 3 weken lang houdbaar",
-            "Meer dan 200 kleuren beschikbaar",
-            "Geen beschadiging van natuurlijke nagel",
-            "UV/LED lamp vereist",
-            "Professionele salonkwaliteit"
-          ]
-        },
-        nailCareEssentials: {
-          title: "Nagelzorg Essentials",
-          subtitle: "Dagelijkse Verzorging",
-          description: "Complete verzorgingsset voor gezonde, sterke nagels. Inclusief nagelriemolie, versterkende behandeling en hydraterende handcrème voor optimale nagelgezondheid.",
-          features: [
-            "Nagelriemolie met vitamine E",
-            "Versterkende nagelbehandeling",
-            "Hydraterende handcrème",
-            "Nagelvijl en buffer set",
-            "Dagelijks gebruik aanbevolen"
-          ]
-        },
-        acrylicSystem: {
-          title: "Acryl Systeem",
-          subtitle: "Professionele Nagelverlenging",
-          description: "Complete acryl set voor prachtige, sterke nagelextensies. Bevat poeder, vloeistof en alle benodigdheden voor professionele acryl applicatie met langdurige resultaten.",
-          features: [
-            "Clear, pink en white acryl poeder",
-            "Professionele monomeer vloeistof",
-            "Tips in verschillende maten",
-            "Vormen en vijlen inbegrepen",
-            "Voor professionals en ervaren gebruikers"
-          ]
-        },
-        nailArtSupplies: {
-          title: "Nail Art Benodigdheden",
-          subtitle: "Creatieve Nagelkunst",
-          description: "Alles voor prachtige nail art creaties. Van glitters tot chrome poeders, rhinestones tot stickers - laat uw creativiteit de vrije loop met onze uitgebreide nail art collectie.",
-          features: [
-            "Glitters in alle kleuren",
-            "Chrome en holographic poeders",
-            "Rhinestones en decoraties",
-            "Nail art penselen",
-            "Transfer foils en stickers"
-          ]
-        }
-      },
-      cta: {
-        title: "Klaar om te Bestellen?",
-        description: "Shop vandaag nog onze premium nagelzorgproducten en ervaar professionele kwaliteit thuis. Gratis verzending bij bestellingen boven €50.",
-        shopNow: "SHOP NU"
+        title: "PRODUCTEN",
+        subtitle: "Ontdek onze premium nagelzorgproducten"
       }
     },
     en: {
-             nav: {
-         home: "Home",
-         services: "Services",
-         products: "Products",
-         gallery: "Gallery",
-         pricing: "Pricing",
-         pricelist: "Price List",
-         contact: "Contact",
-         bookNow: "BOOK NOW"
-       },
+      nav: {
+        home: "Home",
+        products: "Products",
+        gallery: "Gallery",
+        pricing: "Pricing",
+        pricelist: "Price List",
+        contact: "Contact",
+        bookNow: "BOOK NOW"
+      },
       header: {
-        title: "OUR PRODUCTS",
-        subtitle: "Discover our premium nail care products used in our salon. High-quality products for professional results at home or for use by professionals."
-      },
-      filters: {
-        all: "All",
-        gelPolish: "Gel Polish",
-        nailCare: "Nail Care",
-        acrylicSystems: "Acrylic Systems", 
-        nailArt: "Nail Art",
-        tools: "Tools",
-        treatments: "Treatments"
-      },
-      products: {
-        gelPolishCollection: {
-          title: "Gel Polish Collection",
-          subtitle: "Long-Lasting Color & Shine",
-          description: "Our premium gel polish collection offers long-lasting color up to 3 weeks. Professional quality with UV/LED curing for a perfect finish that won't chip or fade.",
-          features: [
-            "Lasts up to 3 weeks",
-            "Over 200 colors available",
-            "No damage to natural nail",
-            "UV/LED lamp required",
-            "Professional salon quality"
-          ]
-        },
-        nailCareEssentials: {
-          title: "Nail Care Essentials",
-          subtitle: "Daily Care Routine",
-          description: "Complete care set for healthy, strong nails. Includes cuticle oil, strengthening treatment and moisturizing hand cream for optimal nail health.",
-          features: [
-            "Cuticle oil with vitamin E",
-            "Strengthening nail treatment",
-            "Moisturizing hand cream",
-            "File and buffer set",
-            "Daily use recommended"
-          ]
-        },
-        acrylicSystem: {
-          title: "Acrylic System",
-          subtitle: "Professional Nail Extensions",
-          description: "Complete acrylic set for beautiful, strong nail extensions. Contains powder, liquid and all necessities for professional acrylic application with long-lasting results.",
-          features: [
-            "Clear, pink and white acrylic powder",
-            "Professional monomer liquid",
-            "Tips in various sizes",
-            "Forms and files included",
-            "For professionals and experienced users"
-          ]
-        },
-        nailArtSupplies: {
-          title: "Nail Art Supplies",
-          subtitle: "Creative Nail Art",
-          description: "Everything for beautiful nail art creations. From glitters to chrome powders, rhinestones to stickers - let your creativity run wild with our extensive nail art collection.",
-          features: [
-            "Glitters in all colors",
-            "Chrome and holographic powders",
-            "Rhinestones and decorations",
-            "Nail art brushes",
-            "Transfer foils and stickers"
-          ]
-        }
-      },
-      cta: {
-        title: "Ready to Shop?",
-        description: "Shop our premium nail care products today and experience professional quality at home. Free shipping on orders over €50.",
-        shopNow: "SHOP NOW"
+        title: "PRODUCTS",
+        subtitle: "Discover our premium nail care products"
       }
     }
   };
@@ -181,171 +48,14 @@ export const Products = (): JSX.Element => {
 
   const scrollToSection = (sectionId: string) => {
     if (sectionId === 'pricing') {
-      // Navigate to home page and scroll to pricing section
       window.location.href = '/#pricing';
     } else if (sectionId === 'contact') {
-      // Navigate to home page and scroll to contact section
       window.location.href = '/#contact';
     } else if (sectionId === 'home') {
-      // Navigate to home page
       window.location.href = '/';
     }
     setMobileMenuOpen(false);
   };
-
-
-
-  // Products organized by categories like the Gallery
-  const products = [
-    {
-      id: 1,
-      category: "gelPolish",
-      image: NO_IMAGE,
-      title: currentLanguage === 'nl' ? "Premium Gellak Set" : "Premium Gel Polish Set",
-      description: currentLanguage === 'nl' ? "Complete gellak collectie met basis- en topcoat" : "Complete gel polish collection with base and top coat",
-      price: "€45.99",
-      originalPrice: "€59.99",
-      popular: true
-    },
-    {
-      id: 2,
-      category: "gelPolish",
-      image: NO_IMAGE,
-      title: currentLanguage === 'nl' ? "Gellak Starterset" : "Gel Polish Starter Kit",
-      description: currentLanguage === 'nl' ? "Alles wat je nodig hebt om te beginnen" : "Everything you need to get started",
-      price: "€79.99",
-      popular: false
-    },
-    {
-      id: 3,
-      category: "gelPolish",
-      image: NO_IMAGE,
-      title: currentLanguage === 'nl' ? "Gellak Kleurenpakket" : "Gel Polish Color Pack",
-      description: currentLanguage === 'nl' ? "Set van 6 populaire kleuren" : "Set of 6 popular colors",
-      price: "€49.99",
-      popular: true
-    },
-    // Nail Care
-    {
-      id: 4,
-      category: "nailCare",
-      image: NO_IMAGE,
-      title: currentLanguage === 'nl' ? "Nagelriemolie" : "Cuticle Oil",
-      description: currentLanguage === 'nl' ? "Voedende olie voor gezonde nagelriemen" : "Nourishing oil for healthy cuticles",
-      price: "€12.99",
-      originalPrice: "€14.99",
-      popular: false
-    },
-    {
-      id: 5,
-      category: "nailCare",
-      image: NO_IMAGE,
-      title: currentLanguage === 'nl' ? "Nagelvijlen Set" : "Nail File Set",
-      description: currentLanguage === 'nl' ? "Professionele vijlen in verschillende grofheden" : "Professional files in different grits",
-      price: "€9.99",
-      popular: false
-    },
-    // Acrylic System
-    {
-      id: 6,
-      category: "acrylicSystems",
-      image: NO_IMAGE,
-      title: currentLanguage === 'nl' ? "Acryl Starterset" : "Acrylic Starter Kit",
-      description: currentLanguage === 'nl' ? "Complete set voor acryl nagels" : "Complete set for acrylic nails",
-      price: "€89.99",
-      popular: true
-    },
-    {
-      id: 7,
-      category: "acrylicSystems",
-      image: NO_IMAGE,
-      title: currentLanguage === 'nl' ? "Acryl Poeder" : "Acrylic Powder",
-      description: currentLanguage === 'nl' ? "Hoogwaardige acryl poeder" : "High-quality acrylic powder",
-      price: "€24.99",
-      popular: false
-    },
-    // Nail Art
-    {
-      id: 8,
-      category: "nailArt",
-      image: NO_IMAGE,
-      title: currentLanguage === 'nl' ? "Nail Art Penselen" : "Nail Art Brushes",
-      description: currentLanguage === 'nl' ? "Set van 10 professionele penselen" : "Set of 10 professional brushes",
-      price: "€29.99",
-      originalPrice: "€34.99",
-      popular: false
-    },
-    {
-      id: 9,
-      category: "nailArt",
-      image: NO_IMAGE,
-      title: currentLanguage === 'nl' ? "Glitter Collectie" : "Glitter Collection",
-      description: currentLanguage === 'nl' ? "12 verschillende glitters" : "12 different glitters",
-      price: "€19.99",
-      popular: false
-    },
-    {
-      id: 10,
-      category: "nailArt",
-      image: NO_IMAGE,
-      title: currentLanguage === 'nl' ? "Sticker Set" : "Sticker Set",
-      description: currentLanguage === 'nl' ? "Diverse nail art stickers" : "Various nail art stickers",
-      price: "€7.99",
-      popular: false
-    },
-    // Tools
-    {
-      id: 11,
-      category: "tools",
-      image: NO_IMAGE,
-      title: currentLanguage === 'nl' ? "E-file Pro" : "E-file Pro",
-      description: currentLanguage === 'nl' ? "Professionele elektrische nagelvijl" : "Professional electric nail file",
-      price: "€199.99",
-      popular: true
-    },
-    {
-      id: 12,
-      category: "tools",
-      image: NO_IMAGE,
-      title: currentLanguage === 'nl' ? "LED Lamp" : "LED Lamp",
-      description: currentLanguage === 'nl' ? "48W LED/UV lamp" : "48W LED/UV lamp",
-      price: "€59.99",
-      popular: true
-    },
-    // Treatments
-    {
-      id: 13,
-      category: "treatments",
-      image: NO_IMAGE,
-      title: currentLanguage === 'nl' ? "Nagelverharder" : "Nail Hardener",
-      description: currentLanguage === 'nl' ? "Versterkende behandeling" : "Strengthening treatment",
-      price: "€14.99",
-      popular: false
-    },
-    {
-      id: 14,
-      category: "treatments",
-      image: NO_IMAGE,
-      title: currentLanguage === 'nl' ? "Nagelgroei Serum" : "Nail Growth Serum",
-      description: currentLanguage === 'nl' ? "Stimuleert gezonde nagelgroei" : "Stimulates healthy nail growth",
-      price: "€19.99",
-      popular: true
-    }
-  ];
-
-  const filteredProducts = activeFilter === 'all' 
-    ? products 
-    : products.filter(product => product.category === activeFilter);
-
-  const filters = [
-    { key: 'all', label: t.filters.all },
-    { key: 'gelPolish', label: t.filters.gelPolish },
-    { key: 'nailCare', label: t.filters.nailCare },
-    { key: 'acrylicSystems', label: t.filters.acrylicSystems },
-    { key: 'nailArt', label: t.filters.nailArt },
-    { key: 'tools', label: t.filters.tools },
-    { key: 'treatments', label: t.filters.treatments }
-  ];
 
   return (
     <div className="min-h-screen bg-white dark:bg-gray-900">
@@ -395,7 +105,7 @@ export const Products = (): JSX.Element => {
               </Link>
               
               <Button 
-                onClick={() => scrollToSection('contact')}
+                onClick={() => window.open('https://wa.me/31628699827', '_blank')}
                 className="bg-gradient-to-r from-beige-500 to-beige-600 hover:from-beige-600 hover:to-beige-700 text-white px-6 py-2 rounded-full font-semibold"
               >
                 {t.nav.bookNow}
@@ -489,7 +199,7 @@ export const Products = (): JSX.Element => {
                 </Link>
                 
                 <Button 
-                  onClick={() => scrollToSection('contact')}
+                  onClick={() => window.open('https://wa.me/31628699827', '_blank')}
                   className="bg-gradient-to-r from-beige-500 to-beige-600 hover:from-beige-600 hover:to-beige-700 text-white px-6 py-2 rounded-full font-semibold w-full"
                 >
                   {t.nav.bookNow}
@@ -546,106 +256,16 @@ export const Products = (): JSX.Element => {
         </div>
       </div>
 
-      {/* Filter Section */}
-      <section className="py-8 bg-beige-50 dark:bg-gray-800">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="flex items-center justify-center mb-6">
-            <Filter className="w-5 h-5 text-beige-600 mr-2" />
-            <span className="text-lg font-semibold text-beige-800 dark:text-beige-200">
-              {currentLanguage === 'nl' ? 'Filter op Categorie' : 'Filter by Category'}
-            </span>
-          </div>
-          <div className="flex flex-wrap justify-center gap-3">
-            {filters.map((filter) => (
-              <button
-                key={filter.key}
-                onClick={() => setActiveFilter(filter.key)}
-                className={`px-6 py-2 rounded-full font-medium transition-all duration-200 hover:scale-105 ${
-                  activeFilter === filter.key
-                    ? 'bg-beige-500 text-white shadow-md'
-                    : 'bg-white text-beige-700 border border-beige-300 hover:bg-beige-100'
-                }`}
-              >
-                {filter.label}
-              </button>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Products Grid */}
+      {/* Products Grid - Empty State */}
       <section className="py-20">
         <div className="max-w-7xl mx-auto px-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {filteredProducts.map((product) => (
-              <Card key={product.id} className="group overflow-hidden border-none shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-105">
-                <div className="relative">
-                  <img 
-                    src={product.image}
-                    alt={product.title}
-                    className="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-110"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    <div className="absolute bottom-4 left-4 right-4">
-                      <h3 className="text-white font-bold text-lg mb-2">{product.title}</h3>
-                      <p className="text-white/90 text-sm">{product.description}</p>
-                    </div>
-                  </div>
-                  
-                  {product.popular && (
-                    <div className="absolute top-3 left-3">
-                      <Badge className="bg-beige-500 text-white px-3 py-1 text-xs font-semibold">
-                        <Star className="w-3 h-3 mr-1" />
-                        {currentLanguage === 'nl' ? 'Populair' : 'Popular'}
-                      </Badge>
-                    </div>
-                  )}
-                  
-                  <div className="absolute top-3 right-3">
-                    <Badge className="bg-beige-500/90 text-white">
-                      {t.filters[product.category as keyof typeof t.filters]}
-                    </Badge>
-                  </div>
-                  
-                  {/* Price Badge */}
-                  <div className="absolute bottom-3 right-3 bg-white/90 backdrop-blur-sm rounded-lg px-3 py-1">
-                    {product.originalPrice && (
-                      <span className="text-xs text-gray-500 line-through mr-2">{product.originalPrice}</span>
-                    )}
-                    <span className="font-bold text-beige-600">{product.price}</span>
-                  </div>
-                </div>
-                <CardContent className="p-4">
-                  <h3 className="font-semibold text-beige-800 dark:text-beige-200 mb-2">{product.title}</h3>
-                  <p className="text-gray-600 dark:text-gray-300 text-sm mb-3 line-clamp-2">{product.description}</p>
-                  
-                  <div className="flex items-center justify-between mb-3">
-                    <div className="flex items-center">
-                      {product.originalPrice && (
-                        <span className="text-sm text-gray-500 line-through mr-2">{product.originalPrice}</span>
-                      )}
-                      <span className="text-lg font-bold text-beige-600">{product.price}</span>
-                    </div>
-                    {product.originalPrice && (
-                      <Badge className="bg-red-100 text-red-600 text-xs">
-                        {currentLanguage === 'nl' ? 'Korting' : 'Sale'}
-                      </Badge>
-                    )}
-                  </div>
-                  
-                  <div className="flex items-center justify-between">
-                    <Button variant="outline" size="sm" className="text-beige-600 border-beige-300 hover:bg-beige-50">
-                      <Heart className="w-4 h-4 mr-1" />
-                      {currentLanguage === 'nl' ? 'Bewaren' : 'Save'}
-                    </Button>
-                    <Button size="sm" className="bg-beige-500 hover:bg-beige-600 text-white">
-                      <ShoppingCart className="w-4 h-4 mr-1" />
-                      {currentLanguage === 'nl' ? 'Kopen' : 'Buy'}
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
+          <div className="text-center py-12">
+            <p className="text-lg text-beige-600 dark:text-beige-300">
+              {currentLanguage === 'nl' 
+                ? 'Productcatalogus wordt binnenkort bijgewerkt.'
+                : 'Product catalog will be updated soon.'
+              }
+            </p>
           </div>
         </div>
       </section>
@@ -654,15 +274,20 @@ export const Products = (): JSX.Element => {
       <section className="py-20 bg-gradient-to-r from-beige-50 to-beige-100 dark:from-gray-800 dark:to-gray-700">
         <div className="max-w-4xl mx-auto text-center px-6">
           <h2 className="text-4xl font-bold text-beige-800 dark:text-beige-200 mb-6">
-            {t.cta.title}
+            {currentLanguage === 'nl' ? 'Klaar om te Bestellen?' : 'Ready to Shop?'}
           </h2>
           <p className="text-xl text-beige-600 dark:text-beige-300 mb-8 leading-relaxed">
-            {t.cta.description}
+            {currentLanguage === 'nl' 
+              ? 'Ontdek onze premium nagelzorgproducten en maak uw keuze.'
+              : 'Discover our premium nail care products and make your choice.'
+            }
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button className="bg-gradient-to-r from-beige-500 to-beige-600 hover:from-beige-600 hover:to-beige-700 text-white px-12 py-4 rounded-full text-lg font-semibold transition-all duration-300 hover:scale-105 shadow-xl">
-              <ShoppingCart className="w-5 h-5 mr-2" />
-              {t.cta.shopNow}
+            <Button className="bg-gradient-to-r from-beige-500 to-beige-600 hover:from-beige-600 hover:to-beige-700 text-white px-12 py-4 rounded-full text-lg font-semibold transition-all duration-300 hover:scale-105 shadow-xl"
+              onClick={() => window.open('https://wa.me/31628699827', '_blank')}
+            >
+              <Sparkles className="w-5 h-5 mr-2" />
+              {currentLanguage === 'nl' ? 'SHOP NU' : 'SHOP NOW'}
             </Button>
           </div>
         </div>

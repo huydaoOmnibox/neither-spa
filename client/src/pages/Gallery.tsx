@@ -1,17 +1,14 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Menu, X, Heart, Eye, Sparkles, Filter } from "lucide-react";
+import { Card } from "@/components/ui/card";
+import { Menu, X, Sparkles } from "lucide-react";
 import { Link } from "wouter";
 import logoPath from "@assets/image_1752511415001.png";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { NO_IMAGE } from "@/lib/constants";
 
 export const Gallery = (): JSX.Element => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { currentLanguage, setCurrentLanguage } = useLanguage();
-  const [activeFilter, setActiveFilter] = useState<string>('all');
 
   // Translation content
   const translations = {
@@ -28,15 +25,6 @@ export const Gallery = (): JSX.Element => {
       header: {
         title: "GALERIJ",
         subtitle: "Bekijk onze collectie van prachtige nagelkunst en inspirerende designs"
-      },
-      filters: {
-        all: "Alles",
-        gellac: "Gellak",
-        nailart: "Nail Art",
-        acrylic: "Acryl",
-        biab: "BIAB",
-        pedicure: "Pedicure",
-        special: "Speciaal"
       }
     },
     en: {
@@ -52,15 +40,6 @@ export const Gallery = (): JSX.Element => {
       header: {
         title: "GALLERY",
         subtitle: "Explore our collection of beautiful nail art and inspiring designs"
-      },
-      filters: {
-        all: "All",
-        gellac: "Gel Polish",
-        nailart: "Nail Art",
-        acrylic: "Acrylic",
-        biab: "BIAB",
-        pedicure: "Pedicure",
-        special: "Special"
       }
     }
   };
@@ -77,135 +56,6 @@ export const Gallery = (): JSX.Element => {
     }
     setMobileMenuOpen(false);
   };
-
-  // Gallery items data
-  const galleryItems = [
-    // Gel Polish
-    {
-      id: 1,
-      category: "gellac",
-      image: NO_IMAGE,
-      title: currentLanguage === 'nl' ? "Elegante Franse Manicure" : "Elegant French Manicure",
-      description: currentLanguage === 'nl' ? "Klassieke Franse stijl met perfecte witte tips" : "Classic French style with perfect white tips"
-    },
-    {
-      id: 2,
-      category: "gellac",
-      image: NO_IMAGE,
-      title: currentLanguage === 'nl' ? "Pastel Gellak Collectie" : "Pastel Gel Polish Collection",
-      description: currentLanguage === 'nl' ? "Zachte pastelkleuren perfect voor de lente" : "Soft pastel colors perfect for spring"
-    },
-    {
-      id: 3,
-      category: "gellac",
-      image: NO_IMAGE,
-      title: currentLanguage === 'nl' ? "Rode Klassiekers" : "Red Classics",
-      description: currentLanguage === 'nl' ? "Tijdloze rode tinten voor elke gelegenheid" : "Timeless red shades for any occasion"
-    },
-    // Nail Art
-    {
-      id: 4,
-      category: "nailart",
-      image: NO_IMAGE,
-      title: currentLanguage === 'nl' ? "Glitter & Glamour" : "Glitter & Glamour",
-      description: currentLanguage === 'nl' ? "Sprankelende designs met premium glitters" : "Sparkling designs with premium glitters"
-    },
-    {
-      id: 5,
-      category: "nailart",
-      image: NO_IMAGE,
-      title: currentLanguage === 'nl' ? "Bloemen Designs" : "Floral Designs",
-      description: currentLanguage === 'nl' ? "Delicate bloemenpatronen met handgeschilderde details" : "Delicate floral patterns with hand-painted details"
-    },
-    {
-      id: 6,
-      category: "nailart",
-      image: NO_IMAGE,
-      title: currentLanguage === 'nl' ? "Geometrische Patronen" : "Geometric Patterns",
-      description: currentLanguage === 'nl' ? "Moderne geometrische kunst voor een unieke look" : "Modern geometric art for a unique look"
-    },
-    // Acrylic
-    {
-      id: 7,
-      category: "acrylic",
-      image: NO_IMAGE,
-      title: currentLanguage === 'nl' ? "Acryl Extensies" : "Acrylic Extensions",
-      description: currentLanguage === 'nl' ? "Perfecte vorm en lengte met duurzame acryl" : "Perfect shape and length with durable acrylic"
-    },
-    {
-      id: 8,
-      category: "acrylic",
-      image: NO_IMAGE,
-      title: currentLanguage === 'nl' ? "Naturel Look" : "Natural Look",
-      description: currentLanguage === 'nl' ? "Natuurlijk ogende acrylnagels" : "Natural-looking acrylic nails"
-    },
-    // BIAB
-    {
-      id: 9,
-      category: "biab",
-      image: NO_IMAGE,
-      title: currentLanguage === 'nl' ? "BIAB Versterking" : "BIAB Strengthening",
-      description: currentLanguage === 'nl' ? "Sterke en gezonde natuurlijke nagels" : "Strong and healthy natural nails"
-    },
-    {
-      id: 10,
-      category: "biab",
-      image: NO_IMAGE,
-      title: currentLanguage === 'nl' ? "BIAB French" : "BIAB French",
-      description: currentLanguage === 'nl' ? "Franse manicure met BIAB techniek" : "French manicure with BIAB technique"
-    },
-    // Pedicure
-    {
-      id: 11,
-      category: "pedicure",
-      image: NO_IMAGE,
-      title: currentLanguage === 'nl' ? "Spa Pedicure" : "Spa Pedicure",
-      description: currentLanguage === 'nl' ? "Luxe voetverzorging met gellak" : "Luxury foot care with gel polish"
-    },
-    {
-      id: 12,
-      category: "pedicure",
-      image: NO_IMAGE,
-      title: currentLanguage === 'nl' ? "Medische Pedicure" : "Medical Pedicure",
-      description: currentLanguage === 'nl' ? "Professionele voetverzorging voor probleemvoeten" : "Professional foot care for problem feet"
-    },
-    // Special
-    {
-      id: 13,
-      category: "special",
-      image: NO_IMAGE,
-      title: currentLanguage === 'nl' ? "Bruidsnagels" : "Bridal Nails",
-      description: currentLanguage === 'nl' ? "Speciale designs voor je grote dag" : "Special designs for your big day"
-    },
-    {
-      id: 14,
-      category: "special",
-      image: NO_IMAGE,
-      title: currentLanguage === 'nl' ? "Feestdagen Collectie" : "Holiday Collection",
-      description: currentLanguage === 'nl' ? "Feestelijke designs voor speciale gelegenheden" : "Festive designs for special occasions"
-    },
-    {
-      id: 15,
-      category: "special",
-      image: NO_IMAGE,
-      title: currentLanguage === 'nl' ? "Swarovski Kristallen" : "Swarovski Crystals",
-      description: currentLanguage === 'nl' ? "Luxe designs met echte kristallen" : "Luxury designs with genuine crystals"
-    }
-  ];
-
-  const filteredItems = activeFilter === 'all' 
-    ? galleryItems 
-    : galleryItems.filter(item => item.category === activeFilter);
-
-  const filters = [
-    { key: 'all', label: t.filters.all },
-    { key: 'gellac', label: t.filters.gellac },
-    { key: 'nailart', label: t.filters.nailart },
-    { key: 'acrylic', label: t.filters.acrylic },
-    { key: 'biab', label: t.filters.biab },
-    { key: 'pedicure', label: t.filters.pedicure },
-    { key: 'special', label: t.filters.special }
-  ];
 
   return (
     <div className="min-h-screen bg-white dark:bg-gray-900">
@@ -255,7 +105,7 @@ export const Gallery = (): JSX.Element => {
               </Link>
               
               <Button 
-                onClick={() => scrollToSection('contact')}
+                onClick={() => window.open('https://wa.me/31628699827', '_blank')}
                 className="bg-gradient-to-r from-beige-500 to-beige-600 hover:from-beige-600 hover:to-beige-700 text-white px-6 py-2 rounded-full font-semibold"
               >
                 {t.nav.bookNow}
@@ -349,7 +199,7 @@ export const Gallery = (): JSX.Element => {
                 </Link>
                 
                 <Button 
-                  onClick={() => scrollToSection('contact')}
+                  onClick={() => window.open('https://wa.me/31628699827', '_blank')}
                   className="bg-gradient-to-r from-beige-500 to-beige-600 hover:from-beige-600 hover:to-beige-700 text-white px-6 py-2 rounded-full font-semibold w-full"
                 >
                   {t.nav.bookNow}
@@ -406,78 +256,16 @@ export const Gallery = (): JSX.Element => {
         </div>
       </div>
 
-      {/* Filter Section */}
-      <section className="py-8 bg-beige-50 dark:bg-gray-800">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="flex items-center justify-center mb-6">
-            <Filter className="w-5 h-5 text-beige-600 mr-2" />
-            <span className="text-lg font-semibold text-beige-800 dark:text-beige-200">
-              {currentLanguage === 'nl' ? 'Filter op Categorie' : 'Filter by Category'}
-            </span>
-          </div>
-          <div className="flex flex-wrap justify-center gap-3">
-            {filters.map((filter) => (
-              <button
-                key={filter.key}
-                onClick={() => setActiveFilter(filter.key)}
-                className={`px-6 py-2 rounded-full font-medium transition-all duration-200 hover:scale-105 ${
-                  activeFilter === filter.key
-                    ? 'bg-beige-500 text-white shadow-md'
-                    : 'bg-white text-beige-700 border border-beige-300 hover:bg-beige-100'
-                }`}
-              >
-                {filter.label}
-              </button>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Gallery Grid */}
+      {/* Gallery Grid - Empty State */}
       <section className="py-20">
         <div className="max-w-7xl mx-auto px-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {filteredItems.map((item) => (
-              <Card key={item.id} className="group overflow-hidden border-none shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-105">
-                <div className="relative">
-                  <img 
-                    src={item.image}
-                    alt={item.title}
-                    className="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-110"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    <div className="absolute bottom-4 left-4 right-4">
-                      <h3 className="text-white font-bold text-lg mb-2">{item.title}</h3>
-                      <p className="text-white/90 text-sm">{item.description}</p>
-                    </div>
-                  </div>
-                  <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    <Button size="sm" className="bg-white/20 backdrop-blur-sm hover:bg-white/30 text-white border-white/30">
-                      <Eye className="w-4 h-4" />
-                    </Button>
-                  </div>
-                  <div className="absolute top-3 left-3">
-                    <Badge className="bg-beige-500/90 text-white">
-                      {t.filters[item.category as keyof typeof t.filters]}
-                    </Badge>
-                  </div>
-                </div>
-                <CardContent className="p-4">
-                  <h3 className="font-semibold text-beige-800 dark:text-beige-200 mb-2">{item.title}</h3>
-                  <p className="text-gray-600 dark:text-gray-300 text-sm">{item.description}</p>
-                  <div className="flex items-center justify-between mt-3">
-                    <Button variant="outline" size="sm" className="text-beige-600 border-beige-300 hover:bg-beige-50">
-                      <Heart className="w-4 h-4 mr-1" />
-                      {currentLanguage === 'nl' ? 'Bewaren' : 'Save'}
-                    </Button>
-                    <Button size="sm" className="bg-beige-500 hover:bg-beige-600 text-white">
-                      <Sparkles className="w-4 h-4 mr-1" />
-                      {currentLanguage === 'nl' ? 'Boek Nu' : 'Book Now'}
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
+          <div className="text-center py-12">
+            <p className="text-lg text-beige-600 dark:text-beige-300">
+              {currentLanguage === 'nl' 
+                ? 'Galerij wordt binnenkort bijgewerkt met nieuwe afbeeldingen.'
+                : 'Gallery will be updated with new images soon.'
+              }
+            </p>
           </div>
         </div>
       </section>
@@ -495,7 +283,9 @@ export const Gallery = (): JSX.Element => {
             }
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button className="bg-gradient-to-r from-beige-500 to-beige-600 hover:from-beige-600 hover:to-beige-700 text-white px-12 py-4 rounded-full text-lg font-semibold transition-all duration-300 hover:scale-105 shadow-xl">
+            <Button className="bg-gradient-to-r from-beige-500 to-beige-600 hover:from-beige-600 hover:to-beige-700 text-white px-12 py-4 rounded-full text-lg font-semibold transition-all duration-300 hover:scale-105 shadow-xl"
+              onClick={() => window.open('https://wa.me/31628699827', '_blank')}
+            >
               <Sparkles className="w-5 h-5 mr-2" />
               {currentLanguage === 'nl' ? 'AFSPRAAK MAKEN' : 'BOOK APPOINTMENT'}
             </Button>

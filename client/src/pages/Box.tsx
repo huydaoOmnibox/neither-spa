@@ -354,7 +354,7 @@ export const Box = (): JSX.Element => {
               </Link>
               
               <Button 
-                onClick={() => scrollToSection('contact')}
+                onClick={() => window.open('https://wa.me/31628699827', '_blank')}
                 className="bg-gradient-to-r from-beige-500 to-beige-600 hover:from-beige-600 hover:to-beige-700 text-white px-6 py-2 rounded-full font-semibold"
               >
                 {t.nav.bookNow}
@@ -448,7 +448,7 @@ export const Box = (): JSX.Element => {
                 </Link>
                 
                 <Button 
-                  onClick={() => scrollToSection('contact')}
+                  onClick={() => window.open('https://wa.me/31628699827', '_blank')}
                   className="bg-gradient-to-r from-beige-500 to-beige-600 hover:from-beige-600 hover:to-beige-700 text-white px-6 py-2 rounded-full font-semibold w-full"
                 >
                   {t.nav.bookNow}
@@ -547,6 +547,7 @@ export const Box = (): JSX.Element => {
           </p>
           
           <Button 
+            onClick={() => window.open('https://wa.me/31628699827', '_blank')}
             size="lg" 
             className="bg-gradient-to-r from-beige-500 to-beige-600 hover:from-beige-600 hover:to-beige-700 text-white shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 px-6 sm:px-8 md:px-10 py-2 sm:py-3 text-base sm:text-lg rounded-full animate-fade-in-up animation-delay-400"
           >
