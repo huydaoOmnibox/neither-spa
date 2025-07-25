@@ -1,0 +1,1009 @@
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Clock, Menu, X, Sparkles, Star, Heart, CheckCircle } from "lucide-react";
+import { Link } from "wouter";
+import logoPath from "@assets/image_1752511415001.png";
+
+export const Pricelist = (): JSX.Element => {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [currentLanguage, setCurrentLanguage] = useState<'nl' | 'en'>('nl');
+
+  // Translation content
+  const translations = {
+    nl: {
+      nav: {
+        home: "Home",
+        services: "Diensten",
+        pricing: "Prijzen",
+        pricelist: "Prijslijst",
+        contact: "Contact",
+        bookNow: "AFSPRAAK MAKEN"
+      },
+      header: {
+        title: "PRIJSLIJST",
+        subtitle: "Transparante prijzen voor alle nagelbehandelingen en diensten"
+      },
+      categories: {
+        gellak: "Gellak",
+        biab: "BIAB",
+        pedicure: "Pedicure",
+        gelBuilder: "Gel Builder",
+        acrylic: "Acryl",
+        other: "Overige"
+      },
+      services: {
+        // Gellak
+        gellakVoeten: "Gellak voeten",
+        gellakHanden: "Gellak handen",
+        gellakFrench: "Gellak French",
+        gellakVerwijderen: "Gellak verwijderen",
+        gellakVerwijderenOpnieuw: "Gellak verwijderen +opnieuw",
+        gellakVerwijderenAndereSalon: "Gellak verwijderen andere salon+opnieuw",
+        
+        // BIAB
+        biabNaturel: "Biab naturel",
+        biabMetGellak: "Biab met Gellak",
+        biabFrench: "Biab French",
+        biabKortVerlenging: "Biab met kort verlenging",
+        biabVerwijderen: "Biab verwijderen",
+        biabVerwijderenOpnieuw: "Biab verwijderen+opnieuw",
+        biabVerwijderenAndereSalon: "Biab verwijderen andere salon+opnieuw",
+        
+        // Pedicure
+        signaturePedicureZonderKleur: "Signature pedicure zonder kleur",
+        signaturePedicureMetKleur: "Signature pedicure met kleur",
+        signaturePedicureMetFrench: "Signature pedicure met French",
+        deluxePedicureZonderKleur: "Deluxe pedicure zonder kleur",
+        deluxePedicureMetKleur: "Deluxe pedicure met kleur",
+        deluxePedicureMetFrench: "Deluxe pedicure met French",
+        
+        // Gel Builder
+        gelBuilderNaturel: "Gel builder naturel",
+        gelBuilderMetGellak: "Gel builder met Gellak",
+        gelBuilderFrench: "Gel builder French",
+        gelBuilderOpvullen: "Gel builder opvullen",
+        gelBuilderMetGellakOpvullen: "Gel builder met Gellak opvullen",
+        gelBuilderMetFrenchOpvullen: "Gel builder met French opvullen",
+        gelBuilderAfhalen: "Gel builder afhalen",
+        gelBuilderAfhalenAndereSalon: "Gel builder afhalen andere salon",
+        gelBuilderAfhalenOpnieuw: "Gel builder afhalen+opnieuw",
+        
+        // Acrylic
+        acrylNaturel: "Acryl naturel",
+        acrylRozePoeder: "Acryl roze poeder",
+        acrylMetGellak: "Acryl met Gellak",
+        acrylMetFrench: "Acryl met French",
+        opvullenNaturel: "Opvullen naturel",
+        opvullenRozePoeder: "Opvullen roze poeder",
+        opvullenMetGellak: "Opvullen met Gellak",
+        opvullenMetFrench: "Opvullen met French",
+        acrylAfhalen: "Acryl afhalen",
+        acrylAfhalenAnderSalon: "Acryl afhalen andersalon",
+        acrylAfhalenOpnieuw: "Acryl afhalen+opnieuw",
+        acrylAfhalenAndereSalonOpnieuw: "Acryl afhalen andere salon+opnieuw",
+        
+        // Other
+        steentje: "Steentje",
+        vanaf2Kleuren: "Vanaf 2 kleuren",
+        nagelReparatie: "Nagel reparatie",
+        nailFoil: "Nail foil",
+        glitterDoorlopen: "Glitter doorlopen",
+        nailArt: "Nail art",
+        catEye: "Cat eye",
+        chrome: "Chrome",
+        langeNagelVerlengen: "Lange nagel verlengen",
+        nagelKnippen: "Nagel knippen",
+        manicureAlleen: "Manicure alleen",
+        gellakAfhalenManicure: "Gellak afhalen+Manicure",
+        biabAfhalenManicure: "Biab afhalen+Manicure",
+        acrylAfhalenManicure: "Acryl afhalen+Manicure",
+        manicureNewset: "Manicure+newset",
+        babyboom: "Babyboom"
+      },
+      detailedServices: {
+        premiumNail: {
+          title: "Premium Nagelzorg",
+          subtitle: "Complete Nageltransformatie",
+          description: "Ervaar onze kenmerkende nagelzorgservice met professionele manicures, nagelkunstontwerpen en langdurige gelapplicaties. Onze bekwame technici gebruiken premium producten om ervoor te zorgen dat uw nagels er vlekkeloos en gezond uitzien.",
+          features: [
+            "Nagelvorm geven en nagelriemverzorging",
+            "Handmassage en hydraterende behandeling",
+            "Keuze uit gewone lak of gelapplicatie",
+            "Op maat gemaakte nagelkunstontwerpen beschikbaar",
+            "Nagelversterkende behandelingen"
+          ]
+        },
+        luxuryPedicure: {
+          title: "Luxe Pedicure Spa",
+          subtitle: "Ontspanning voor Uw Voeten",
+          description: "Geniet van onze luxueuze pedicure-ervaring met voetbad, scrub en massage. Perfect voor vermoeide voeten die verwenning en professionele zorg nodig hebben in een ontspannende spa-omgeving.",
+          features: [
+            "Warm voetbad met essentiële oliën",
+            "Eeltverwijdering en scrub",
+            "Ontspannende voet- en beenmassage",
+            "Teennagel vormen en lakken",
+            "Hydraterende behandeling"
+          ]
+        },
+        eyelashExtensions: {
+          title: "Wimperextensies",
+          subtitle: "Mooie, Dramatische Wimpers",
+          description: "Versterk uw natuurlijke schoonheid met onze professionele wimperextensie service. Kies uit klassieke, volume of mega volume wimpers voor een prachtig, langdurig resultaat dat de behoefte aan mascara wegneemt.",
+          features: [
+            "Individuele wimperapplicatie",
+            "Keuze uit krul, lengte en dikte",
+            "Natuurlijke of dramatische volume opties",
+            "Wimperveilige lijm",
+            "Nazorg instructies inbegrepen"
+          ]
+        },
+        professionalWaxing: {
+          title: "Professioneel Harsen",
+          subtitle: "Gladde, Haarvrije Huid",
+          description: "Ervaar zachte maar effectieve haarverwijdering met onze professionele harsservices. Met gebruik van hoogwaardige warme was bieden wij comfortabele behandelingen voor verschillende lichaamsdelen met langdurige resultaten.",
+          features: [
+            "Premium warme was applicatie",
+            "Voor- en nabehandeling",
+            "Verschillende lichaamsdelen beschikbaar",
+            "Kalmerende nazorg producten",
+            "Professionele hygiënestandaarden"
+          ]
+        }
+      },
+      cta: {
+        title: "Klaar om een Afspraak te Maken?",
+        description: "Boek vandaag nog en ervaar onze professionele nagelbehandelingen met transparante prijzen.",
+        bookAppointment: "AFSPRAAK MAKEN"
+      }
+    },
+    en: {
+      nav: {
+        home: "Home",
+        services: "Services",
+        pricing: "Pricing",
+        pricelist: "Price List",
+        contact: "Contact",
+        bookNow: "BOOK NOW"
+      },
+      header: {
+        title: "PRICE LIST",
+        subtitle: "Transparent pricing for all nail treatments and services"
+      },
+      categories: {
+        gellak: "Gel Polish",
+        biab: "BIAB",
+        pedicure: "Pedicure",
+        gelBuilder: "Gel Builder",
+        acrylic: "Acrylic",
+        other: "Other Services"
+      },
+      services: {
+        // Gel Polish
+        gellakVoeten: "Gel polish feet",
+        gellakHanden: "Gel polish hands",
+        gellakFrench: "Gel polish French",
+        gellakVerwijderen: "Gel polish removal",
+        gellakVerwijderenOpnieuw: "Gel polish removal +reapplication",
+        gellakVerwijderenAndereSalon: "Gel polish removal other salon+reapplication",
+        
+        // BIAB
+        biabNaturel: "BIAB natural",
+        biabMetGellak: "BIAB with gel polish",
+        biabFrench: "BIAB French",
+        biabKortVerlenging: "BIAB with short extension",
+        biabVerwijderen: "BIAB removal",
+        biabVerwijderenOpnieuw: "BIAB removal+reapplication",
+        biabVerwijderenAndereSalon: "BIAB removal other salon+reapplication",
+        
+        // Pedicure
+        signaturePedicureZonderKleur: "Signature pedicure without color",
+        signaturePedicureMetKleur: "Signature pedicure with color",
+        signaturePedicureMetFrench: "Signature pedicure with French",
+        deluxePedicureZonderKleur: "Deluxe pedicure without color",
+        deluxePedicureMetKleur: "Deluxe pedicure with color",
+        deluxePedicureMetFrench: "Deluxe pedicure with French",
+        
+        // Gel Builder
+        gelBuilderNaturel: "Gel builder natural",
+        gelBuilderMetGellak: "Gel builder with gel polish",
+        gelBuilderFrench: "Gel builder French",
+        gelBuilderOpvullen: "Gel builder infill",
+        gelBuilderMetGellakOpvullen: "Gel builder with gel polish infill",
+        gelBuilderMetFrenchOpvullen: "Gel builder with French infill",
+        gelBuilderAfhalen: "Gel builder removal",
+        gelBuilderAfhalenAndereSalon: "Gel builder removal other salon",
+        gelBuilderAfhalenOpnieuw: "Gel builder removal+reapplication",
+        
+        // Acrylic
+        acrylNaturel: "Acrylic natural",
+        acrylRozePoeder: "Acrylic pink powder",
+        acrylMetGellak: "Acrylic with gel polish",
+        acrylMetFrench: "Acrylic with French",
+        opvullenNaturel: "Infill natural",
+        opvullenRozePoeder: "Infill pink powder",
+        opvullenMetGellak: "Infill with gel polish",
+        opvullenMetFrench: "Infill with French",
+        acrylAfhalen: "Acrylic removal",
+        acrylAfhalenAnderSalon: "Acrylic removal other salon",
+        acrylAfhalenOpnieuw: "Acrylic removal+reapplication",
+        acrylAfhalenAndereSalonOpnieuw: "Acrylic removal other salon+reapplication",
+        
+        // Other
+        steentje: "Rhinestone",
+        vanaf2Kleuren: "From 2 colors",
+        nagelReparatie: "Nail repair",
+        nailFoil: "Nail foil",
+        glitterDoorlopen: "Glitter fade",
+        nailArt: "Nail art",
+        catEye: "Cat eye",
+        chrome: "Chrome",
+        langeNagelVerlengen: "Long nail extension",
+        nagelKnippen: "Nail trimming",
+        manicureAlleen: "Manicure only",
+        gellakAfhalenManicure: "Gel polish removal+Manicure",
+        biabAfhalenManicure: "BIAB removal+Manicure",
+        acrylAfhalenManicure: "Acrylic removal+Manicure",
+        manicureNewset: "Manicure+new set",
+        babyboom: "Baby boom"
+      },
+      detailedServices: {
+        premiumNail: {
+          title: "Premium Nail Care",
+          subtitle: "Complete Nail Transformation",
+          description: "Experience our signature nail care service featuring professional manicures, nail art designs, and long-lasting gel applications. Our skilled technicians use premium products to ensure your nails look flawless and healthy.",
+          features: [
+            "Nail shaping and cuticle care",
+            "Hand massage and moisturizing treatment",
+            "Choice of regular polish or gel application",
+            "Custom nail art designs available",
+            "Nail strengthening treatments"
+          ]
+        },
+        luxuryPedicure: {
+          title: "Luxury Pedicure Spa",
+          subtitle: "Relaxation for Your Feet",
+          description: "Indulge in our luxurious pedicure experience with foot soaking, exfoliation, and massage. Perfect for tired feet that need pampering and professional care in a relaxing spa environment.",
+          features: [
+            "Warm foot soak with essential oils",
+            "Callus removal and exfoliation",
+            "Relaxing foot and leg massage",
+            "Toenail shaping and polish",
+            "Moisturizing treatment"
+          ]
+        },
+        eyelashExtensions: {
+          title: "Eyelash Extensions",
+          subtitle: "Beautiful, Dramatic Lashes",
+          description: "Enhance your natural beauty with our professional eyelash extension service. Choose from classic, volume, or mega volume lashes for a stunning, long-lasting result that eliminates the need for mascara.",
+          features: [
+            "Individual lash application",
+            "Choice of curl, length, and thickness",
+            "Natural or dramatic volume options",
+            "Lash-safe adhesive",
+            "Aftercare instructions included"
+          ]
+        },
+        professionalWaxing: {
+          title: "Professional Waxing",
+          subtitle: "Smooth, Hair-Free Skin",
+          description: "Experience gentle yet effective hair removal with our professional waxing services. Using high-quality warm wax, we provide comfortable treatments for various body areas with long-lasting results.",
+          features: [
+            "Premium warm wax application",
+            "Pre and post-treatment care",
+            "Various area options available",
+            "Soothing aftercare products",
+            "Professional hygiene standards"
+          ]
+        }
+      },
+      cta: {
+        title: "Ready to Book an Appointment?",
+        description: "Book today and experience our professional nail treatments with transparent pricing.",
+        bookAppointment: "BOOK APPOINTMENT"
+      }
+    }
+  };
+
+  const t = translations[currentLanguage];
+
+  const scrollToSection = (sectionId: string) => {
+    if (sectionId === 'pricing') {
+      // Navigate to home page and scroll to pricing section
+      window.location.href = '/#pricing';
+    } else if (sectionId === 'contact') {
+      // Navigate to home page and scroll to contact section
+      window.location.href = '/#contact';
+    } else if (sectionId === 'home') {
+      // Navigate to home page
+      window.location.href = '/';
+    }
+    setMobileMenuOpen(false);
+  };
+
+  // Price data organized by category
+  const priceData = {
+    gellak: [
+      { service: "gellakVoeten", price: "€30" },
+      { service: "gellakHanden", price: "€35" },
+      { service: "gellakFrench", price: "€45" },
+      { service: "gellakVerwijderen", price: "€15" },
+      { service: "gellakVerwijderenOpnieuw", price: "+€5" },
+      { service: "gellakVerwijderenAndereSalon", price: "+€8" }
+    ],
+    biab: [
+      { service: "biabNaturel", price: "€50" },
+      { service: "biabMetGellak", price: "€60" },
+      { service: "biabFrench", price: "€65" },
+      { service: "biabKortVerlenging", price: "+€10" },
+      { service: "biabVerwijderen", price: "€20" },
+      { service: "biabVerwijderenOpnieuw", price: "+€5" },
+      { service: "biabVerwijderenAndereSalon", price: "+€8" }
+    ],
+    pedicure: [
+      { service: "signaturePedicureZonderKleur", price: "€45" },
+      { service: "signaturePedicureMetKleur", price: "€60" },
+      { service: "signaturePedicureMetFrench", price: "€70" },
+      { service: "deluxePedicureZonderKleur", price: "€60" },
+      { service: "deluxePedicureMetKleur", price: "€75" },
+      { service: "deluxePedicureMetFrench", price: "€85" }
+    ],
+    gelBuilder: [
+      { service: "gelBuilderNaturel", price: "€55" },
+      { service: "gelBuilderMetGellak", price: "€60" },
+      { service: "gelBuilderFrench", price: "€70" },
+      { service: "gelBuilderOpvullen", price: "€45" },
+      { service: "gelBuilderMetGellakOpvullen", price: "€55" },
+      { service: "gelBuilderMetFrenchOpvullen", price: "€65" },
+      { service: "gelBuilderAfhalen", price: "€20" },
+      { service: "gelBuilderAfhalenAndereSalon", price: "€25" },
+      { service: "gelBuilderAfhalenOpnieuw", price: "+€8" }
+    ],
+    acrylic: [
+      { service: "acrylNaturel", price: "€50" },
+      { service: "acrylRozePoeder", price: "€55" },
+      { service: "acrylMetGellak", price: "€60" },
+      { service: "acrylMetFrench", price: "€70" },
+      { service: "opvullenNaturel", price: "€45" },
+      { service: "opvullenRozePoeder", price: "€50" },
+      { service: "opvullenMetGellak", price: "€55" },
+      { service: "opvullenMetFrench", price: "€65" },
+      { service: "acrylAfhalen", price: "€25" },
+      { service: "acrylAfhalenAnderSalon", price: "€30" },
+      { service: "acrylAfhalenOpnieuw", price: "+€8" },
+      { service: "acrylAfhalenAndereSalonOpnieuw", price: "+€10" }
+    ],
+    other: [
+      { service: "steentje", price: "€1" },
+      { service: "vanaf2Kleuren", price: "€5" },
+      { service: "nagelReparatie", price: "€5" },
+      { service: "nailFoil", price: "€2,5/nagel" },
+      { service: "glitterDoorlopen", price: "€2,5/nagel" },
+      { service: "nailArt", price: "€5/nagel" },
+      { service: "catEye", price: "€10" },
+      { service: "chrome", price: "€10" },
+      { service: "langeNagelVerlengen", price: "€10" },
+      { service: "nagelKnippen", price: "€10" },
+      { service: "manicureAlleen", price: "€25" },
+      { service: "gellakAfhalenManicure", price: "€30" },
+      { service: "biabAfhalenManicure", price: "€35" },
+      { service: "acrylAfhalenManicure", price: "€40" },
+      { service: "manicureNewset", price: "+€15" },
+      { service: "babyboom", price: "€15" }
+    ]
+  };
+
+  return (
+    <div className="min-h-screen bg-white dark:bg-gray-900">
+      {/* Navigation Bar */}
+      <nav className="fixed top-0 left-0 right-0 bg-white/95 dark:bg-gray-900/95 backdrop-blur-md border-b border-beige-300 dark:border-gray-700 z-50 shadow-lg">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="flex items-center justify-between h-16">
+            {/* Logo */}
+            <div className="flex items-center space-x-3">
+              <img 
+                src={logoPath} 
+                alt="Nails of the Netherlands Logo" 
+                className="h-14 w-14 object-contain rounded-full border-2 border-beige-400"
+              />
+              <span className="text-lg font-bold text-beige-800 dark:text-beige-200">
+                NAILS OF THE NETHERLANDS
+              </span>
+            </div>
+
+            {/* Desktop Navigation */}
+            <div className="hidden md:flex items-center space-x-8">
+              <button 
+                onClick={() => scrollToSection('home')}
+                className="text-beige-700 dark:text-beige-300 hover:text-beige-500 dark:hover:text-beige-400 font-medium transition-colors duration-200"
+              >
+                {t.nav.home}
+              </button>
+              <Link href="/services">
+                <button className="text-beige-700 dark:text-beige-300 hover:text-beige-500 dark:hover:text-beige-400 font-medium transition-colors duration-200">
+                  {t.nav.services}
+                </button>
+              </Link>
+              <button 
+                onClick={() => scrollToSection('pricing')}
+                className="text-beige-700 dark:text-beige-300 hover:text-beige-500 dark:hover:text-beige-400 font-medium transition-colors duration-200"
+              >
+                {t.nav.pricing}
+              </button>
+              <Link href="/pricelist">
+                <button className="text-beige-500 dark:text-beige-400 font-semibold transition-colors duration-200 border-b-2 border-beige-500">
+                  {t.nav.pricelist}
+                </button>
+              </Link>
+              <button 
+                onClick={() => scrollToSection('contact')}
+                className="text-beige-700 dark:text-beige-300 hover:text-beige-500 dark:hover:text-beige-400 font-medium transition-colors duration-200"
+              >
+                {t.nav.contact}
+              </button>
+              
+              <Button 
+                onClick={() => scrollToSection('contact')}
+                className="bg-gradient-to-r from-beige-500 to-beige-600 hover:from-beige-600 hover:to-beige-700 text-white px-6 py-2 rounded-full font-semibold"
+              >
+                {t.nav.bookNow}
+              </Button>
+              
+              {/* Language Flags */}
+              <div className="flex items-center space-x-2">
+                <button 
+                  onClick={() => setCurrentLanguage('en')}
+                  className={`w-8 h-8 rounded-full overflow-hidden border-2 transition-all duration-200 hover:scale-110 ${
+                    currentLanguage === 'en' ? 'border-beige-500 shadow-md' : 'border-gray-300 hover:border-beige-400'
+                  }`}
+                  title="English"
+                >
+                  <svg className="w-full h-full" viewBox="0 0 60 40" fill="none">
+                    <rect width="60" height="40" fill="#012169"/>
+                    <path d="M0 0L60 40M60 0L0 40" stroke="white" strokeWidth="6"/>
+                    <path d="M0 0L60 40M60 0L0 40" stroke="#C8102E" strokeWidth="4"/>
+                    <path d="M30 0V40M0 20H60" stroke="white" strokeWidth="12"/>
+                    <path d="M30 0V40M0 20H60" stroke="#C8102E" strokeWidth="8"/>
+                  </svg>
+                </button>
+                <button 
+                  onClick={() => setCurrentLanguage('nl')}
+                  className={`w-8 h-8 rounded-full overflow-hidden border-2 transition-all duration-200 hover:scale-110 ${
+                    currentLanguage === 'nl' ? 'border-beige-500 shadow-md' : 'border-gray-300 hover:border-beige-400'
+                  }`}
+                  title="Nederlands"
+                >
+                  <svg className="w-full h-full" viewBox="0 0 60 40" fill="none">
+                    <rect width="60" height="13.33" fill="#AE1C28"/>
+                    <rect y="13.33" width="60" height="13.33" fill="white"/>
+                    <rect y="26.66" width="60" height="13.34" fill="#21468B"/>
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            {/* Mobile Menu Button */}
+            <div className="md:hidden">
+              <button
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                className="text-beige-700 dark:text-beige-300 hover:text-beige-500 dark:hover:text-beige-400"
+              >
+                {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              </button>
+            </div>
+          </div>
+
+          {/* Mobile Navigation */}
+          {mobileMenuOpen && (
+            <div className="md:hidden absolute top-16 left-0 right-0 bg-white dark:bg-gray-900 border-b border-beige-300 dark:border-gray-700 shadow-lg">
+              <div className="flex flex-col space-y-4 p-6">
+                <button 
+                  onClick={() => scrollToSection('home')}
+                  className="text-beige-700 dark:text-beige-300 hover:text-beige-500 dark:hover:text-beige-400 font-medium text-left transition-colors duration-200"
+                >
+                  {t.nav.home}
+                </button>
+                <Link href="/services">
+                  <button 
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="text-beige-700 dark:text-beige-300 hover:text-beige-500 dark:hover:text-beige-400 font-medium text-left transition-colors duration-200"
+                  >
+                    {t.nav.services}
+                  </button>
+                </Link>
+                <button 
+                  onClick={() => scrollToSection('pricing')}
+                  className="text-beige-700 dark:text-beige-300 hover:text-beige-500 dark:hover:text-beige-400 font-medium text-left transition-colors duration-200"
+                >
+                  {t.nav.pricing}
+                </button>
+                <Link href="/pricelist">
+                  <button 
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="text-beige-500 dark:text-beige-400 font-semibold text-left transition-colors duration-200"
+                  >
+                    {t.nav.pricelist}
+                  </button>
+                </Link>
+                <button 
+                  onClick={() => scrollToSection('contact')}
+                  className="text-beige-700 dark:text-beige-300 hover:text-beige-500 dark:hover:text-beige-400 font-medium text-left transition-colors duration-200"
+                >
+                  {t.nav.contact}
+                </button>
+                
+                <Button 
+                  onClick={() => scrollToSection('contact')}
+                  className="bg-gradient-to-r from-beige-500 to-beige-600 hover:from-beige-600 hover:to-beige-700 text-white px-6 py-2 rounded-full font-semibold w-full"
+                >
+                  {t.nav.bookNow}
+                </Button>
+                
+                {/* Mobile Language Flags */}
+                <div className="flex items-center justify-center space-x-4 pt-2">
+                  <button 
+                    onClick={() => setCurrentLanguage('en')}
+                    className={`w-10 h-10 rounded-full overflow-hidden border-2 transition-all duration-200 hover:scale-110 ${
+                      currentLanguage === 'en' ? 'border-beige-500 shadow-md' : 'border-gray-300 hover:border-beige-400'
+                    }`}
+                    title="English"
+                  >
+                    <svg className="w-full h-full" viewBox="0 0 60 40" fill="none">
+                      <rect width="60" height="40" fill="#012169"/>
+                      <path d="M0 0L60 40M60 0L0 40" stroke="white" strokeWidth="6"/>
+                      <path d="M0 0L60 40M60 0L0 40" stroke="#C8102E" strokeWidth="4"/>
+                      <path d="M30 0V40M0 20H60" stroke="white" strokeWidth="12"/>
+                      <path d="M30 0V40M0 20H60" stroke="#C8102E" strokeWidth="8"/>
+                    </svg>
+                  </button>
+                  <button 
+                    onClick={() => setCurrentLanguage('nl')}
+                    className={`w-10 h-10 rounded-full overflow-hidden border-2 transition-all duration-200 hover:scale-110 ${
+                      currentLanguage === 'nl' ? 'border-beige-500 shadow-md' : 'border-gray-300 hover:border-beige-400'
+                    }`}
+                    title="Nederlands"
+                  >
+                    <svg className="w-full h-full" viewBox="0 0 60 40" fill="none">
+                      <rect width="60" height="13.33" fill="#AE1C28"/>
+                      <rect y="13.33" width="60" height="13.33" fill="white"/>
+                      <rect y="26.66" width="60" height="13.34" fill="#21468B"/>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      </nav>
+
+      {/* Header */}
+      <div className="bg-gradient-to-r from-beige-100 to-beige-200 dark:from-gray-800 dark:to-gray-700 pt-20 pb-12">
+        <div className="max-w-7xl mx-auto px-6">          
+          <div className="text-center">
+            <h1 className="text-6xl font-bold text-beige-800 dark:text-beige-200 mb-6">
+              {t.header.title}
+            </h1>
+            <p className="text-xl text-beige-600 dark:text-beige-300 max-w-3xl mx-auto leading-relaxed">
+              {t.header.subtitle}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Price List Content */}
+      <section className="py-20">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            
+            {/* Gellak */}
+            <Card className="bg-gradient-to-br from-beige-50 to-beige-100 dark:from-gray-800 dark:to-gray-700 border-none shadow-xl hover:shadow-2xl transition-all duration-300">
+              <CardHeader className="bg-gradient-to-r from-beige-500 to-beige-600 text-white rounded-t-xl">
+                <CardTitle className="text-2xl font-bold text-center flex items-center justify-center gap-2">
+                  <Sparkles className="w-6 h-6" />
+                  {t.categories.gellak}
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="p-6">
+                <div className="space-y-3">
+                  {priceData.gellak.map((item, index) => (
+                    <div key={index} className="flex justify-between items-center py-2 border-b border-beige-200 dark:border-gray-600 last:border-b-0">
+                      <span className="text-gray-700 dark:text-gray-300">{t.services[item.service as keyof typeof t.services]}</span>
+                      <Badge className="bg-beige-500 text-white font-semibold">{item.price}</Badge>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* BIAB */}
+            <Card className="bg-gradient-to-br from-beige-50 to-beige-100 dark:from-gray-800 dark:to-gray-700 border-none shadow-xl hover:shadow-2xl transition-all duration-300">
+              <CardHeader className="bg-gradient-to-r from-beige-500 to-beige-600 text-white rounded-t-xl">
+                <CardTitle className="text-2xl font-bold text-center flex items-center justify-center gap-2">
+                  <Sparkles className="w-6 h-6" />
+                  {t.categories.biab}
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="p-6">
+                <div className="space-y-3">
+                  {priceData.biab.map((item, index) => (
+                    <div key={index} className="flex justify-between items-center py-2 border-b border-beige-200 dark:border-gray-600 last:border-b-0">
+                      <span className="text-gray-700 dark:text-gray-300">{t.services[item.service as keyof typeof t.services]}</span>
+                      <Badge className="bg-beige-500 text-white font-semibold">{item.price}</Badge>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Pedicure */}
+            <Card className="bg-gradient-to-br from-beige-50 to-beige-100 dark:from-gray-800 dark:to-gray-700 border-none shadow-xl hover:shadow-2xl transition-all duration-300">
+              <CardHeader className="bg-gradient-to-r from-beige-500 to-beige-600 text-white rounded-t-xl">
+                <CardTitle className="text-2xl font-bold text-center flex items-center justify-center gap-2">
+                  <Sparkles className="w-6 h-6" />
+                  {t.categories.pedicure}
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="p-6">
+                <div className="space-y-3">
+                  {priceData.pedicure.map((item, index) => (
+                    <div key={index} className="flex justify-between items-center py-2 border-b border-beige-200 dark:border-gray-600 last:border-b-0">
+                      <span className="text-gray-700 dark:text-gray-300">{t.services[item.service as keyof typeof t.services]}</span>
+                      <Badge className="bg-beige-500 text-white font-semibold">{item.price}</Badge>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Gel Builder */}
+            <Card className="bg-gradient-to-br from-beige-50 to-beige-100 dark:from-gray-800 dark:to-gray-700 border-none shadow-xl hover:shadow-2xl transition-all duration-300">
+              <CardHeader className="bg-gradient-to-r from-beige-500 to-beige-600 text-white rounded-t-xl">
+                <CardTitle className="text-2xl font-bold text-center flex items-center justify-center gap-2">
+                  <Sparkles className="w-6 h-6" />
+                  {t.categories.gelBuilder}
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="p-6">
+                <div className="space-y-3">
+                  {priceData.gelBuilder.map((item, index) => (
+                    <div key={index} className="flex justify-between items-center py-2 border-b border-beige-200 dark:border-gray-600 last:border-b-0">
+                      <span className="text-gray-700 dark:text-gray-300">{t.services[item.service as keyof typeof t.services]}</span>
+                      <Badge className="bg-beige-500 text-white font-semibold">{item.price}</Badge>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Acrylic */}
+            <Card className="bg-gradient-to-br from-beige-50 to-beige-100 dark:from-gray-800 dark:to-gray-700 border-none shadow-xl hover:shadow-2xl transition-all duration-300">
+              <CardHeader className="bg-gradient-to-r from-beige-500 to-beige-600 text-white rounded-t-xl">
+                <CardTitle className="text-2xl font-bold text-center flex items-center justify-center gap-2">
+                  <Sparkles className="w-6 h-6" />
+                  {t.categories.acrylic}
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="p-6">
+                <div className="space-y-3">
+                  {priceData.acrylic.map((item, index) => (
+                    <div key={index} className="flex justify-between items-center py-2 border-b border-beige-200 dark:border-gray-600 last:border-b-0">
+                      <span className="text-gray-700 dark:text-gray-300">{t.services[item.service as keyof typeof t.services]}</span>
+                      <Badge className="bg-beige-500 text-white font-semibold">{item.price}</Badge>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Other Services */}
+            <Card className="bg-gradient-to-br from-beige-50 to-beige-100 dark:from-gray-800 dark:to-gray-700 border-none shadow-xl hover:shadow-2xl transition-all duration-300">
+              <CardHeader className="bg-gradient-to-r from-beige-500 to-beige-600 text-white rounded-t-xl">
+                <CardTitle className="text-2xl font-bold text-center flex items-center justify-center gap-2">
+                  <Sparkles className="w-6 h-6" />
+                  {t.categories.other}
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="p-6">
+                <div className="space-y-3">
+                  {priceData.other.map((item, index) => (
+                    <div key={index} className="flex justify-between items-center py-2 border-b border-beige-200 dark:border-gray-600 last:border-b-0">
+                      <span className="text-gray-700 dark:text-gray-300">{t.services[item.service as keyof typeof t.services]}</span>
+                      <Badge className="bg-beige-500 text-white font-semibold">{item.price}</Badge>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+
+          </div>
+        </div>
+      </section>
+
+      {/* Detailed Services Section */}
+      <section className="py-20">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="text-center mb-16">
+            <h2 className="text-5xl font-bold text-beige-800 dark:text-beige-200 mb-6">
+              {currentLanguage === 'nl' ? 'ONZE DIENSTEN' : 'OUR SERVICES'}
+            </h2>
+            <p className="text-xl text-beige-600 dark:text-beige-300 max-w-3xl mx-auto leading-relaxed">
+              {currentLanguage === 'nl' 
+                ? 'Ontdek onze premium nagel- en spa-diensten die zijn ontworpen om u te verwennen en uw natuurlijke schoonheid te versterken.'
+                : 'Discover our premium nail and spa services designed to pamper you and enhance your natural beauty.'
+              }
+            </p>
+          </div>
+          
+          <div className="space-y-16">
+            {/* Premium Nail Care */}
+            <div className="grid lg:grid-cols-2 gap-12 items-center">
+              <div className="relative group">
+                <div className="relative overflow-hidden rounded-3xl shadow-2xl">
+                  <img 
+                    src="https://images.unsplash.com/photo-1519014816548-bf5fe059798b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80"
+                    alt="Premium Nail Care"
+                    className="w-full h-96 object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+                  <div className="absolute top-6 left-6">
+                    <Badge className="bg-beige-500 text-white px-4 py-2 text-sm font-semibold">
+                      <Star className="w-4 h-4 mr-1" />
+                      Most Popular
+                    </Badge>
+                  </div>
+                  <div className="absolute bottom-6 left-6 text-white">
+                    <div className="flex items-center gap-4 mb-2">
+                      <div className="flex items-center gap-1">
+                        <Clock className="w-4 h-4" />
+                        <span className="text-sm">60-90 min</span>
+                      </div>
+                      <div className="text-2xl font-bold">€45 - €90</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="space-y-6">
+                <div>
+                  <h3 className="text-4xl font-bold text-beige-800 dark:text-beige-200 mb-2">
+                    {t.detailedServices.premiumNail.title}
+                  </h3>
+                  <p className="text-xl text-beige-600 dark:text-beige-300 font-medium mb-4">
+                    {t.detailedServices.premiumNail.subtitle}
+                  </p>
+                  <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed">
+                    {t.detailedServices.premiumNail.description}
+                  </p>
+                </div>
+
+                <div className="space-y-3">
+                  <h4 className="text-xl font-semibold text-beige-800 dark:text-beige-200 flex items-center gap-2">
+                    <Sparkles className="w-5 h-5" />
+                    {currentLanguage === 'nl' ? "Wat is inbegrepen:" : "What's Included:"}
+                  </h4>
+                  <ul className="space-y-2">
+                    {t.detailedServices.premiumNail.features.map((feature, idx) => (
+                      <li key={idx} className="flex items-center gap-3 text-gray-700 dark:text-gray-300">
+                        <CheckCircle className="w-5 h-5 text-beige-500 flex-shrink-0" />
+                        <span>{feature}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div className="flex flex-col sm:flex-row gap-4 pt-6">
+                  <Button className="bg-gradient-to-r from-beige-500 to-beige-600 hover:from-beige-600 hover:to-beige-700 text-white px-8 py-3 rounded-full font-semibold transition-all duration-300 hover:scale-105 shadow-lg">
+                    <Heart className="w-4 h-4 mr-2" />
+                    {currentLanguage === 'nl' ? 'Boek Deze Service' : 'Book This Service'}
+                  </Button>
+                </div>
+              </div>
+            </div>
+
+            {/* Luxury Pedicure */}
+            <div className="grid lg:grid-cols-2 gap-12 items-center lg:grid-flow-col-dense">
+              <div className="relative group lg:col-start-2">
+                <div className="relative overflow-hidden rounded-3xl shadow-2xl">
+                  <img 
+                    src="https://images.unsplash.com/photo-1595187729633-5ee2d3604e59?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80"
+                    alt="Luxury Pedicure"
+                    className="w-full h-96 object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+                  <div className="absolute bottom-6 left-6 text-white">
+                    <div className="flex items-center gap-4 mb-2">
+                      <div className="flex items-center gap-1">
+                        <Clock className="w-4 h-4" />
+                        <span className="text-sm">45-75 min</span>
+                      </div>
+                      <div className="text-2xl font-bold">€35 - €65</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="space-y-6 lg:col-start-1 lg:row-start-1">
+                <div>
+                  <h3 className="text-4xl font-bold text-beige-800 dark:text-beige-200 mb-2">
+                    {t.detailedServices.luxuryPedicure.title}
+                  </h3>
+                  <p className="text-xl text-beige-600 dark:text-beige-300 font-medium mb-4">
+                    {t.detailedServices.luxuryPedicure.subtitle}
+                  </p>
+                  <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed">
+                    {t.detailedServices.luxuryPedicure.description}
+                  </p>
+                </div>
+
+                <div className="space-y-3">
+                  <h4 className="text-xl font-semibold text-beige-800 dark:text-beige-200 flex items-center gap-2">
+                    <Sparkles className="w-5 h-5" />
+                    {currentLanguage === 'nl' ? "Wat is inbegrepen:" : "What's Included:"}
+                  </h4>
+                  <ul className="space-y-2">
+                    {t.detailedServices.luxuryPedicure.features.map((feature, idx) => (
+                      <li key={idx} className="flex items-center gap-3 text-gray-700 dark:text-gray-300">
+                        <CheckCircle className="w-5 h-5 text-beige-500 flex-shrink-0" />
+                        <span>{feature}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div className="flex flex-col sm:flex-row gap-4 pt-6">
+                  <Button className="bg-gradient-to-r from-beige-500 to-beige-600 hover:from-beige-600 hover:to-beige-700 text-white px-8 py-3 rounded-full font-semibold transition-all duration-300 hover:scale-105 shadow-lg">
+                    <Heart className="w-4 h-4 mr-2" />
+                    {currentLanguage === 'nl' ? 'Boek Deze Service' : 'Book This Service'}
+                  </Button>
+                </div>
+              </div>
+            </div>
+
+            {/* Eyelash Extensions */}
+            <div className="grid lg:grid-cols-2 gap-12 items-center">
+              <div className="relative group">
+                <div className="relative overflow-hidden rounded-3xl shadow-2xl">
+                  <img 
+                    src="https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80"
+                    alt="Eyelash Extensions"
+                    className="w-full h-96 object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+                  <div className="absolute top-6 left-6">
+                    <Badge className="bg-beige-500 text-white px-4 py-2 text-sm font-semibold">
+                      <Star className="w-4 h-4 mr-1" />
+                      Popular
+                    </Badge>
+                  </div>
+                  <div className="absolute bottom-6 left-6 text-white">
+                    <div className="flex items-center gap-4 mb-2">
+                      <div className="flex items-center gap-1">
+                        <Clock className="w-4 h-4" />
+                        <span className="text-sm">90-120 min</span>
+                      </div>
+                      <div className="text-2xl font-bold">€55 - €120</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="space-y-6">
+                <div>
+                  <h3 className="text-4xl font-bold text-beige-800 dark:text-beige-200 mb-2">
+                    {t.detailedServices.eyelashExtensions.title}
+                  </h3>
+                  <p className="text-xl text-beige-600 dark:text-beige-300 font-medium mb-4">
+                    {t.detailedServices.eyelashExtensions.subtitle}
+                  </p>
+                  <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed">
+                    {t.detailedServices.eyelashExtensions.description}
+                  </p>
+                </div>
+
+                <div className="space-y-3">
+                  <h4 className="text-xl font-semibold text-beige-800 dark:text-beige-200 flex items-center gap-2">
+                    <Sparkles className="w-5 h-5" />
+                    {currentLanguage === 'nl' ? "Wat is inbegrepen:" : "What's Included:"}
+                  </h4>
+                  <ul className="space-y-2">
+                    {t.detailedServices.eyelashExtensions.features.map((feature, idx) => (
+                      <li key={idx} className="flex items-center gap-3 text-gray-700 dark:text-gray-300">
+                        <CheckCircle className="w-5 h-5 text-beige-500 flex-shrink-0" />
+                        <span>{feature}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div className="flex flex-col sm:flex-row gap-4 pt-6">
+                  <Button className="bg-gradient-to-r from-beige-500 to-beige-600 hover:from-beige-600 hover:to-beige-700 text-white px-8 py-3 rounded-full font-semibold transition-all duration-300 hover:scale-105 shadow-lg">
+                    <Heart className="w-4 h-4 mr-2" />
+                    {currentLanguage === 'nl' ? 'Boek Deze Service' : 'Book This Service'}
+                  </Button>
+                </div>
+              </div>
+            </div>
+
+            {/* Professional Waxing */}
+            <div className="grid lg:grid-cols-2 gap-12 items-center lg:grid-flow-col-dense">
+              <div className="relative group lg:col-start-2">
+                <div className="relative overflow-hidden rounded-3xl shadow-2xl">
+                  <img 
+                    src="https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80"
+                    alt="Professional Waxing"
+                    className="w-full h-96 object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+                  <div className="absolute bottom-6 left-6 text-white">
+                    <div className="flex items-center gap-4 mb-2">
+                      <div className="flex items-center gap-1">
+                        <Clock className="w-4 h-4" />
+                        <span className="text-sm">15-60 min</span>
+                      </div>
+                      <div className="text-2xl font-bold">€20 - €80</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="space-y-6 lg:col-start-1 lg:row-start-1">
+                <div>
+                  <h3 className="text-4xl font-bold text-beige-800 dark:text-beige-200 mb-2">
+                    {t.detailedServices.professionalWaxing.title}
+                  </h3>
+                  <p className="text-xl text-beige-600 dark:text-beige-300 font-medium mb-4">
+                    {t.detailedServices.professionalWaxing.subtitle}
+                  </p>
+                  <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed">
+                    {t.detailedServices.professionalWaxing.description}
+                  </p>
+                </div>
+
+                <div className="space-y-3">
+                  <h4 className="text-xl font-semibold text-beige-800 dark:text-beige-200 flex items-center gap-2">
+                    <Sparkles className="w-5 h-5" />
+                    {currentLanguage === 'nl' ? "Wat is inbegrepen:" : "What's Included:"}
+                  </h4>
+                  <ul className="space-y-2">
+                    {t.detailedServices.professionalWaxing.features.map((feature, idx) => (
+                      <li key={idx} className="flex items-center gap-3 text-gray-700 dark:text-gray-300">
+                        <CheckCircle className="w-5 h-5 text-beige-500 flex-shrink-0" />
+                        <span>{feature}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div className="flex flex-col sm:flex-row gap-4 pt-6">
+                  <Button className="bg-gradient-to-r from-beige-500 to-beige-600 hover:from-beige-600 hover:to-beige-700 text-white px-8 py-3 rounded-full font-semibold transition-all duration-300 hover:scale-105 shadow-lg">
+                    <Heart className="w-4 h-4 mr-2" />
+                    {currentLanguage === 'nl' ? 'Boek Deze Service' : 'Book This Service'}
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Call to Action */}
+      <section className="py-20 bg-gradient-to-r from-beige-50 to-beige-100 dark:from-gray-800 dark:to-gray-700">
+        <div className="max-w-4xl mx-auto text-center px-6">
+          <h2 className="text-4xl font-bold text-beige-800 dark:text-beige-200 mb-6">
+            {t.cta.title}
+          </h2>
+          <p className="text-xl text-beige-600 dark:text-beige-300 mb-8 leading-relaxed">
+            {t.cta.description}
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Button className="bg-gradient-to-r from-beige-500 to-beige-600 hover:from-beige-600 hover:to-beige-700 text-white px-12 py-4 rounded-full text-lg font-semibold transition-all duration-300 hover:scale-105 shadow-xl">
+              <Clock className="w-5 h-5 mr-2" />
+              {t.cta.bookAppointment}
+            </Button>
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+}; 

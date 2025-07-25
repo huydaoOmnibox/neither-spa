@@ -6,14 +6,16 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/not-found";
 
 import { Box } from "@/pages/Box";
-import { Services } from "@/pages/Services";
+import { Products } from "@/pages/Products";
+import { Pricelist } from "@/pages/Pricelist";
 
 function Router() {
   return (
     <Switch>
       {/* Add pages below */}
       <Route path="/" component={Box} />
-      <Route path="/services" component={Services} />
+              <Route path="/products" component={Products} />
+      <Route path="/pricelist" component={Pricelist} />
       {/* Fallback to 404 */}
       <Route component={NotFound} />
     </Switch>
