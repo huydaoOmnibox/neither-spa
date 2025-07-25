@@ -6,6 +6,7 @@ import { Clock, Menu, X, Sparkles, Star, Heart, CheckCircle } from "lucide-react
 import { Link } from "wouter";
 import logoPath from "@assets/image_1752511415001.png";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { NO_IMAGE } from "@/lib/constants";
 
 export const Pricelist = (): JSX.Element => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -748,7 +749,7 @@ export const Pricelist = (): JSX.Element => {
               <div className="relative group">
                 <div className="relative overflow-hidden rounded-3xl shadow-2xl">
                   <img 
-                    src="https://images.unsplash.com/photo-1519014816548-bf5fe059798b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80"
+                    src={NO_IMAGE}
                     alt="Premium Nail Care"
                     className="w-full h-96 object-cover transition-transform duration-500 group-hover:scale-105"
                   />
@@ -813,7 +814,7 @@ export const Pricelist = (): JSX.Element => {
               <div className="relative group lg:col-start-2">
                 <div className="relative overflow-hidden rounded-3xl shadow-2xl">
                   <img 
-                    src="https://images.unsplash.com/photo-1595187729633-5ee2d3604e59?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80"
+                    src={NO_IMAGE}
                     alt="Luxury Pedicure"
                     className="w-full h-96 object-cover transition-transform duration-500 group-hover:scale-105"
                   />
@@ -872,7 +873,7 @@ export const Pricelist = (): JSX.Element => {
               <div className="relative group">
                 <div className="relative overflow-hidden rounded-3xl shadow-2xl">
                   <img 
-                    src="https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80"
+                    src={NO_IMAGE}
                     alt="Eyelash Extensions"
                     className="w-full h-96 object-cover transition-transform duration-500 group-hover:scale-105"
                   />
@@ -937,7 +938,7 @@ export const Pricelist = (): JSX.Element => {
               <div className="relative group lg:col-start-2">
                 <div className="relative overflow-hidden rounded-3xl shadow-2xl">
                   <img 
-                    src="https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80"
+                    src={NO_IMAGE}
                     alt="Professional Waxing"
                     className="w-full h-96 object-cover transition-transform duration-500 group-hover:scale-105"
                   />

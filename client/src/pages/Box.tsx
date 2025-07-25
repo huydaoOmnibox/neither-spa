@@ -6,6 +6,7 @@ import { Heart, Sparkles, Star, MapPin, Phone, Mail, Clock, Menu, X, CheckCircle
 import { Link } from "wouter";
 import logoPath from "@assets/image_1752511415001.png";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { NO_IMAGE } from "@/lib/constants";
 
 export const Box = (): JSX.Element => {
   const [activeTab, setActiveTab] = useState<'services' | 'pricing'>('services');
@@ -152,8 +153,8 @@ export const Box = (): JSX.Element => {
       },
       hero: {
         title: "NAILS OF THE NETHERLANDS",
-        subtitle: "The Best in Leeuwarden",
-        description: "Quality – Prestige – Responsibility define our brand",
+        subtitle: "A modern nail salon in Leeuwarden",
+        description: "Quality - Prestige - Responsibility define our brand",
         bookAppointment: "BOOK APPOINTMENT"
       },
              about: {
@@ -267,13 +268,13 @@ export const Box = (): JSX.Element => {
 
   const t = translations[currentLanguage];
 
-  // Carousel images for hero banner
+  // Hero images
   const heroImages = [
-    "https://images.unsplash.com/photo-1604654894610-df63bc536371?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80",
-    "https://images.unsplash.com/photo-1519014816548-bf5fe059798b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80",
-    "https://images.unsplash.com/photo-1540555700478-4be289fbecef?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80",
-    "https://images.unsplash.com/photo-1595187729633-5ee2d3604e59?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80",
-    "https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80"
+    NO_IMAGE,
+    NO_IMAGE,
+    NO_IMAGE,
+    NO_IMAGE,
+    NO_IMAGE
   ];
 
   // Auto-cycle through carousel images
@@ -638,7 +639,7 @@ export const Box = (): JSX.Element => {
             <div className="relative animate-fade-in-up animation-delay-200">
               <div className="w-full h-96 bg-gradient-to-br from-beige-200 to-beige-300 rounded-3xl shadow-2xl overflow-hidden">
                 <img 
-                  src="https://images.unsplash.com/photo-1544161515-4ab6ce6db874?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" 
+                  src={NO_IMAGE} 
                   alt="Elegant spa room with modern décor and relaxing ambiance" 
                   className="w-full h-full object-cover"
                 />
@@ -660,7 +661,7 @@ export const Box = (): JSX.Element => {
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             <div className="relative">
               <img 
-                src="https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80"
+                src={NO_IMAGE}
                 alt="Professional nail technician at work" 
                 className="w-full h-96 object-cover rounded-2xl shadow-2xl"
               />
@@ -707,7 +708,7 @@ export const Box = (): JSX.Element => {
           <div className="grid md:grid-cols-3 gap-8">
             <div className="group relative overflow-hidden rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-500">
               <img 
-                src="https://images.unsplash.com/photo-1604654894610-df63bc536371?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80"
+                src={NO_IMAGE}
                 alt="Elegant nail art designs" 
                 className="w-full h-80 object-cover transition-transform duration-500 group-hover:scale-110"
               />
@@ -721,7 +722,7 @@ export const Box = (): JSX.Element => {
             
             <div className="group relative overflow-hidden rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-500">
               <img 
-                src="https://images.unsplash.com/photo-1519014816548-bf5fe059798b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80"
+                src={NO_IMAGE}
                 alt="Classic nail styles" 
                 className="w-full h-80 object-cover transition-transform duration-500 group-hover:scale-110"
               />
@@ -735,7 +736,7 @@ export const Box = (): JSX.Element => {
             
             <div className="group relative overflow-hidden rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-500">
               <img 
-                src="https://images.unsplash.com/photo-1610992015732-2449b76344bc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80"
+                src={NO_IMAGE}
                 alt="Seasonal nail trends" 
                 className="w-full h-80 object-cover transition-transform duration-500 group-hover:scale-110"
               />
@@ -777,7 +778,7 @@ export const Box = (): JSX.Element => {
             
             <div className="relative">
               <img 
-                src="https://images.unsplash.com/photo-1540555700478-4be289fbecef?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80"
+                src={NO_IMAGE}
                 alt="Relaxing salon interior" 
                 className="w-full h-96 object-cover rounded-2xl shadow-2xl"
               />
@@ -854,7 +855,7 @@ export const Box = (): JSX.Element => {
               <div className="flex justify-center mb-4">
                 <div className="w-24 h-24 bg-gradient-to-br from-beige-100 to-beige-200 rounded-full flex items-center justify-center group-hover:animate-bounce-gentle overflow-hidden">
                   <img 
-                    src="https://images.unsplash.com/photo-1519014816548-bf5fe059798b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=200&q=80" 
+                    src={NO_IMAGE} 
                     alt="Nail care" 
                     className="w-16 h-16 object-cover rounded-full"
                   />
@@ -873,7 +874,7 @@ export const Box = (): JSX.Element => {
               <div className="flex justify-center mb-4">
                 <div className="w-24 h-24 bg-gradient-to-br from-blue-100 to-cyan-200 rounded-full flex items-center justify-center group-hover:animate-bounce-gentle overflow-hidden">
                   <img 
-                    src="https://images.unsplash.com/photo-1595187729633-5ee2d3604e59?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=200&q=80" 
+                    src={NO_IMAGE} 
                     alt="Foot care spa" 
                     className="w-20 h-16 object-cover rounded-full"
                   />
@@ -892,7 +893,7 @@ export const Box = (): JSX.Element => {
               <div className="flex justify-center mb-6">
                 <div className="w-20 h-20 bg-beige-500 rounded-full flex items-center justify-center group-hover:animate-bounce-gentle overflow-hidden">
                   <img 
-                    src="https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=200&q=80" 
+                    src={NO_IMAGE} 
                     alt="Eyelash extensions" 
                     className="w-10 h-10 object-cover rounded-full"
                   />
@@ -911,7 +912,7 @@ export const Box = (): JSX.Element => {
               <div className="flex justify-center mb-6">
                 <div className="w-20 h-20 bg-beige-500 rounded-full flex items-center justify-center group-hover:animate-bounce-gentle overflow-hidden">
                   <img 
-                    src="https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=200&q=80" 
+                    src={NO_IMAGE} 
                     alt="Waxing services" 
                     className="w-10 h-10 object-cover rounded-full"
                   />
@@ -999,7 +1000,7 @@ export const Box = (): JSX.Element => {
                   <div className="relative animate-fade-in-up">
                     <div className="w-full h-80 bg-gradient-to-br from-beige-200 to-beige-300 rounded-3xl shadow-2xl overflow-hidden">
                       <img 
-                        src="https://images.unsplash.com/photo-1544161515-4ab6ce6db874?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" 
+                        src={NO_IMAGE} 
                         alt="Elegant spa room with modern décor and relaxing ambiance" 
                         className="w-full h-full object-cover"
                       />
@@ -1050,7 +1051,7 @@ export const Box = (): JSX.Element => {
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             <div className="group relative overflow-hidden rounded-2xl shadow-xl hover:shadow-3xl transition-all duration-300">
               <img 
-                src="https://images.unsplash.com/photo-1604654894610-df63bc536371?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&q=80" 
+                src={NO_IMAGE} 
                 alt="Creative nail art designs" 
                 className="w-full h-72 object-cover transition-transform duration-500 group-hover:scale-110"
               />
@@ -1060,7 +1061,7 @@ export const Box = (): JSX.Element => {
             </div>
             <div className="group relative overflow-hidden rounded-2xl shadow-xl hover:shadow-3xl transition-all duration-300">
               <img 
-                src="https://images.unsplash.com/photo-1632345031435-8727f6897d53?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&q=80" 
+                src={NO_IMAGE} 
                 alt="Elegant nail styles" 
                 className="w-full h-72 object-cover transition-transform duration-500 group-hover:scale-110"
               />
@@ -1070,7 +1071,7 @@ export const Box = (): JSX.Element => {
             </div>
             <div className="group relative overflow-hidden rounded-2xl shadow-xl hover:shadow-3xl transition-all duration-300">
               <img 
-                src="https://images.unsplash.com/photo-1519014816548-bf5fe059798b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&q=80" 
+                src={NO_IMAGE} 
                 alt="Modern nail looks" 
                 className="w-full h-72 object-cover transition-transform duration-500 group-hover:scale-110"
               />
@@ -1080,7 +1081,7 @@ export const Box = (): JSX.Element => {
             </div>
             <div className="group relative overflow-hidden rounded-2xl shadow-xl hover:shadow-3xl transition-all duration-300">
               <img 
-                src="https://images.unsplash.com/photo-1610992015732-2449b76344bc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&q=80" 
+                src={NO_IMAGE} 
                 alt="Vibrant nail colors" 
                 className="w-full h-72 object-cover transition-transform duration-500 group-hover:scale-110"
               />
@@ -1119,7 +1120,7 @@ export const Box = (): JSX.Element => {
             <div className="relative group overflow-hidden rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105">
               <div className="aspect-square bg-gradient-to-br from-beige-100 to-beige-200 overflow-hidden">
                 <img 
-                  src="https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&q=80" 
+                  src={NO_IMAGE} 
                   alt="Premium nail polish collection" 
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                 />
@@ -1135,7 +1136,7 @@ export const Box = (): JSX.Element => {
             <div className="relative group overflow-hidden rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105">
               <div className="aspect-square bg-gradient-to-br from-beige-100 to-beige-200 overflow-hidden">
                 <img 
-                  src="https://images.unsplash.com/photo-1519014816548-bf5fe059798b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&q=80" 
+                  src={NO_IMAGE} 
                   alt="Professional nail care tools" 
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                 />
@@ -1151,7 +1152,7 @@ export const Box = (): JSX.Element => {
             <div className="relative group overflow-hidden rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105">
               <div className="aspect-square bg-gradient-to-br from-beige-100 to-beige-200 overflow-hidden">
                 <img 
-                  src="https://images.unsplash.com/photo-1604654894610-df63bc536371?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&q=80" 
+                  src={NO_IMAGE} 
                   alt="Gel polish collection" 
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                 />
@@ -1167,7 +1168,7 @@ export const Box = (): JSX.Element => {
             <div className="relative group overflow-hidden rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105">
               <div className="aspect-square bg-gradient-to-br from-orange-100 to-amber-200 overflow-hidden">
                 <img 
-                  src="https://unsplash.com/photos/a-woman-getting-her-nails-done-at-a-nail-salon-gb6gtiTZKB8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&q=80" 
+                  src={NO_IMAGE} 
                   alt="Nail art accessories and decorations" 
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                 />
@@ -1199,7 +1200,7 @@ export const Box = (): JSX.Element => {
           <div className="grid md:grid-cols-4 gap-6">
             <div className="group relative overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300">
               <img 
-                src="https://images.unsplash.com/photo-1632345031435-8727f6897d53?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&q=80"
+                src={NO_IMAGE}
                 alt="Client nail work showcase" 
                 className="w-full h-80 object-cover transition-transform duration-300 group-hover:scale-110"
               />
@@ -1212,7 +1213,7 @@ export const Box = (): JSX.Element => {
             
             <div className="group relative overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300">
               <img 
-                src="https://images.unsplash.com/photo-1595187729633-5ee2d3604e59?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&q=80"
+                src={NO_IMAGE}
                 alt="Pedicure results showcase" 
                 className="w-full h-80 object-cover transition-transform duration-300 group-hover:scale-110"
               />
@@ -1225,7 +1226,7 @@ export const Box = (): JSX.Element => {
             
             <div className="group relative overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300">
               <img 
-                src="https://images.unsplash.com/photo-1604654894610-df63bc536371?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&q=80"
+                src={NO_IMAGE}
                 alt="Nail art showcase" 
                 className="w-full h-80 object-cover transition-transform duration-300 group-hover:scale-110"
               />
@@ -1238,7 +1239,7 @@ export const Box = (): JSX.Element => {
             
             <div className="group relative overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300">
               <img 
-                src="https://images.unsplash.com/photo-1519014816548-bf5fe059798b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&q=80"
+                src={NO_IMAGE}
                 alt="Classic nail style showcase" 
                 className="w-full h-80 object-cover transition-transform duration-300 group-hover:scale-110"
               />

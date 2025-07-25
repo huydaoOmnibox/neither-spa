@@ -6,6 +6,7 @@ import { Clock, Star, Heart, Sparkles, CheckCircle, Menu, X, ShoppingCart, Filte
 import { Link } from "wouter";
 import logoPath from "@assets/image_1752511415001.png";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { NO_IMAGE } from "@/lib/constants";
 
 export const Products = (): JSX.Element => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -196,13 +197,12 @@ export const Products = (): JSX.Element => {
 
   // Products organized by categories like the Gallery
   const products = [
-    // Gel Polish Products
     {
       id: 1,
       category: "gelPolish",
-      image: "https://images.unsplash.com/photo-1632345031435-8727f6897d53?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
+      image: NO_IMAGE,
       title: currentLanguage === 'nl' ? "Premium Gellak Set" : "Premium Gel Polish Set",
-      description: currentLanguage === 'nl' ? "Complete gellak collectie met 12 populaire kleuren" : "Complete gel polish collection with 12 popular colors",
+      description: currentLanguage === 'nl' ? "Complete gellak collectie met basis- en topcoat" : "Complete gel polish collection with base and top coat",
       price: "€45.99",
       originalPrice: "€59.99",
       popular: true
@@ -210,142 +210,126 @@ export const Products = (): JSX.Element => {
     {
       id: 2,
       category: "gelPolish",
-      image: "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
-      title: currentLanguage === 'nl' ? "Rode Klassiekers" : "Red Classics",
-      description: currentLanguage === 'nl' ? "5 tijdloze rode gellak kleuren" : "5 timeless red gel polish colors",
-      price: "€24.99",
-      originalPrice: "",
+      image: NO_IMAGE,
+      title: currentLanguage === 'nl' ? "Gellak Starterset" : "Gel Polish Starter Kit",
+      description: currentLanguage === 'nl' ? "Alles wat je nodig hebt om te beginnen" : "Everything you need to get started",
+      price: "€79.99",
       popular: false
     },
     {
       id: 3,
       category: "gelPolish",
-      image: "https://images.unsplash.com/photo-1604654894610-df63bc536371?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
-      title: currentLanguage === 'nl' ? "Franse Manicure Kit" : "French Manicure Kit",
-      description: currentLanguage === 'nl' ? "Professionele kit voor perfecte Franse manicure" : "Professional kit for perfect French manicure",
-      price: "€18.99",
-      originalPrice: "",
-      popular: false
+      image: NO_IMAGE,
+      title: currentLanguage === 'nl' ? "Gellak Kleurenpakket" : "Gel Polish Color Pack",
+      description: currentLanguage === 'nl' ? "Set van 6 populaire kleuren" : "Set of 6 popular colors",
+      price: "€49.99",
+      popular: true
     },
-
-    // Nail Care Products
+    // Nail Care
     {
       id: 4,
       category: "nailCare",
-      image: "https://images.unsplash.com/photo-1596462502278-27bfdc403348?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
-      title: currentLanguage === 'nl' ? "Nagelzorg Essentials" : "Nail Care Essentials",
-      description: currentLanguage === 'nl' ? "Complete set met nagelriemolie, handcrème en versterkingsbehandeling" : "Complete set with cuticle oil, hand cream and strengthening treatment",
-      price: "€32.99",
-      originalPrice: "€39.99",
-      popular: true
+      image: NO_IMAGE,
+      title: currentLanguage === 'nl' ? "Nagelriemolie" : "Cuticle Oil",
+      description: currentLanguage === 'nl' ? "Voedende olie voor gezonde nagelriemen" : "Nourishing oil for healthy cuticles",
+      price: "€12.99",
+      originalPrice: "€14.99",
+      popular: false
     },
     {
       id: 5,
       category: "nailCare",
-      image: "https://images.unsplash.com/photo-1560869713-bf17eeb44aca?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
-      title: currentLanguage === 'nl' ? "Nagelriemolie Set" : "Cuticle Oil Set",
-      description: currentLanguage === 'nl' ? "3 verschillende nagelriemoliën met vitamine E" : "3 different cuticle oils with vitamin E",
-      price: "€16.99",
-      originalPrice: "",
+      image: NO_IMAGE,
+      title: currentLanguage === 'nl' ? "Nagelvijlen Set" : "Nail File Set",
+      description: currentLanguage === 'nl' ? "Professionele vijlen in verschillende grofheden" : "Professional files in different grits",
+      price: "€9.99",
       popular: false
     },
-
-    // Acrylic Systems
+    // Acrylic System
     {
       id: 6,
       category: "acrylicSystems",
-      image: "https://images.unsplash.com/photo-1562904732-a5d6d57bb203?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
-      title: currentLanguage === 'nl' ? "Professioneel Acryl Systeem" : "Professional Acrylic System",
-      description: currentLanguage === 'nl' ? "Complete acryl kit met poeder, vloeistof en tips" : "Complete acrylic kit with powder, liquid and tips",
-      price: "€149.99",
-      originalPrice: "€189.99",
+      image: NO_IMAGE,
+      title: currentLanguage === 'nl' ? "Acryl Starterset" : "Acrylic Starter Kit",
+      description: currentLanguage === 'nl' ? "Complete set voor acryl nagels" : "Complete set for acrylic nails",
+      price: "€89.99",
       popular: true
     },
     {
       id: 7,
       category: "acrylicSystems",
-      image: "https://images.unsplash.com/photo-1519014816548-bf5fe059798b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
-      title: currentLanguage === 'nl' ? "Acryl Starterskit" : "Acrylic Starter Kit",
-      description: currentLanguage === 'nl' ? "Ideaal voor beginners in acryl nagelverlenging" : "Ideal for beginners in acrylic nail extensions",
-      price: "€79.99",
-      originalPrice: "",
+      image: NO_IMAGE,
+      title: currentLanguage === 'nl' ? "Acryl Poeder" : "Acrylic Powder",
+      description: currentLanguage === 'nl' ? "Hoogwaardige acryl poeder" : "High-quality acrylic powder",
+      price: "€24.99",
       popular: false
     },
-
     // Nail Art
     {
       id: 8,
       category: "nailArt",
-      image: "https://images.unsplash.com/photo-1610992015732-2449b76344bc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
-      title: currentLanguage === 'nl' ? "Nail Art Mega Set" : "Nail Art Mega Set",
-      description: currentLanguage === 'nl' ? "Grote collectie glitters, rhinestones en decoraties" : "Large collection of glitters, rhinestones and decorations",
-      price: "€24.99",
+      image: NO_IMAGE,
+      title: currentLanguage === 'nl' ? "Nail Art Penselen" : "Nail Art Brushes",
+      description: currentLanguage === 'nl' ? "Set van 10 professionele penselen" : "Set of 10 professional brushes",
+      price: "€29.99",
       originalPrice: "€34.99",
-      popular: true
+      popular: false
     },
     {
       id: 9,
       category: "nailArt",
-      image: "https://images.unsplash.com/photo-1594736797933-d0df8d6e5d8d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
-      title: currentLanguage === 'nl' ? "Chrome Poeders" : "Chrome Powders",
-      description: currentLanguage === 'nl' ? "5 verschillende chrome poeders voor spiegeleffect" : "5 different chrome powders for mirror effect",
-      price: "€12.99",
-      originalPrice: "",
+      image: NO_IMAGE,
+      title: currentLanguage === 'nl' ? "Glitter Collectie" : "Glitter Collection",
+      description: currentLanguage === 'nl' ? "12 verschillende glitters" : "12 different glitters",
+      price: "€19.99",
       popular: false
     },
     {
       id: 10,
       category: "nailArt",
-      image: "https://images.unsplash.com/photo-1600334129128-685c5582fd35?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
-      title: currentLanguage === 'nl' ? "Transfer Foils Set" : "Transfer Foils Set",
-      description: currentLanguage === 'nl' ? "20 verschillende transfer foils voor unieke ontwerpen" : "20 different transfer foils for unique designs",
-      price: "€8.99",
-      originalPrice: "",
+      image: NO_IMAGE,
+      title: currentLanguage === 'nl' ? "Sticker Set" : "Sticker Set",
+      description: currentLanguage === 'nl' ? "Diverse nail art stickers" : "Various nail art stickers",
+      price: "€7.99",
       popular: false
     },
-
     // Tools
     {
       id: 11,
       category: "tools",
-      image: "https://images.unsplash.com/photo-1513594736602-b21ab73eba6a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
-      title: currentLanguage === 'nl' ? "Professionele Nagelvijlen Set" : "Professional Nail Files Set",
-      description: currentLanguage === 'nl' ? "10 verschillende nagelvijlen voor alle nageltypen" : "10 different nail files for all nail types",
-      price: "€14.99",
-      originalPrice: "",
-      popular: false
+      image: NO_IMAGE,
+      title: currentLanguage === 'nl' ? "E-file Pro" : "E-file Pro",
+      description: currentLanguage === 'nl' ? "Professionele elektrische nagelvijl" : "Professional electric nail file",
+      price: "€199.99",
+      popular: true
     },
     {
       id: 12,
       category: "tools",
-      image: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
-      title: currentLanguage === 'nl' ? "UV/LED Lamp" : "UV/LED Lamp",
-      description: currentLanguage === 'nl' ? "36W professionele lamp voor perfecte uitharding" : "36W professional lamp for perfect curing",
-      price: "€89.99",
-      originalPrice: "€109.99",
+      image: NO_IMAGE,
+      title: currentLanguage === 'nl' ? "LED Lamp" : "LED Lamp",
+      description: currentLanguage === 'nl' ? "48W LED/UV lamp" : "48W LED/UV lamp",
+      price: "€59.99",
       popular: true
     },
-
     // Treatments
     {
       id: 13,
       category: "treatments",
-      image: "https://images.unsplash.com/photo-1595187729633-5ee2d3604e59?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
-      title: currentLanguage === 'nl' ? "BIAB Behandeling Kit" : "BIAB Treatment Kit",
-      description: currentLanguage === 'nl' ? "Complete kit voor nagelversterking met BIAB techniek" : "Complete kit for nail strengthening with BIAB technique",
-      price: "€67.99",
-      originalPrice: "",
+      image: NO_IMAGE,
+      title: currentLanguage === 'nl' ? "Nagelverharder" : "Nail Hardener",
+      description: currentLanguage === 'nl' ? "Versterkende behandeling" : "Strengthening treatment",
+      price: "€14.99",
       popular: false
     },
     {
       id: 14,
       category: "treatments",
-      image: "https://images.unsplash.com/photo-1609205883892-98a9de7ae739?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
-      title: currentLanguage === 'nl' ? "Nagelverharder Behandeling" : "Nail Hardener Treatment",
-      description: currentLanguage === 'nl' ? "Intensieve kuur voor zwakke en breekbare nagels" : "Intensive treatment for weak and brittle nails",
+      image: NO_IMAGE,
+      title: currentLanguage === 'nl' ? "Nagelgroei Serum" : "Nail Growth Serum",
+      description: currentLanguage === 'nl' ? "Stimuleert gezonde nagelgroei" : "Stimulates healthy nail growth",
       price: "€19.99",
-      originalPrice: "",
-      popular: false
+      popular: true
     }
   ];
 

@@ -6,6 +6,7 @@ import { Menu, X, Heart, Eye, Sparkles, Filter } from "lucide-react";
 import { Link } from "wouter";
 import logoPath from "@assets/image_1752511415001.png";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { NO_IMAGE } from "@/lib/constants";
 
 export const Gallery = (): JSX.Element => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -17,7 +18,6 @@ export const Gallery = (): JSX.Element => {
     nl: {
       nav: {
         home: "Home",
-        services: "Diensten",
         products: "Producten",
         gallery: "Galerij",
         pricing: "Prijzen",
@@ -26,31 +26,22 @@ export const Gallery = (): JSX.Element => {
         bookNow: "AFSPRAAK MAKEN"
       },
       header: {
-        title: "ONZE GALERIJ",
-        subtitle: "Ontdek onze prachtige nagelkunstwerken en professionele behandelingen. Van elegante gellak tot ingewikkelde nail art - bekijk onze portfolio van tevreden klanten."
+        title: "GALERIJ",
+        subtitle: "Bekijk onze collectie van prachtige nagelkunst en inspirerende designs"
       },
       filters: {
         all: "Alles",
         gellac: "Gellak",
-        nailArt: "Nail Art",
+        nailart: "Nail Art",
         acrylic: "Acryl",
         biab: "BIAB",
         pedicure: "Pedicure",
         special: "Speciaal"
-      },
-      categories: {
-        gellac: "Gellak Ontwerpen",
-        nailArt: "Nail Art Creaties",
-        acrylic: "Acryl Extensions",
-        biab: "BIAB Behandelingen",
-        pedicure: "Pedicure Werken",
-        special: "Speciale Ontwerpen"
       }
     },
     en: {
       nav: {
         home: "Home",
-        services: "Services",
         products: "Products",
         gallery: "Gallery",
         pricing: "Pricing",
@@ -59,25 +50,17 @@ export const Gallery = (): JSX.Element => {
         bookNow: "BOOK NOW"
       },
       header: {
-        title: "OUR GALLERY",
-        subtitle: "Discover our beautiful nail art works and professional treatments. From elegant gel polish to intricate nail art - view our portfolio of satisfied clients."
+        title: "GALLERY",
+        subtitle: "Explore our collection of beautiful nail art and inspiring designs"
       },
       filters: {
         all: "All",
         gellac: "Gel Polish",
-        nailArt: "Nail Art",
+        nailart: "Nail Art",
         acrylic: "Acrylic",
         biab: "BIAB",
         pedicure: "Pedicure",
         special: "Special"
-      },
-      categories: {
-        gellac: "Gel Polish Designs",
-        nailArt: "Nail Art Creations",
-        acrylic: "Acrylic Extensions",
-        biab: "BIAB Treatments",
-        pedicure: "Pedicure Works",
-        special: "Special Designs"
       }
     }
   };
@@ -95,123 +78,118 @@ export const Gallery = (): JSX.Element => {
     setMobileMenuOpen(false);
   };
 
-  // Gallery items with categories
+  // Gallery items data
   const galleryItems = [
     // Gel Polish
     {
       id: 1,
       category: "gellac",
-      image: "https://images.unsplash.com/photo-1604654894610-df63bc536371?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
+      image: NO_IMAGE,
       title: currentLanguage === 'nl' ? "Elegante Franse Manicure" : "Elegant French Manicure",
       description: currentLanguage === 'nl' ? "Klassieke Franse stijl met perfecte witte tips" : "Classic French style with perfect white tips"
     },
     {
       id: 2,
       category: "gellac",
-      image: "https://images.unsplash.com/photo-1632345031435-8727f6897d53?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
+      image: NO_IMAGE,
       title: currentLanguage === 'nl' ? "Pastel Gellak Collectie" : "Pastel Gel Polish Collection",
       description: currentLanguage === 'nl' ? "Zachte pastelkleuren perfect voor de lente" : "Soft pastel colors perfect for spring"
     },
     {
       id: 3,
       category: "gellac",
-      image: "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
+      image: NO_IMAGE,
       title: currentLanguage === 'nl' ? "Rode Klassiekers" : "Red Classics",
       description: currentLanguage === 'nl' ? "Tijdloze rode tinten voor elke gelegenheid" : "Timeless red shades for any occasion"
     },
-    
     // Nail Art
     {
       id: 4,
-      category: "nailArt",
-      image: "https://images.unsplash.com/photo-1610992015732-2449b76344bc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
-      title: currentLanguage === 'nl' ? "Bloemen Nail Art" : "Floral Nail Art",
-      description: currentLanguage === 'nl' ? "Handgeschilderde bloemenpatronen" : "Hand-painted floral patterns"
+      category: "nailart",
+      image: NO_IMAGE,
+      title: currentLanguage === 'nl' ? "Glitter & Glamour" : "Glitter & Glamour",
+      description: currentLanguage === 'nl' ? "Sprankelende designs met premium glitters" : "Sparkling designs with premium glitters"
     },
     {
       id: 5,
-      category: "nailArt",
-      image: "https://images.unsplash.com/photo-1594736797933-d0df8d6e5d8d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
-      title: currentLanguage === 'nl' ? "Geometrische Ontwerpen" : "Geometric Designs",
-      description: currentLanguage === 'nl' ? "Moderne geometrische patronen" : "Modern geometric patterns"
+      category: "nailart",
+      image: NO_IMAGE,
+      title: currentLanguage === 'nl' ? "Bloemen Designs" : "Floral Designs",
+      description: currentLanguage === 'nl' ? "Delicate bloemenpatronen met handgeschilderde details" : "Delicate floral patterns with hand-painted details"
     },
     {
       id: 6,
-      category: "nailArt",
-      image: "https://images.unsplash.com/photo-1596462502278-27bfdc403348?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
-      title: currentLanguage === 'nl' ? "Glitter & Rhinestones" : "Glitter & Rhinestones",
-      description: currentLanguage === 'nl' ? "Luxe accenten voor speciale gelegenheden" : "Luxury accents for special occasions"
+      category: "nailart",
+      image: NO_IMAGE,
+      title: currentLanguage === 'nl' ? "Geometrische Patronen" : "Geometric Patterns",
+      description: currentLanguage === 'nl' ? "Moderne geometrische kunst voor een unieke look" : "Modern geometric art for a unique look"
     },
-
     // Acrylic
     {
       id: 7,
       category: "acrylic",
-      image: "https://images.unsplash.com/photo-1562904732-a5d6d57bb203?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
-      title: currentLanguage === 'nl' ? "Lange Acryl Extensions" : "Long Acrylic Extensions",
-      description: currentLanguage === 'nl' ? "Dramatische lengtes met perfecte vorm" : "Dramatic lengths with perfect shape"
+      image: NO_IMAGE,
+      title: currentLanguage === 'nl' ? "Acryl Extensies" : "Acrylic Extensions",
+      description: currentLanguage === 'nl' ? "Perfecte vorm en lengte met duurzame acryl" : "Perfect shape and length with durable acrylic"
     },
     {
       id: 8,
       category: "acrylic",
-      image: "https://images.unsplash.com/photo-1519014816548-bf5fe059798b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
-      title: currentLanguage === 'nl' ? "Natuurlijke Acryl Look" : "Natural Acrylic Look",
-      description: currentLanguage === 'nl' ? "Subtiele verlenging voor dagelijks gebruik" : "Subtle extension for daily wear"
+      image: NO_IMAGE,
+      title: currentLanguage === 'nl' ? "Naturel Look" : "Natural Look",
+      description: currentLanguage === 'nl' ? "Natuurlijk ogende acrylnagels" : "Natural-looking acrylic nails"
     },
-
     // BIAB
     {
       id: 9,
       category: "biab",
-      image: "https://images.unsplash.com/photo-1560869713-bf17eeb44aca?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
-      title: currentLanguage === 'nl' ? "BIAB Natural Look" : "BIAB Natural Look",
-      description: currentLanguage === 'nl' ? "Versterkende behandeling voor natuurlijke nagels" : "Strengthening treatment for natural nails"
+      image: NO_IMAGE,
+      title: currentLanguage === 'nl' ? "BIAB Versterking" : "BIAB Strengthening",
+      description: currentLanguage === 'nl' ? "Sterke en gezonde natuurlijke nagels" : "Strong and healthy natural nails"
     },
     {
       id: 10,
       category: "biab",
-      image: "https://images.unsplash.com/photo-1513594736602-b21ab73eba6a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
-      title: currentLanguage === 'nl' ? "BIAB met Kleur" : "BIAB with Color",
-      description: currentLanguage === 'nl' ? "Gekleurde BIAB voor extra glamour" : "Colored BIAB for extra glamour"
+      image: NO_IMAGE,
+      title: currentLanguage === 'nl' ? "BIAB French" : "BIAB French",
+      description: currentLanguage === 'nl' ? "Franse manicure met BIAB techniek" : "French manicure with BIAB technique"
     },
-
     // Pedicure
     {
       id: 11,
       category: "pedicure",
-      image: "https://images.unsplash.com/photo-1595187729633-5ee2d3604e59?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
-      title: currentLanguage === 'nl' ? "Luxe Pedicure" : "Luxury Pedicure",
-      description: currentLanguage === 'nl' ? "Complete voetverzorging met perfecte afwerking" : "Complete foot care with perfect finish"
+      image: NO_IMAGE,
+      title: currentLanguage === 'nl' ? "Spa Pedicure" : "Spa Pedicure",
+      description: currentLanguage === 'nl' ? "Luxe voetverzorging met gellak" : "Luxury foot care with gel polish"
     },
     {
       id: 12,
       category: "pedicure",
-      image: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
-      title: currentLanguage === 'nl' ? "Zomer Pedicure" : "Summer Pedicure",
-      description: currentLanguage === 'nl' ? "Frisse kleuren voor de zomermaanden" : "Fresh colors for summer months"
+      image: NO_IMAGE,
+      title: currentLanguage === 'nl' ? "Medische Pedicure" : "Medical Pedicure",
+      description: currentLanguage === 'nl' ? "Professionele voetverzorging voor probleemvoeten" : "Professional foot care for problem feet"
     },
-
     // Special
     {
       id: 13,
       category: "special",
-      image: "https://images.unsplash.com/photo-1600334129128-685c5582fd35?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
-      title: currentLanguage === 'nl' ? "Bruiloft Nagels" : "Wedding Nails",
-      description: currentLanguage === 'nl' ? "Elegante ontwerpen voor jullie speciale dag" : "Elegant designs for your special day"
+      image: NO_IMAGE,
+      title: currentLanguage === 'nl' ? "Bruidsnagels" : "Bridal Nails",
+      description: currentLanguage === 'nl' ? "Speciale designs voor je grote dag" : "Special designs for your big day"
     },
     {
       id: 14,
       category: "special",
-      image: "https://images.unsplash.com/photo-1609205883892-98a9de7ae739?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
-      title: currentLanguage === 'nl' ? "Feestelijke Ontwerpen" : "Festive Designs",
-      description: currentLanguage === 'nl' ? "Perfect voor feesten en speciale gelegenheden" : "Perfect for parties and special occasions"
+      image: NO_IMAGE,
+      title: currentLanguage === 'nl' ? "Feestdagen Collectie" : "Holiday Collection",
+      description: currentLanguage === 'nl' ? "Feestelijke designs voor speciale gelegenheden" : "Festive designs for special occasions"
     },
     {
       id: 15,
       category: "special",
-      image: "https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
-      title: currentLanguage === 'nl' ? "Chrome Effect" : "Chrome Effect",
-      description: currentLanguage === 'nl' ? "Futuristische chromen afwerking" : "Futuristic chrome finish"
+      image: NO_IMAGE,
+      title: currentLanguage === 'nl' ? "Swarovski Kristallen" : "Swarovski Crystals",
+      description: currentLanguage === 'nl' ? "Luxe designs met echte kristallen" : "Luxury designs with genuine crystals"
     }
   ];
 
@@ -222,7 +200,7 @@ export const Gallery = (): JSX.Element => {
   const filters = [
     { key: 'all', label: t.filters.all },
     { key: 'gellac', label: t.filters.gellac },
-    { key: 'nailArt', label: t.filters.nailArt },
+    { key: 'nailart', label: t.filters.nailart },
     { key: 'acrylic', label: t.filters.acrylic },
     { key: 'biab', label: t.filters.biab },
     { key: 'pedicure', label: t.filters.pedicure },
