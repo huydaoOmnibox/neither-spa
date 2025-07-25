@@ -7,15 +7,17 @@ import NotFound from "@/pages/not-found";
 
 import { Box } from "@/pages/Box";
 import { Products } from "@/pages/Products";
+import { Gallery } from "@/pages/Gallery";
 import { Pricelist } from "@/pages/Pricelist";
 
 function Router() {
   return (
     <Switch>
       {/* Add pages below */}
-      <Route path="/" component={Box} />
-              <Route path="/products" component={Products} />
-      <Route path="/pricelist" component={Pricelist} />
+              <Route path="/" component={Box} />
+        <Route path="/products" component={Products} />
+        <Route path="/gallery" component={Gallery} />
+        <Route path="/pricelist" component={Pricelist} />
       {/* Fallback to 404 */}
       <Route component={NotFound} />
     </Switch>

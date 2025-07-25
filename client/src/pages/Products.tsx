@@ -17,6 +17,7 @@ export const Products = (): JSX.Element => {
          home: "Home",
          services: "Diensten",
          products: "Producten",
+         gallery: "Galerij",
          pricing: "Prijzen",
          pricelist: "Prijslijst",
          contact: "Contact",
@@ -87,6 +88,7 @@ export const Products = (): JSX.Element => {
          home: "Home",
          services: "Services",
          products: "Products",
+         gallery: "Gallery",
          pricing: "Pricing",
          pricelist: "Price List",
          contact: "Contact",
@@ -250,6 +252,11 @@ export const Products = (): JSX.Element => {
                   {t.nav.products}
                 </button>
               </Link>
+              <Link href="/gallery">
+                <button className="text-beige-700 dark:text-beige-300 hover:text-beige-500 dark:hover:text-beige-400 font-medium transition-colors duration-200">
+                  {t.nav.gallery}
+                </button>
+              </Link>
               <button 
                 onClick={() => scrollToSection('pricing')}
                 className="text-beige-700 dark:text-beige-300 hover:text-beige-500 dark:hover:text-beige-400 font-medium transition-colors duration-200"
@@ -335,6 +342,14 @@ export const Products = (): JSX.Element => {
                     className="text-beige-500 dark:text-beige-400 font-semibold text-left transition-colors duration-200"
                   >
                     {t.nav.products}
+                  </button>
+                </Link>
+                <Link href="/gallery">
+                  <button 
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="text-beige-700 dark:text-beige-300 hover:text-beige-500 dark:hover:text-beige-400 font-medium text-left transition-colors duration-200"
+                  >
+                    {t.nav.gallery}
                   </button>
                 </Link>
                 <button 

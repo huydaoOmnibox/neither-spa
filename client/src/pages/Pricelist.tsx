@@ -16,6 +16,8 @@ export const Pricelist = (): JSX.Element => {
       nav: {
         home: "Home",
         services: "Diensten",
+        products: "Producten",
+        gallery: "Galerij",
         pricing: "Prijzen",
         pricelist: "Prijslijst",
         contact: "Contact",
@@ -162,6 +164,8 @@ export const Pricelist = (): JSX.Element => {
       nav: {
         home: "Home",
         services: "Services",
+        products: "Products",
+        gallery: "Gallery",
         pricing: "Pricing",
         pricelist: "Price List",
         contact: "Contact",
@@ -420,9 +424,14 @@ export const Pricelist = (): JSX.Element => {
               >
                 {t.nav.home}
               </button>
-              <Link href="/services">
+              <Link href="/products">
                 <button className="text-beige-700 dark:text-beige-300 hover:text-beige-500 dark:hover:text-beige-400 font-medium transition-colors duration-200">
-                  {t.nav.services}
+                  {t.nav.products}
+                </button>
+              </Link>
+              <Link href="/gallery">
+                <button className="text-beige-700 dark:text-beige-300 hover:text-beige-500 dark:hover:text-beige-400 font-medium transition-colors duration-200">
+                  {t.nav.gallery}
                 </button>
               </Link>
               <button 
@@ -504,12 +513,20 @@ export const Pricelist = (): JSX.Element => {
                 >
                   {t.nav.home}
                 </button>
-                <Link href="/services">
+                <Link href="/products">
                   <button 
                     onClick={() => setMobileMenuOpen(false)}
                     className="text-beige-700 dark:text-beige-300 hover:text-beige-500 dark:hover:text-beige-400 font-medium text-left transition-colors duration-200"
                   >
-                    {t.nav.services}
+                    {t.nav.products}
+                  </button>
+                </Link>
+                <Link href="/gallery">
+                  <button 
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="text-beige-700 dark:text-beige-300 hover:text-beige-500 dark:hover:text-beige-400 font-medium text-left transition-colors duration-200"
+                  >
+                    {t.nav.gallery}
                   </button>
                 </Link>
                 <button 
