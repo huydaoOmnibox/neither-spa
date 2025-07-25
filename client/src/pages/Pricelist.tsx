@@ -445,12 +445,11 @@ export const Pricelist = (): JSX.Element => {
                   {t.nav.pricelist}
                 </button>
               </Link>
-              <button 
-                onClick={() => scrollToSection('contact')}
-                className="text-beige-700 dark:text-beige-300 hover:text-beige-500 dark:hover:text-beige-400 font-medium transition-colors duration-200"
-              >
-                {t.nav.contact}
-              </button>
+              <Link href="/contact">
+                <button className="text-beige-700 dark:text-beige-300 hover:text-beige-500 dark:hover:text-beige-400 font-medium transition-colors duration-200">
+                  {t.nav.contact}
+                </button>
+              </Link>
               
               <Button 
                 onClick={() => scrollToSection('contact')}
@@ -543,12 +542,14 @@ export const Pricelist = (): JSX.Element => {
                     {t.nav.pricelist}
                   </button>
                 </Link>
-                <button 
-                  onClick={() => scrollToSection('contact')}
-                  className="text-beige-700 dark:text-beige-300 hover:text-beige-500 dark:hover:text-beige-400 font-medium text-left transition-colors duration-200"
-                >
-                  {t.nav.contact}
-                </button>
+                <Link href="/contact">
+                  <button 
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="text-beige-700 dark:text-beige-300 hover:text-beige-500 dark:hover:text-beige-400 font-medium text-left transition-colors duration-200"
+                  >
+                    {t.nav.contact}
+                  </button>
+                </Link>
                 
                 <Button 
                   onClick={() => scrollToSection('contact')}
