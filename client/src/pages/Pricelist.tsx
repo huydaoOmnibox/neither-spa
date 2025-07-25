@@ -321,10 +321,8 @@ export const Pricelist = (): JSX.Element => {
           description: "Let your nails speak with our artistic nail designs. From subtle accents to elaborate designs, we make your nail art dreams come true.",
           features: [
             "Hand-painted designs",
-            "Swarovski crystals",
             "Chrome and glitter effects",
             "Seasonal designs",
-            "Personalized artwork"
           ]
         }
       },
@@ -971,9 +969,9 @@ export const Pricelist = (): JSX.Element => {
                     <div className="flex items-center gap-4 mb-2">
                       <div className="flex items-center gap-1">
                         <Clock className="w-4 h-4" />
-                        <span className="text-sm">15-60 min</span>
+                        <span className="text-sm"></span>
                       </div>
-                      <div className="text-2xl font-bold">€20 - €80</div>
+                      <div className="text-2xl font-bold"></div>
                     </div>
                   </div>
                 </div>
@@ -1036,9 +1034,9 @@ export const Pricelist = (): JSX.Element => {
                     <div className="flex items-center gap-4 mb-2">
                       <div className="flex items-center gap-1">
                         <Clock className="w-4 h-4" />
-                        <span className="text-sm">90-120 min</span>
+                        <span className="text-sm"></span>
                       </div>
-                      <div className="text-2xl font-bold">€55 - €120</div>
+                      <div className="text-2xl font-bold"></div>
                     </div>
                   </div>
                 </div>

@@ -42,7 +42,7 @@ export const Contact = (): JSX.Element => {
         },
         email: {
           title: "E-mail",
-          address: "info@nailsofthenetherlands.nl"
+          address: "nailofthenetherlands@gmail.com"
         },
         hours: {
           title: "Openingstijden",
