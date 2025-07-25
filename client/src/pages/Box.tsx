@@ -39,7 +39,7 @@ export const Box = (): JSX.Element => {
          address: "Adres",
          addressValue: "Wirdumerdijk 29, 8911 CC Leeuwarden",
          hotline: "Telefoon",
-         hotlineValue: "+31 (0)58 XXX XXXX",
+         hotlineValue: "+31 62 869 9827",
          openingHours: "Openingstijden",
          openingHoursValue: "Maandag tot en met Zaterdag: 10.00 - 18.00",
          contactUs: "CONTACT OPNEMEN"
@@ -163,7 +163,7 @@ export const Box = (): JSX.Element => {
          address: "Address",
          addressValue: "Wirdumerdijk 29, 8911 CC Leeuwarden",
          hotline: "Hotline",
-         hotlineValue: "+31 (0)58 XXX XXXX",
+         hotlineValue: "+31 62 869 9827",
          openingHours: "Opening Hours",
          openingHoursValue: "Monday to Saturday: 10.00 - 18.00",
          contactUs: "CONTACT US"
@@ -179,12 +179,12 @@ export const Box = (): JSX.Element => {
       lookbook: {
         title: "VIEW OUR LOOKBOOK",
         subtitle: "Discover the latest nail art trends and classic elegance in our curated collection of stunning nail designs.",
-        artistic: "Artistic Designs",
-        artisticDesc: "Hand-painted nail art masterpieces",
-        classic: "Classic Elegance",
-        classicDesc: "Timeless styles for every occasion",
-        seasonal: "Seasonal Trends",
-        seasonalDesc: "Fresh looks for every season",
+        artistic: "<Title>",
+        artisticDesc: "<Sub-Title>",
+        classic: "<Title>",
+        classicDesc: "<Sub-Title>",
+        seasonal: "<Title>",
+        seasonalDesc: "<Sub-Title>",
         viewGallery: "VIEW FULL GALLERY"
       },
       feelBetter: {
@@ -201,41 +201,41 @@ export const Box = (): JSX.Element => {
         nailCareDesc: "New modelling gel/acrylic, manicure, nail design, Shellac",
         footCare: "Foot Care",
         footCareDesc: "Clean feet, exfoliate, paint toenails, relaxing treatments",
-        eyelashExtensions: "Eyelash Extensions",
-        eyelashDesc: "Volume Lashes, Mega Volume Lashes, professional application",
-        waxing: "Waxing",
-        waxingDesc: "Professional waxing services with warm wax, gentle and effective",
-        newAcryl: "New Acryl/Gel with color",
-        newAcrylDesc: "Professional application",
-        fillAcryl: "Fill Acryl/Gel with color",
-        fillAcrylDesc: "Maintenance service",
-        ombreFrench: "Ombre/French Design",
-        ombreFrenchDesc: "Gradient & French tips",
-        pedicureShellac: "Pedicure with Shellac",
-        pedicureShellacDesc: "Complete foot treatment",
-        manicureShellac: "Manicure with Shellac",
-        manicureShellacDesc: "Hand care & polish",
+        eyelashExtensions: "Acrylic/Gel",
+        eyelashDesc: "Artificial nails and extensions",
+        waxing: "BIAB",
+        waxingDesc: "Builder In A Bottle technique",
+        newAcryl: "Gel polish feet",
+        newAcrylDesc: "----",
+        fillAcryl: "Gel polish hands",
+        fillAcrylDesc: "----",
+        ombreFrench: "Gel polish French",
+        ombreFrenchDesc: "----",
+        pedicureShellac: "Gel polish removal",
+        pedicureShellacDesc: "----",
+        manicureShellac: "Gel polish removal +reapplication",
+        manicureShellacDesc: "----",
         specialPackage: "Special Package Deal",
         specialDesc: "Get a full manicure + pedicure combo for the best value!",
-        bookSave: "Book Now & Save €20"
+        bookSave: "Book Now & Save €"
       },
       gallery: {
         title: "OUR GALLERY",
-        creative: "Creative Designs",
-        elegant: "Elegant Styles",
-        modern: "Modern Looks",
-        vibrant: "Vibrant Colors"
+        creative: "Title",
+        elegant: "Title",
+        modern: "Title",
+        vibrant: "Title"
       },
       products: {
         title: "FEATURED PRODUCTS",
-        nailPolish: "Nail Polish",
-        nailPolishDesc: "Premium Collection",
-        careTools: "Care Tools",
-        careToolsDesc: "Professional Kit",
-        gelPolish: "Gel Polish",
-        gelPolishDesc: "Long-lasting Shine",
-        artSupplies: "Art Supplies",
-        artSuppliesDesc: "Creative Tools",
+        nailPolish: "Title",
+        nailPolishDesc: "Sub-Title",
+        careTools: "Title",
+        careToolsDesc: "Sub-Title",
+        gelPolish: "Title",
+        gelPolishDesc: "Sub-Title",
+        artSupplies: "Title",
+        artSuppliesDesc: "Sub-Title",
         booking: "BOOKING"
       },
       styledBy: {
@@ -632,7 +632,10 @@ export const Box = (): JSX.Element => {
                 </div>
               </div>
               
-              <Button className="mt-8 bg-beige-500 hover:bg-beige-600 text-white px-8 py-3 rounded-full">
+              <Button 
+                onClick={() => window.open('https://wa.me/31628699827', '_blank')}
+                className="mt-8 bg-gradient-to-r from-beige-500 to-beige-600 hover:from-beige-600 hover:to-beige-700 text-white px-8 py-3 rounded-full font-semibold transition-all duration-300 hover:scale-105"
+              >
                 {t.about.contactUs}
               </Button>
             </div>
@@ -648,8 +651,8 @@ export const Box = (): JSX.Element => {
               {/* Elegant overlay with spa room details */}
               <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent rounded-3xl"></div>
               <div className="absolute bottom-6 left-6 text-white">
-                <h3 className="text-2xl font-bold mb-2 drop-shadow-lg">Luxury Spa Experience</h3>
-                <p className="text-beige-100 drop-shadow-md">Relax in our beautiful, modern spa rooms designed for your comfort</p>
+                <h3 className="text-2xl font-bold mb-2 drop-shadow-lg">Title</h3>
+                <p className="text-beige-100 drop-shadow-md">Sub Title</p>
               </div>
             </div>
           </div>
@@ -932,97 +935,97 @@ export const Box = (): JSX.Element => {
             )}
 
             {activeTab === 'pricing' && (
-            <div className="space-y-8">
-              <div className="grid md:grid-cols-2 gap-12 items-start">
-                <div className="space-y-6">
-                  <Card className="bg-white dark:bg-gray-800 border-none shadow-2xl hover:shadow-3xl transition-all duration-300 hover:scale-102">
-                    <CardHeader className="bg-gradient-to-r from-beige-500 to-beige-600 text-white rounded-t-xl">
-                      <CardTitle className="text-2xl font-bold text-center">{t.servicesSection.nailCare}</CardTitle>
-                    </CardHeader>
-                    <CardContent className="p-6">
-                      <div className="space-y-4">
-                        <div className="flex justify-between items-center py-3 border-b border-beige-200 dark:border-gray-600">
-                          <div>
-                            <span className="text-beige-700 dark:text-beige-300 font-medium">{t.servicesSection.newAcryl}</span>
-                            <p className="text-sm text-gray-500 dark:text-gray-400">{t.servicesSection.newAcrylDesc}</p>
+              <div className="space-y-8">
+                <div className="grid md:grid-cols-2 gap-12 items-start">
+                  <div className="space-y-6">
+                    <Card className="bg-white dark:bg-gray-800 border-none shadow-2xl hover:shadow-3xl transition-all duration-300 hover:scale-102">
+                      <CardHeader className="bg-gradient-to-r from-beige-500 to-beige-600 text-white rounded-t-xl">
+                        <CardTitle className="text-2xl font-bold text-center">{t.servicesSection.nailCare}</CardTitle>
+                      </CardHeader>
+                      <CardContent className="p-6">
+                        <div className="space-y-4">
+                          <div className="flex justify-between items-center py-3 border-b border-beige-200 dark:border-gray-600">
+                            <div>
+                              <span className="text-beige-700 dark:text-beige-300 font-medium">{t.servicesSection.newAcryl}</span>
+                              <p className="text-sm text-gray-500 dark:text-gray-400">{t.servicesSection.newAcrylDesc}</p>
+                            </div>
+                            <Badge className="bg-beige-500 text-white text-lg px-3 py-1">€30</Badge>
                           </div>
-                          <Badge className="bg-beige-500 text-white text-lg px-3 py-1">€90</Badge>
-                        </div>
-                        <div className="flex justify-between items-center py-3 border-b border-beige-200 dark:border-gray-600">
-                          <div>
-                            <span className="text-beige-700 dark:text-beige-300 font-medium">{t.servicesSection.fillAcryl}</span>
-                            <p className="text-sm text-gray-500 dark:text-gray-400">{t.servicesSection.fillAcrylDesc}</p>
+                          <div className="flex justify-between items-center py-3 border-b border-beige-200 dark:border-gray-600">
+                            <div>
+                              <span className="text-beige-700 dark:text-beige-300 font-medium">{t.servicesSection.fillAcryl}</span>
+                              <p className="text-sm text-gray-500 dark:text-gray-400">{t.servicesSection.fillAcrylDesc}</p>
+                            </div>
+                            <Badge className="bg-beige-500 text-white text-lg px-3 py-1">€35</Badge>
                           </div>
-                          <Badge className="bg-beige-500 text-white text-lg px-3 py-1">€70</Badge>
-                        </div>
-                        <div className="flex justify-between items-center py-3 border-b border-beige-200 dark:border-gray-600">
-                          <div>
-                            <span className="text-beige-700 dark:text-beige-300 font-medium">{t.servicesSection.ombreFrench}</span>
-                            <p className="text-sm text-gray-500 dark:text-gray-400">{t.servicesSection.ombreFrenchDesc}</p>
+                          <div className="flex justify-between items-center py-3 border-b border-beige-200 dark:border-gray-600">
+                            <div>
+                              <span className="text-beige-700 dark:text-beige-300 font-medium">{t.servicesSection.ombreFrench}</span>
+                              <p className="text-sm text-gray-500 dark:text-gray-400">{t.servicesSection.ombreFrenchDesc}</p>
+                            </div>
+                            <Badge className="bg-beige-500 text-white text-lg px-3 py-1">€45</Badge>
                           </div>
-                          <Badge className="bg-beige-500 text-white text-lg px-3 py-1">€80</Badge>
-                        </div>
-                        <div className="flex justify-between items-center py-3 border-b border-beige-200 dark:border-gray-600">
-                          <div>
-                            <span className="text-beige-700 dark:text-beige-300 font-medium">{t.servicesSection.pedicureShellac}</span>
-                            <p className="text-sm text-gray-500 dark:text-gray-400">{t.servicesSection.pedicureShellacDesc}</p>
+                          <div className="flex justify-between items-center py-3 border-b border-beige-200 dark:border-gray-600">
+                            <div>
+                              <span className="text-beige-700 dark:text-beige-300 font-medium">{t.servicesSection.pedicureShellac}</span>
+                              <p className="text-sm text-gray-500 dark:text-gray-400">{t.servicesSection.pedicureShellacDesc}</p>
+                            </div>
+                            <Badge className="bg-beige-500 text-white text-lg px-3 py-1">€15</Badge>
                           </div>
-                          <Badge className="bg-beige-500 text-white text-lg px-3 py-1">€80</Badge>
-                        </div>
-                        <div className="flex justify-between items-center py-3">
-                          <div>
-                            <span className="text-beige-700 dark:text-beige-300 font-medium">{t.servicesSection.manicureShellac}</span>
-                            <p className="text-sm text-gray-500 dark:text-gray-400">{t.servicesSection.manicureShellacDesc}</p>
+                          <div className="flex justify-between items-center py-3">
+                            <div>
+                              <span className="text-beige-700 dark:text-beige-300 font-medium">{t.servicesSection.manicureShellac}</span>
+                              <p className="text-sm text-gray-500 dark:text-gray-400">{t.servicesSection.manicureShellacDesc}</p>
+                            </div>
+                            <Badge className="bg-beige-500 text-white text-lg px-3 py-1">+€5</Badge>
                           </div>
-                          <Badge className="bg-beige-500 text-white text-lg px-3 py-1">€60</Badge>
                         </div>
-                      </div>
-                    </CardContent>
-                  </Card>
+                      </CardContent>
+                    </Card>
 
-                  <Card className="bg-gradient-to-br from-beige-500 to-beige-600 text-white border-none shadow-2xl">
-                    <CardContent className="p-6 text-center">
-                      <h3 className="text-2xl font-bold mb-4">{t.servicesSection.specialPackage}</h3>
-                      <p className="text-beige-100 mb-4">
-                        {t.servicesSection.specialDesc}
-                      </p>
-                      <div className="flex items-center justify-center space-x-2 mb-4">
-                        <span className="text-lg line-through opacity-70">€140</span>
-                        <span className="text-3xl font-bold">€120</span>
-                      </div>
-                      <Button className="bg-white text-beige-500 hover:bg-beige-50 font-semibold px-6 py-2 rounded-full transition-all duration-300 hover:scale-105">
-                        {t.servicesSection.bookSave}
-                      </Button>
-                    </CardContent>
-                  </Card>
-                </div>
-                
-                <div className="space-y-6">
-                  <div className="relative animate-fade-in-up">
-                    <div className="w-full h-80 bg-gradient-to-br from-beige-200 to-beige-300 rounded-3xl shadow-2xl overflow-hidden">
-                      <img 
-                        src={NO_IMAGE} 
-                        alt="Elegant spa room with modern décor and relaxing ambiance" 
-                        className="w-full h-full object-cover"
-                      />
-                      {/* Elegant overlay with spa room details */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
-                      <div className="absolute bottom-6 left-6 text-white">
-                        <h3 className="text-2xl font-bold mb-2 drop-shadow-lg">Luxury Spa Room</h3>
-                        <p className="text-beige-100 drop-shadow-md">Experience ultimate relaxation in our beautifully designed spa environment</p>
-                      </div>
-                    </div>
+                    <Card className="bg-gradient-to-br from-beige-500 to-beige-600 text-white border-none shadow-2xl">
+                      <CardContent className="p-6 text-center">
+                        <h3 className="text-2xl font-bold mb-4">{t.servicesSection.specialPackage}</h3>
+                        <p className="text-beige-100 mb-4">
+                          {t.servicesSection.specialDesc}
+                        </p>
+                        <div className="flex items-center justify-center space-x-2 mb-4">
+                          <span className="text-lg line-through opacity-70"></span>
+                          <span className="text-3xl font-bold">Public Soon</span>
+                        </div>
+                        <Button className="bg-white text-beige-500 hover:bg-beige-50 font-semibold px-6 py-2 rounded-full transition-all duration-300 hover:scale-105">
+                          {t.servicesSection.bookSave}
+                        </Button>
+                      </CardContent>
+                    </Card>
                   </div>
 
-                  <div className="text-center">
-                    <Button className="bg-gradient-to-r from-beige-500 to-beige-600 hover:from-beige-600 hover:to-beige-700 text-white px-12 py-4 rounded-full text-lg font-semibold transition-all duration-300 hover:scale-105 shadow-2xl">
-                      <Clock className="w-5 h-5 mr-2" />
-                      BOOK APPOINTMENT
-                    </Button>
+                  <div className="space-y-6">
+                    <div className="relative animate-fade-in-up">
+                      <div className="w-full h-80 bg-gradient-to-br from-beige-200 to-beige-300 rounded-3xl shadow-2xl overflow-hidden">
+                        <img 
+                          src={NO_IMAGE} 
+                          alt="Elegant spa room with modern décor and relaxing ambiance" 
+                          className="w-full h-full object-cover"
+                        />
+                        {/* Elegant overlay with spa room details */}
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+                        <div className="absolute bottom-6 left-6 text-white">
+                          <h3 className="text-2xl font-bold mb-2 drop-shadow-lg">Title</h3>
+                          <p className="text-beige-100 drop-shadow-md">Sub-Title</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="text-center">
+                      <Button className="bg-gradient-to-r from-beige-500 to-beige-600 hover:from-beige-600 hover:to-beige-700 text-white px-12 py-4 rounded-full text-lg font-semibold transition-all duration-300 hover:scale-105 shadow-2xl">
+                        <Clock className="w-5 h-5 mr-2" />
+                        BOOK APPOINTMENT
+                      </Button>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
             )}
           </div>
         </div>
@@ -1324,7 +1327,7 @@ export const Box = (): JSX.Element => {
                 </div>
                 <div className="flex items-center gap-3">
                   <Phone className="w-5 h-5" />
-                  <span className="text-beige-200">+31 (0)58 XXX XXXX</span>
+                  <span className="text-beige-200">+31 62 869 9827</span>
                 </div>
                 <div className="flex items-center gap-3">
                   <MapPin className="w-5 h-5" />

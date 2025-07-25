@@ -38,7 +38,7 @@ export const Contact = (): JSX.Element => {
         },
         phone: {
           title: "Telefoon",
-          number: "+31 (0)58 123 4567"
+          number: "+31 62 869 9827"
         },
         email: {
           title: "E-mail",
@@ -92,7 +92,7 @@ export const Contact = (): JSX.Element => {
         },
         phone: {
           title: "Phone",
-          number: "+31 (0)58 123 4567"
+          number: "+31 62 869 9827"
         },
         email: {
           title: "Email",
@@ -398,10 +398,12 @@ export const Contact = (): JSX.Element => {
                 <Card className="border-none shadow-lg hover:shadow-xl transition-all duration-300">
                   <CardContent className="p-6">
                     <div className="flex items-center gap-3">
-                      <div className="bg-beige-100 p-2 rounded-full">
+                      <div className="bg-beige-100 p-2 rounded-full cursor-pointer hover:bg-beige-200 transition-all duration-300"
+                           onClick={() => window.open('https://wa.me/31628699827', '_blank')}>
                         <Phone className="w-5 h-5 text-beige-600" />
                       </div>
-                      <div>
+                      <div className="cursor-pointer hover:text-beige-600 transition-colors duration-300"
+                           onClick={() => window.open('https://wa.me/31628699827', '_blank')}>
                         <h3 className="font-semibold text-beige-800 dark:text-beige-200 text-sm">
                           {t.contactInfo.phone.title}
                         </h3>
