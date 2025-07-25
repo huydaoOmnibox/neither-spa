@@ -492,7 +492,7 @@ export const Box = (): JSX.Element => {
       </nav>
 
       {/* Hero Banner Section */}
-      <section id="home" className="relative h-[85vh] flex items-center justify-center bg-gradient-to-br from-beige-100 via-beige-50 to-beige-200 dark:from-gray-800 dark:to-gray-900 overflow-hidden pt-16">
+      <section id="home" className="relative min-h-[600px] h-[calc(100vh-4rem)] flex items-center justify-center bg-gradient-to-br from-beige-100 via-beige-50 to-beige-200 dark:from-gray-800 dark:to-gray-900 overflow-hidden pt-16">
         {/* Carousel Background Images */}
         <div className="absolute inset-0">
           {heroImages.map((image, index) => (
@@ -514,54 +514,54 @@ export const Box = (): JSX.Element => {
         <div className="absolute inset-0 bg-black/60"></div>
         {/* Floating decorative elements */}
         <div className="absolute inset-0 pointer-events-none">
-          <Heart className="absolute top-20 left-10 text-beige-300 w-8 h-8 animate-float opacity-40" />
-          <Sparkles className="absolute top-40 right-20 text-beige-400 w-6 h-6 animate-bounce-gentle opacity-50" />
-          <Star className="absolute bottom-40 left-20 text-beige-300 w-5 h-5 animate-pulse-gentle opacity-30" />
-          <Heart className="absolute bottom-20 right-10 text-beige-400 w-6 h-6 animate-float animation-delay-2000 opacity-40" />
+          <Heart className="absolute top-[10%] left-[5%] text-beige-300 w-8 h-8 animate-float opacity-40" />
+          <Sparkles className="absolute top-[20%] right-[10%] text-beige-400 w-6 h-6 animate-bounce-gentle opacity-50" />
+          <Star className="absolute bottom-[30%] left-[10%] text-beige-300 w-5 h-5 animate-pulse-gentle opacity-30" />
+          <Heart className="absolute bottom-[15%] right-[5%] text-beige-400 w-6 h-6 animate-float animation-delay-2000 opacity-40" />
         </div>
         
-        <div className="text-center z-10 max-w-4xl px-6">
-          <div className="flex justify-center mb-6">
+        <div className="text-center z-10 w-full max-w-4xl px-4 sm:px-6 py-8 sm:py-12">
+          <div className="flex justify-center mb-6 sm:mb-8">
             <div className="relative">
               <img 
                 src={logoPath} 
                 alt="Nails of the Netherlands Leeuwarden Logo" 
-                className="h-56 w-56 object-contain animate-pulse-gentle rounded-full border-4 border-beige-300 p-5 bg-white shadow-2xl"
+                className="h-32 w-32 sm:h-40 sm:w-40 md:h-48 md:w-48 lg:h-56 lg:w-56 object-contain animate-pulse-gentle rounded-full border-4 border-beige-300 p-3 sm:p-4 md:p-5 bg-white shadow-2xl"
               />
-              <div className="absolute -top-3 -right-3">
-                <Sparkles className="w-9 h-9 text-beige-500 animate-bounce-gentle" />
+              <div className="absolute -top-2 -right-2 sm:-top-3 sm:-right-3">
+                <Sparkles className="w-6 h-6 sm:w-8 sm:h-8 md:w-9 md:h-9 text-beige-500 animate-bounce-gentle" />
               </div>
             </div>
           </div>
           
-          <h1 className="text-6xl font-bold text-white dark:text-white mb-5 animate-fade-in-up drop-shadow-2xl">
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-white dark:text-white mb-4 sm:mb-5 animate-fade-in-up drop-shadow-2xl">
             {t.hero.title}
           </h1>
           
-          <p className="text-2xl text-beige-200 dark:text-beige-200 font-medium mb-6 animate-fade-in-up animation-delay-200 drop-shadow-lg">
+          <p className="text-xl sm:text-2xl text-beige-200 dark:text-beige-200 font-medium mb-4 sm:mb-6 animate-fade-in-up animation-delay-200 drop-shadow-lg">
             {t.hero.subtitle}
           </p>
           
-          <p className="text-lg text-beige-100 dark:text-beige-100 mb-8 max-w-2xl mx-auto animate-fade-in-up animation-delay-400 drop-shadow-lg">
+          <p className="text-base sm:text-lg text-beige-100 dark:text-beige-100 mb-6 sm:mb-8 max-w-2xl mx-auto animate-fade-in-up animation-delay-400 drop-shadow-lg">
             {t.hero.description}
           </p>
           
           <Button 
             size="lg" 
-            className="bg-gradient-to-r from-beige-500 to-beige-600 hover:from-beige-600 hover:to-beige-700 text-white shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 px-10 py-3 text-lg rounded-full animate-fade-in-up animation-delay-400"
+            className="bg-gradient-to-r from-beige-500 to-beige-600 hover:from-beige-600 hover:to-beige-700 text-white shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 px-6 sm:px-8 md:px-10 py-2 sm:py-3 text-base sm:text-lg rounded-full animate-fade-in-up animation-delay-400"
           >
             {t.hero.bookAppointment}
           </Button>
         </div>
         
         {/* Carousel Indicators */}
-        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20">
-          <div className="flex space-x-3">
+        <div className="absolute bottom-4 sm:bottom-6 md:bottom-8 left-1/2 transform -translate-x-1/2 z-20">
+          <div className="flex space-x-2 sm:space-x-3">
             {heroImages.map((_, index) => (
               <button
                 key={index}
                 onClick={() => setCurrentImageIndex(index)}
-                className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                className={`w-2 h-2 sm:w-3 sm:h-3 rounded-full transition-all duration-300 ${
                   index === currentImageIndex 
                     ? 'bg-beige-300 scale-125' 
                     : 'bg-white/50 hover:bg-white/70'
