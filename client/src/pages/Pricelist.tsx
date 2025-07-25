@@ -788,9 +788,9 @@ export const Pricelist = (): JSX.Element => {
                     <div className="flex items-center gap-4 mb-2">
                       <div className="flex items-center gap-1">
                         <Clock className="w-4 h-4" />
-                        <span className="text-sm">60-90 min</span>
+                        <span className="text-sm"></span> 
                       </div>
-                      <div className="text-2xl font-bold">€45 - €90</div>
+                      <div className="text-2xl font-bold"></div>
                     </div>
                   </div>
                 </div>
@@ -847,9 +847,9 @@ export const Pricelist = (): JSX.Element => {
                     <div className="flex items-center gap-4 mb-2">
                       <div className="flex items-center gap-1">
                         <Clock className="w-4 h-4" />
-                        <span className="text-sm">45-75 min</span>
+                        <span className="text-sm"></span>
                       </div>
-                      <div className="text-2xl font-bold">€35 - €65</div>
+                      <div className="text-2xl font-bold"></div>
                     </div>
                   </div>
                 </div>
@@ -912,9 +912,9 @@ export const Pricelist = (): JSX.Element => {
                     <div className="flex items-center gap-4 mb-2">
                       <div className="flex items-center gap-1">
                         <Clock className="w-4 h-4" />
-                        <span className="text-sm">90-120 min</span>
+                        <span className="text-sm"></span>
                       </div>
-                      <div className="text-2xl font-bold">€55 - €120</div>
+                      <div className="text-2xl font-bold"></div>
                     </div>
                   </div>
                 </div>

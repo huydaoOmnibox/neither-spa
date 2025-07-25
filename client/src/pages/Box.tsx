@@ -35,7 +35,7 @@ export const Box = (): JSX.Element => {
       },
              about: {
          title: "OVER ONS",
-         description: "Welkom bij Nails of The Netherlands – Jouw nagelbestemming in het hart van Leeuwarden!\n\nGelegen in het bruisende stadscentrum van Leeuwarden, op slechts een paar stappen van McDonald's, ICI Paris en Kruidvat, biedt onze nagelsalon de perfecte combinatie van gemak, comfort en kwaliteit. Of je nu op zoek bent naar een snelle manicure, een ontspannende pedicure of een unieke nail art – ons professioneel en vriendelijke team staat voor je klaar.\n\nHeb je moeite om een keuze te maken? Geen zorgen – ons ervaren team adviseert je graag!\n\nIn een moderne, schone omgeving met oog voor detail en hygiëne zorgen wij ervoor dat jij niet alleen prachtige nagels krijgt, maar ook een ontspannen en fijne ervaring beleeft.\n\nKom langs en laat je nagels stralen!",
+         description: "Welkom bij Nails of The Netherlands – Jouw nagelbestemming in het hart van Leeuwarden!\n\nGelegen in het bruisende stadscentrum van Leeuwarden, op slechts een paar stappen van McDonald's, ICI Paris en Kruidvat, biedt onze nagelsalon de perfecte combinatie van gemak, comfort en kwaliteit. Of je nu op zoek bent naar een snelle manicure, een ontspannende pedicure of een unieke nail art – ons proffesionele en vriendelijke team staat voor je klaar.\n\nHeb je moeite om een keuze te maken? Geen zorgen – ons ervaren team adviseert je graag!\n\nIn een moderne, schone omgeving met oog voor detail en hygiëne zorgen wij ervoor dat jij niet alleen prachtige nagels krijgt, maar ook een ontspannen en fijne ervaring beleeft.\n\nKom langs en laat je nagels stralen!",
          address: "Adres",
          addressValue: "Wirdumerdijk 29, 8911 CC Leeuwarden",
          hotline: "Telefoon",
@@ -174,7 +174,7 @@ export const Box = (): JSX.Element => {
         description2: "From our hospital-grade sterilization process to our eco-friendly nail polishes, every detail is carefully considered for your health and the environment.",
         licensed: "Licensed & Certified",
         licensedDesc: "All our technicians are professionally trained and certified",
-        experience: "Years Experience"
+        experience: ""
       },
       lookbook: {
         title: "VIEW OUR LOOKBOOK",
@@ -670,7 +670,7 @@ export const Box = (): JSX.Element => {
                 className="w-full h-96 object-cover rounded-2xl shadow-2xl"
               />
               <div className="absolute -bottom-6 -right-6 bg-beige-500 text-white p-6 rounded-2xl shadow-xl">
-                <div className="text-4xl font-bold">5+</div>
+                <div className="text-4xl font-bold"></div>
                 <div className="text-sm uppercase tracking-wide">{t.safety.experience}</div>
               </div>
             </div>
@@ -787,8 +787,8 @@ export const Box = (): JSX.Element => {
                 className="w-full h-96 object-cover rounded-2xl shadow-2xl"
               />
               <div className="absolute -top-6 -left-6 bg-beige-500 text-white p-6 rounded-2xl shadow-xl">
-                <div className="text-4xl font-bold">100%</div>
-                <div className="text-sm uppercase tracking-wide">Satisfaction</div>
+                <div className="text-4xl font-bold"></div>
+                <div className="text-sm uppercase tracking-wide"></div>
               </div>
             </div>
           </div>
