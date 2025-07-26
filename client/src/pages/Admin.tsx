@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -66,19 +66,85 @@ const formatPriceForBackend = (price: string): string => {
   return price;
 };
 
-// Helper function to get image URL (proxy for Google Drive)
+// Image URL cache to prevent repeated proxy calls
+const imageUrlCache = new Map<string, string>();
+
+// Helper function to get image URL (proxy for Google Drive) with caching
 const getImageUrl = (url: string | null): string => {
   if (!url) return '';
   
+  // Check cache first
+  if (imageUrlCache.has(url)) {
+    return imageUrlCache.get(url)!;
+  }
+  
   const convertedUrl = convertGoogleDriveUrl(url);
+  let finalUrl: string;
   
   // If it's a Google Drive URL, use our proxy
   if (convertedUrl.includes('drive.google.com')) {
-    return `/api/proxy-image?url=${encodeURIComponent(convertedUrl)}`;
+    finalUrl = `/api/proxy-image?url=${encodeURIComponent(convertedUrl)}`;
+  } else {
+    // For other URLs, use directly
+    finalUrl = convertedUrl;
   }
   
-  // For other URLs, use directly
-  return convertedUrl;
+  // Cache the result
+  imageUrlCache.set(url, finalUrl);
+  return finalUrl;
+};
+
+// Optimized Image component with error handling
+const OptimizedImage = ({ src, alt, className, ...props }: { src: string | null; alt: string; className?: string; [key: string]: any }) => {
+  const [imageSrc, setImageSrc] = useState<string>('');
+  const [hasError, setHasError] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    if (src) {
+      const imageUrl = getImageUrl(src);
+      setImageSrc(imageUrl);
+      setHasError(false);
+      setIsLoading(true);
+    } else {
+      setImageSrc('');
+      setHasError(false);
+      setIsLoading(false);
+    }
+  }, [src]);
+
+  const handleError = useCallback(() => {
+    setHasError(true);
+    setIsLoading(false);
+    setImageSrc('/api/placeholder-image');
+  }, []);
+
+  const handleLoad = useCallback(() => {
+    setIsLoading(false);
+  }, []);
+
+  if (!src) {
+    return <div className={`bg-gray-200 flex items-center justify-center ${className}`}>No Image</div>;
+  }
+
+  return (
+    <div className="relative">
+      {isLoading && (
+        <div className={`absolute inset-0 bg-gray-200 flex items-center justify-center ${className}`}>
+          <Loader2 className="h-4 w-4 animate-spin" />
+        </div>
+      )}
+      <img
+        src={imageSrc}
+        alt={alt}
+        className={className}
+        onError={handleError}
+        onLoad={handleLoad}
+        style={{ display: isLoading ? 'none' : 'block' }}
+        {...props}
+      />
+    </div>
+  );
 };
 
 export const Admin = (): JSX.Element => {
@@ -191,8 +257,8 @@ export const Admin = (): JSX.Element => {
 
   const t = translations[currentLanguage];
 
-  // API functions
-  const fetchProducts = async () => {
+  // API functions with useCallback for performance
+  const fetchProducts = useCallback(async () => {
     try {
       const response = await fetch('/api/products');
       if (response.ok) {
@@ -202,9 +268,9 @@ export const Admin = (): JSX.Element => {
     } catch (error) {
       console.error('Failed to fetch products:', error);
     }
-  };
+  }, []);
 
-  const fetchGallery = async () => {
+  const fetchGallery = useCallback(async () => {
     try {
       const response = await fetch('/api/gallery');
       if (response.ok) {
@@ -214,9 +280,9 @@ export const Admin = (): JSX.Element => {
     } catch (error) {
       console.error('Failed to fetch gallery:', error);
     }
-  };
+  }, []);
 
-  const fetchPricing = async () => {
+  const fetchPricing = useCallback(async () => {
     try {
       const response = await fetch('/api/pricing');
       if (response.ok) {
@@ -226,9 +292,9 @@ export const Admin = (): JSX.Element => {
     } catch (error) {
       console.error('Failed to fetch pricing:', error);
     }
-  };
+  }, []);
 
-  const fetchHomeContent = async () => {
+  const fetchHomeContent = useCallback(async () => {
     try {
       const response = await fetch('/api/home-content');
       if (response.ok) {
@@ -238,7 +304,7 @@ export const Admin = (): JSX.Element => {
     } catch (error) {
       console.error('Failed to fetch home content:', error);
     }
-  };
+  }, []);
 
   // Load data on component mount and tab change
   useEffect(() => {
@@ -251,16 +317,16 @@ export const Admin = (): JSX.Element => {
     ]).finally(() => {
       setLoading(false);
     });
-  }, []);
+  }, [fetchProducts, fetchGallery, fetchPricing, fetchHomeContent]);
 
-  const handleOpenDialog = (section: 'products' | 'gallery' | 'pricing' | 'home', item?: any) => {
+  const handleOpenDialog = useCallback((section: 'products' | 'gallery' | 'pricing' | 'home', item?: any) => {
     setCurrentSection(section);
     setEditingItem(item || null);
     setFormData(item || {});
     setIsDialogOpen(true);
-  };
+  }, []);
 
-  const handleSave = async () => {
+  const handleSave = useCallback(async () => {
     setSaving(true);
     try {
       const endpoint = `/api/${currentSection === 'home' ? 'home-content' : currentSection}`;
@@ -325,9 +391,9 @@ export const Admin = (): JSX.Element => {
     } finally {
       setSaving(false);
     }
-  };
+  }, [currentSection, editingItem, formData, fetchProducts, fetchGallery, fetchPricing, fetchHomeContent, toast, t.messages]);
 
-  const handleDelete = async (section: string, id: number) => {
+  const handleDelete = useCallback(async (section: string, id: number) => {
     try {
       const endpoint = section === 'home' ? 'home-content' : section;
       const response = await fetch(`/api/${endpoint}/${id}`, {
@@ -365,7 +431,7 @@ export const Admin = (): JSX.Element => {
         variant: "destructive",
       });
     }
-  };
+  }, [fetchProducts, fetchGallery, fetchPricing, fetchHomeContent, toast, t.messages]);
 
   const renderProductsTab = () => (
     <div className="space-y-6">
