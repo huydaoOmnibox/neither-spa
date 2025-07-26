@@ -1,23 +1,4 @@
-import 'dotenv/config';
-
-// Import the storage and schema modules
-let storage, insertProductSchema;
-
-const initializeModules = async () => {
-  if (!storage) {
-    try {
-      console.log('Initializing modules...');
-      const storageModule = await import('../server/storage.js');
-      const schemaModule = await import('../shared/schema.js');
-      storage = storageModule.storage;
-      insertProductSchema = schemaModule.insertProductSchema;
-      console.log('Modules initialized successfully');
-    } catch (error) {
-      console.error('Module initialization error:', error);
-      throw error;
-    }
-  }
-};
+import { storage, insertProductSchema } from './utils.js';
 
 export default async (req, res) => {
   try {
@@ -32,7 +13,7 @@ export default async (req, res) => {
       return res.status(200).end();
     }
 
-    await initializeModules();
+    console.log('Using direct storage import');
 
     if (req.method === 'GET') {
       if (req.query.id) {

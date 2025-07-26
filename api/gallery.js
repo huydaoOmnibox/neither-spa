@@ -1,15 +1,4 @@
-require('dotenv/config');
-
-let storage, insertGallerySchema;
-
-const initializeModules = async () => {
-  if (!storage) {
-    const storageModule = await import('../server/storage.js');
-    const schemaModule = await import('../shared/schema.js');
-    storage = storageModule.storage;
-    insertGallerySchema = schemaModule.insertGallerySchema;
-  }
-};
+import { storage, insertGallerySchema } from './utils.js';
 
 export default async (req, res) => {
   // Enable CORS
@@ -21,7 +10,7 @@ export default async (req, res) => {
     return res.status(200).end();
   }
 
-  await initializeModules();
+  console.log('Using direct storage import');
 
   try {
     if (req.method === 'GET') {
