@@ -18,6 +18,18 @@ export default async (req, res) => {
     console.log('Environment check:');
     console.log('- SUPABASE_URL exists:', !!supabaseUrl);
     console.log('- DATABASE_URL exists:', !!databaseUrl);
+    console.log('- DATABASE_URL value:', databaseUrl ? databaseUrl.replace(/:[^:@]*@/, ':***@') : 'NOT SET');
+    
+    // Test database connection
+    let dbTest = 'NOT TESTED';
+    try {
+      const { storage } = await import('./utils.js');
+      await storage.getProducts();
+      dbTest = 'SUCCESS';
+    } catch (dbError) {
+      dbTest = `FAILED: ${dbError.message}`;
+      console.error('Database test failed:', dbError);
+    }
     
     return res.status(200).json({
       success: true,
@@ -27,8 +39,10 @@ export default async (req, res) => {
       environment: {
         supabaseUrl: supabaseUrl ? 'SET' : 'NOT SET',
         databaseUrl: databaseUrl ? 'SET' : 'NOT SET',
+        databaseUrlMasked: databaseUrl ? databaseUrl.replace(/:[^:@]*@/, ':***@') : 'NOT SET',
         nodeEnv: process.env.NODE_ENV
-      }
+      },
+      databaseTest: dbTest
     });
     
   } catch (error) {
