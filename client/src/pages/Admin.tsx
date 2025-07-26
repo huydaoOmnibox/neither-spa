@@ -94,18 +94,34 @@ const getImageUrl = (url: string | null): string => {
   return finalUrl;
 };
 
-// Optimized Image component with error handling
+// Failed URLs cache to prevent retry loops
+const failedUrlsCache = new Set<string>();
+
+// Data URL for gray placeholder (1x1 gray pixel)
+const GRAY_PIXEL_DATA_URL = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChAI9jINpPwAAAABJRU5ErkJggg==';
+
+// Optimized Image component with error handling and retry prevention
 const OptimizedImage = ({ src, alt, className, ...props }: { src: string | null; alt: string; className?: string; [key: string]: any }) => {
   const [imageSrc, setImageSrc] = useState<string>('');
   const [hasError, setHasError] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [retryCount, setRetryCount] = useState(0);
 
   useEffect(() => {
     if (src) {
+      // Check if this URL has already failed
+      if (failedUrlsCache.has(src)) {
+        setImageSrc(GRAY_PIXEL_DATA_URL);
+        setHasError(true);
+        setIsLoading(false);
+        return;
+      }
+
       const imageUrl = getImageUrl(src);
       setImageSrc(imageUrl);
       setHasError(false);
       setIsLoading(true);
+      setRetryCount(0);
     } else {
       setImageSrc('');
       setHasError(false);
@@ -114,35 +130,54 @@ const OptimizedImage = ({ src, alt, className, ...props }: { src: string | null;
   }, [src]);
 
   const handleError = useCallback(() => {
+    console.log(`Image failed to load: ${imageSrc}`);
+    
+    // Add to failed cache to prevent future retries
+    if (src) {
+      failedUrlsCache.add(src);
+    }
+    
     setHasError(true);
     setIsLoading(false);
-    setImageSrc('/api/placeholder-image');
-  }, []);
+    
+    // Use data URL as final fallback instead of API endpoint
+    setImageSrc(GRAY_PIXEL_DATA_URL);
+  }, [imageSrc, src]);
 
   const handleLoad = useCallback(() => {
     setIsLoading(false);
+    setHasError(false);
   }, []);
 
   if (!src) {
-    return <div className={`bg-gray-200 flex items-center justify-center ${className}`}>No Image</div>;
+    return (
+      <div className={`bg-gray-200 flex items-center justify-center text-gray-500 text-xs ${className}`}>
+        No Image
+      </div>
+    );
   }
 
   return (
     <div className="relative">
-      {isLoading && (
+      {isLoading && !hasError && (
         <div className={`absolute inset-0 bg-gray-200 flex items-center justify-center ${className}`}>
-          <Loader2 className="h-4 w-4 animate-spin" />
+          <Loader2 className="h-4 w-4 animate-spin text-gray-400" />
         </div>
       )}
       <img
         src={imageSrc}
         alt={alt}
-        className={className}
+        className={`${className} ${hasError ? 'opacity-50' : ''}`}
         onError={handleError}
         onLoad={handleLoad}
-        style={{ display: isLoading ? 'none' : 'block' }}
+        style={{ display: isLoading && !hasError ? 'none' : 'block' }}
         {...props}
       />
+      {hasError && (
+        <div className="absolute inset-0 bg-gray-100 flex items-center justify-center text-gray-400 text-xs">
+          <X className="h-4 w-4" />
+        </div>
+      )}
     </div>
   );
 };
