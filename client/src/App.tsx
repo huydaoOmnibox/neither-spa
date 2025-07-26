@@ -10,6 +10,7 @@ import { Products } from "@/pages/Products";
 import { Gallery } from "@/pages/Gallery";
 import { Pricelist } from "@/pages/Pricelist";
 import { Contact } from "@/pages/Contact";
+import { Admin } from "@/pages/Admin";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 
 function Router() {
@@ -21,6 +22,7 @@ function Router() {
         <Route path="/gallery" component={Gallery} />
         <Route path="/pricelist" component={Pricelist} />
         <Route path="/contact" component={Contact} />
+        <Route path="/admin" component={Admin} />
       {/* Fallback to 404 */}
       <Route component={NotFound} />
     </Switch>

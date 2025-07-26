@@ -1,14 +1,80 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Menu, X, Sparkles } from "lucide-react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Menu, X, Sparkles, Package, Loader2, Filter } from "lucide-react";
 import { Link } from "wouter";
 import logoPath from "@assets/image_1752511415001.png";
 import { useLanguage } from "@/contexts/LanguageContext";
+import type { Product } from "@shared/schema";
+
+// Helper function to get image URL (proxy for Google Drive)
+const getImageUrl = (url: string | null): string => {
+  if (!url) return '';
+  
+  const convertedUrl = convertGoogleDriveUrl(url);
+  
+  // If it's a Google Drive URL, use our proxy
+  if (convertedUrl.includes('drive.google.com')) {
+    return `/api/proxy-image?url=${encodeURIComponent(convertedUrl)}`;
+  }
+  
+  // For other URLs, use directly
+  return convertedUrl;
+};
+
+// Helper function to convert Google Drive URLs to direct image URLs
+const convertGoogleDriveUrl = (url: string | null): string => {
+  if (!url) return '';
+  
+  // If it's already a direct Google Drive URL, return as is
+  if (url.includes('drive.google.com/uc')) {
+    return url;
+  }
+
+  // Extract the file ID from the sharing URL
+  const match = url.match(/\/d\/(.*?)\/view/);
+  if (match && match[1]) {
+    return `https://drive.google.com/uc?export=view&id=${match[1]}`;
+  }
+
+  return url;
+};
 
 export const Products = (): JSX.Element => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const { currentLanguage, setCurrentLanguage } = useLanguage();
+
+  // Fetch products from API
+  const fetchProducts = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch('/api/products');
+      if (response.ok) {
+        const data = await response.json();
+        setProducts(data.filter((product: Product) => product.isActive));
+      }
+    } catch (error) {
+      console.error('Failed to fetch products:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchProducts();
+  }, []);
+
+  // Get unique categories
+  const categories = ['all', ...Array.from(new Set(products.map(p => p.category).filter((cat): cat is string => Boolean(cat))))];
+
+  // Filter products by category
+  const filteredProducts = selectedCategory === 'all' 
+    ? products 
+    : products.filter(product => product.category === selectedCategory);
 
   // Translation content
   const translations = {
@@ -25,6 +91,14 @@ export const Products = (): JSX.Element => {
       header: {
         title: "PRODUCTEN",
         subtitle: "Ontdek onze premium nagelzorgproducten"
+      },
+      filters: {
+        all: "Alle",
+        categories: "Categorieën"
+      },
+      product: {
+        contactForPrice: "Neem contact op voor prijs",
+        outOfStock: "Uitverkocht"
       }
     },
     en: {
@@ -40,6 +114,14 @@ export const Products = (): JSX.Element => {
       header: {
         title: "PRODUCTS",
         subtitle: "Discover our premium nail care products"
+      },
+      filters: {
+        all: "All",
+        categories: "Categories"
+      },
+      product: {
+        contactForPrice: "Contact for price",
+        outOfStock: "Out of stock"
       }
     }
   };
@@ -256,17 +338,110 @@ export const Products = (): JSX.Element => {
         </div>
       </div>
 
-      {/* Products Grid - Empty State */}
+      {/* Category Filter */}
+      {!loading && products.length > 0 && (
+        <section className="py-8 bg-white dark:bg-gray-900 border-b border-beige-200 dark:border-gray-700">
+          <div className="max-w-7xl mx-auto px-6">
+            <div className="flex flex-wrap items-center gap-4">
+              <div className="flex items-center gap-2">
+                <Filter className="w-5 h-5 text-beige-600" />
+                <span className="font-medium text-beige-800 dark:text-beige-200">{t.filters.categories}:</span>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {categories.map((category) => (
+                  <Button
+                    key={category}
+                    variant={selectedCategory === category ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => setSelectedCategory(category)}
+                    className={selectedCategory === category 
+                      ? "bg-beige-500 hover:bg-beige-600 text-white" 
+                      : "border-beige-300 text-beige-700 hover:bg-beige-50"
+                    }
+                  >
+                    {category === 'all' ? t.filters.all : category}
+                  </Button>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Products Grid */}
       <section className="py-20">
         <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center py-12">
-            <p className="text-lg text-beige-600 dark:text-beige-300">
-              {currentLanguage === 'nl' 
-                ? 'Productcatalogus wordt binnenkort bijgewerkt.'
-                : 'Product catalog will be updated soon.'
-              }
-            </p>
-          </div>
+          {loading ? (
+            <div className="flex items-center justify-center py-12">
+              <Loader2 className="w-8 h-8 animate-spin text-beige-500" />
+              <span className="ml-2 text-beige-600">
+                {currentLanguage === 'nl' ? 'Producten laden...' : 'Loading products...'}
+              </span>
+            </div>
+          ) : products.length === 0 ? (
+            <div className="text-center py-12">
+              <Package className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+              <p className="text-lg text-beige-600 dark:text-beige-300">
+                {currentLanguage === 'nl' 
+                  ? 'Nog geen producten beschikbaar.'
+                  : 'No products available yet.'
+                }
+              </p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              {filteredProducts.map((product) => (
+                <Card key={product.id} className="bg-white dark:bg-gray-800 hover:shadow-lg transition-all duration-300 hover:scale-105 overflow-hidden">
+                  {/* Product Image */}
+                  <div className="aspect-square bg-gray-100 dark:bg-gray-700 overflow-hidden">
+                    {product.image ? (
+                      <img 
+                        src={getImageUrl(product.image)}
+                        alt={product.name}
+                        className="w-full h-full object-cover"
+                        onError={(e) => {
+                          e.currentTarget.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDIwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIiBmaWxsPSIjRjNGNEY2Ii8+CjxwYXRoIGQ9Ik02MCA4MEMxNzEgMzMgMTMzIDExNiA0MCA4MEMwIDEzMyA2NyAxNzMgMTMzIDE0NkMxNzMgMTMzIDIwMCA2NyAxMjMgNDBDODcgMTMgNzMgNDcgNjAgODBaIiBmaWxsPSIjOUNBM0FGIi8+Cjwvc3ZnPg==';
+                        }}
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center text-gray-400 dark:text-gray-500">
+                        <Package className="w-16 h-16" />
+                      </div>
+                    )}
+                  </div>
+                  
+                  <CardHeader className="pb-3">
+                    <div className="flex justify-between items-start mb-2">
+                      <CardTitle className="text-lg line-clamp-2">{product.name}</CardTitle>
+                      {product.category && (
+                        <Badge variant="secondary" className="ml-2 flex-shrink-0">
+                          {product.category}
+                        </Badge>
+                      )}
+                    </div>
+                    <CardDescription className="line-clamp-3">
+                      {product.description}
+                    </CardDescription>
+                  </CardHeader>
+                  
+                  <CardContent className="pt-0">
+                    <div className="flex justify-between items-center">
+                      <span className="text-xl font-bold text-beige-600">
+                        {product.price || t.product.contactForPrice}
+                      </span>
+                      <Button 
+                        size="sm"
+                        className="bg-beige-500 hover:bg-beige-600 text-white"
+                        onClick={() => window.open('https://wa.me/31628699827', '_blank')}
+                      >
+                        {currentLanguage === 'nl' ? 'Bestellen' : 'Order'}
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 
