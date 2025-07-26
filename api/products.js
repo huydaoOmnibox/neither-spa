@@ -1,4 +1,4 @@
-require('dotenv/config');
+import 'dotenv/config';
 
 // Import the storage and schema modules
 let storage, insertProductSchema;
@@ -19,7 +19,7 @@ const initializeModules = async () => {
   }
 };
 
-module.exports = async (req, res) => {
+export default async (req, res) => {
   try {
     console.log(`${req.method} request to /api/products`);
     

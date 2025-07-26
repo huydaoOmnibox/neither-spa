@@ -1,4 +1,4 @@
-module.exports = async (req, res) => {
+export default async (req, res) => {
   try {
     console.log(`Test endpoint called with method: ${req.method}`);
     
