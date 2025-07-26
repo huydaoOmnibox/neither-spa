@@ -1,4 +1,3 @@
-const express = require('express');
 require('dotenv/config');
 
 // Import the storage and schema modules
@@ -6,26 +5,35 @@ let storage, insertProductSchema;
 
 const initializeModules = async () => {
   if (!storage) {
-    const storageModule = await import('../server/storage.js');
-    const schemaModule = await import('../shared/schema.js');
-    storage = storageModule.storage;
-    insertProductSchema = schemaModule.insertProductSchema;
+    try {
+      console.log('Initializing modules...');
+      const storageModule = await import('../server/storage.js');
+      const schemaModule = await import('../shared/schema.js');
+      storage = storageModule.storage;
+      insertProductSchema = schemaModule.insertProductSchema;
+      console.log('Modules initialized successfully');
+    } catch (error) {
+      console.error('Module initialization error:', error);
+      throw error;
+    }
   }
 };
 
 module.exports = async (req, res) => {
-  // Enable CORS
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-  
-  if (req.method === 'OPTIONS') {
-    return res.status(200).end();
-  }
-
-  await initializeModules();
-
   try {
+    console.log(`${req.method} request to /api/products`);
+    
+    // Enable CORS
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+    
+    if (req.method === 'OPTIONS') {
+      return res.status(200).end();
+    }
+
+    await initializeModules();
+
     if (req.method === 'GET') {
       if (req.query.id) {
         // Get single product
@@ -64,6 +72,10 @@ module.exports = async (req, res) => {
     }
   } catch (error) {
     console.error('API Error:', error);
-    return res.status(500).json({ message: "Internal server error" });
+    return res.status(500).json({ 
+      message: "Internal server error", 
+      error: error.message,
+      stack: process.env.NODE_ENV === 'development' ? error.stack : undefined
+    });
   }
 }; 
