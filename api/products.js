@@ -13,22 +13,19 @@ export default async (req, res) => {
       return res.status(200).end();
     }
 
-    // Parse the URL to determine if this is a single item request
-    const url = req.url || '';
-    const pathParts = url.split('/').filter(part => part);
-    const lastPart = pathParts[pathParts.length - 1];
-    const isSingleItem = !isNaN(parseInt(lastPart)) && lastPart !== 'products';
+    // Parse query parameters
+    const url = new URL(req.url, `http://${req.headers.host}`);
+    const id = url.searchParams.get('id');
+    const isSingleItem = id && !isNaN(parseInt(id));
 
-    console.log('URL:', url);
-    console.log('Path parts:', pathParts);
-    console.log('Last part:', lastPart);
+    console.log('URL:', req.url);
+    console.log('Query ID:', id);
     console.log('Is single item:', isSingleItem);
 
     if (req.method === 'GET') {
       if (isSingleItem) {
         // Get single product
-        const id = parseInt(lastPart);
-        const product = await storage.getProduct(id);
+        const product = await storage.getProduct(parseInt(id));
         if (!product) {
           return res.status(404).json({ message: "Product not found" });
         }
@@ -51,9 +48,8 @@ export default async (req, res) => {
         return res.status(405).json({ message: "Method not allowed" });
       }
       // Update product
-      const id = parseInt(lastPart);
       const productData = insertProductSchema.partial().parse(req.body);
-      const product = await storage.updateProduct(id, productData);
+      const product = await storage.updateProduct(parseInt(id), productData);
       if (!product) {
         return res.status(404).json({ message: "Product not found" });
       }
@@ -63,8 +59,7 @@ export default async (req, res) => {
         return res.status(405).json({ message: "Method not allowed" });
       }
       // Delete product
-      const id = parseInt(lastPart);
-      await storage.deleteProduct(id);
+      await storage.deleteProduct(parseInt(id));
       return res.status(204).end();
     } else {
       return res.status(405).json({ message: "Method not allowed" });

@@ -399,7 +399,7 @@ export const Admin = (): JSX.Element => {
     try {
       const endpoint = `/api/${currentSection === 'home' ? 'home-content' : currentSection}`;
       const method = editingItem?.id ? 'PUT' : 'POST';
-      const url = editingItem?.id ? `${endpoint}/${editingItem.id}` : endpoint;
+      const url = editingItem?.id ? `${endpoint}?id=${editingItem.id}` : endpoint;
 
 
       // Prepare form data with proper formatting
@@ -471,7 +471,7 @@ export const Admin = (): JSX.Element => {
   const handleDelete = useCallback(async (section: string, id: number) => {
     try {
       const endpoint = section === 'home' ? 'home-content' : section;
-      const response = await fetch(`/api/${endpoint}/${id}`, {
+      const response = await fetch(`/api/${endpoint}?id=${id}`, {
         method: 'DELETE',
       });
 

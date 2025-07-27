@@ -11,22 +11,19 @@ export default async (req, res) => {
   }
 
   try {
-    // Parse the URL to determine if this is a single item request
-    const url = req.url || '';
-    const pathParts = url.split('/').filter(part => part);
-    const lastPart = pathParts[pathParts.length - 1];
-    const isSingleItem = !isNaN(parseInt(lastPart)) && lastPart !== 'gallery';
+    // Parse query parameters
+    const url = new URL(req.url, `http://${req.headers.host}`);
+    const id = url.searchParams.get('id');
+    const isSingleItem = id && !isNaN(parseInt(id));
 
-    console.log('Gallery URL:', url);
-    console.log('Path parts:', pathParts);
-    console.log('Last part:', lastPart);
+    console.log('Gallery URL:', req.url);
+    console.log('Query ID:', id);
     console.log('Is single item:', isSingleItem);
 
     if (req.method === 'GET') {
       if (isSingleItem) {
         // Get single gallery item
-        const id = parseInt(lastPart);
-        const item = await storage.getGalleryItem(id);
+        const item = await storage.getGalleryItem(parseInt(id));
         if (!item) {
           return res.status(404).json({ message: "Gallery item not found" });
         }
@@ -49,9 +46,8 @@ export default async (req, res) => {
         return res.status(405).json({ message: "Method not allowed" });
       }
       // Update gallery item
-      const id = parseInt(lastPart);
       const galleryData = insertGallerySchema.partial().parse(req.body);
-      const item = await storage.updateGalleryItem(id, galleryData);
+      const item = await storage.updateGalleryItem(parseInt(id), galleryData);
       if (!item) {
         return res.status(404).json({ message: "Gallery item not found" });
       }
@@ -61,8 +57,7 @@ export default async (req, res) => {
         return res.status(405).json({ message: "Method not allowed" });
       }
       // Delete gallery item
-      const id = parseInt(lastPart);
-      await storage.deleteGalleryItem(id);
+      await storage.deleteGalleryItem(parseInt(id));
       return res.status(204).end();
     } else {
       return res.status(405).json({ message: "Method not allowed" });
