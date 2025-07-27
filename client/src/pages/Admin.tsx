@@ -26,7 +26,7 @@ import {
   EyeOff,
   Loader2
 } from "lucide-react";
-import { Link } from "wouter";
+import { Link, useLocation } from "wouter";
 import logoPath from "@assets/image_1752511415001.png";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useToast } from "@/hooks/use-toast";
@@ -191,6 +191,30 @@ export const Admin = (): JSX.Element => {
   const [saving, setSaving] = useState(false);
   const { currentLanguage, setCurrentLanguage } = useLanguage();
   const { toast } = useToast();
+  const [, setLocation] = useLocation();
+
+  // Get current user from localStorage
+  const getCurrentUser = () => {
+    try {
+      const userStr = localStorage.getItem('adminUser');
+      return userStr ? JSON.parse(userStr) : null;
+    } catch {
+      return null;
+    }
+  };
+
+  const currentUser = getCurrentUser();
+
+  // Logout function
+  const handleLogout = () => {
+    localStorage.removeItem('adminToken');
+    localStorage.removeItem('adminUser');
+    toast({
+      title: "Logged Out",
+      description: "You have been successfully logged out.",
+    });
+    setLocation('/login');
+  };
 
   // Data states
   const [products, setProducts] = useState<Product[]>([]);
@@ -1162,7 +1186,15 @@ export const Admin = (): JSX.Element => {
                 </Button>
               </Link>
               
-              <Button variant="outline">
+              {/* User Info */}
+              {currentUser && (
+                <div className="flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-300">
+                  <Users className="w-4 h-4" />
+                  <span>Welcome, {currentUser.username}</span>
+                </div>
+              )}
+              
+              <Button variant="outline" onClick={handleLogout}>
                 <Settings className="w-4 h-4 mr-2" />
                 {t.nav.logout}
               </Button>

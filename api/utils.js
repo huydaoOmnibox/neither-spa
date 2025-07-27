@@ -18,6 +18,23 @@ const client = postgres(connectionString, {
 export const db = drizzle(client);
 
 // Schema definitions
+export const users = pgTable("users", {
+  id: serial("id").primaryKey(),
+  username: text("username").notNull().unique(),
+  password: text("password").notNull(),
+  customerId: integer("customer_id"),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export const customer = pgTable("customer", {
+  id: serial("id").primaryKey(),
+  name: text("name").notNull(),
+  url: text("url"),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
 export const products = pgTable("products", {
   id: serial("id").primaryKey(),
   name: text("name").notNull(),
@@ -68,6 +85,17 @@ export const homeContent = pgTable("home_content", {
 });
 
 // Zod schemas for validation
+export const loginSchema = z.object({
+  username: z.string().min(1, "Username is required"),
+  password: z.string().min(1, "Password is required"),
+});
+
+export const insertUserSchema = z.object({
+  username: z.string().min(3, "Username must be at least 3 characters"),
+  password: z.string().min(6, "Password must be at least 6 characters"),
+  customerId: z.number().optional(),
+});
+
 export const insertProductSchema = z.object({
   name: z.string(),
   description: z.string().optional(),
@@ -107,6 +135,17 @@ export const insertHomeContentSchema = z.object({
 
 // Storage functions
 export const storage = {
+  // Authentication
+  async getUserByUsername(username) {
+    const result = await db.select().from(users).where(eq(users.username, username));
+    return result[0];
+  },
+  
+  async createUser(userData) {
+    const result = await db.insert(users).values(userData).returning();
+    return result[0];
+  },
+
   // Products
   async getProducts() {
     return await db.select().from(products).orderBy(asc(products.sortOrder));

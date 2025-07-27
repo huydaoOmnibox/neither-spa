@@ -11,7 +11,21 @@ import { Gallery } from "@/pages/Gallery";
 import { Pricelist } from "@/pages/Pricelist";
 import { Contact } from "@/pages/Contact";
 import { Admin } from "@/pages/Admin";
+import { Login } from "@/pages/Login";
 import { LanguageProvider } from "@/contexts/LanguageContext";
+
+// Protected Route Component
+function ProtectedRoute({ component: Component }: { component: React.ComponentType }) {
+  const token = localStorage.getItem('adminToken');
+  
+  if (!token) {
+    // Redirect to login if no token
+    window.location.href = '/login';
+    return null;
+  }
+  
+  return <Component />;
+}
 
 function Router() {
   return (
@@ -22,7 +36,8 @@ function Router() {
         <Route path="/gallery" component={Gallery} />
         <Route path="/pricelist" component={Pricelist} />
         <Route path="/contact" component={Contact} />
-        <Route path="/admin" component={Admin} />
+        <Route path="/login" component={Login} />
+        <Route path="/admin" component={() => <ProtectedRoute component={Admin} />} />
       {/* Fallback to 404 */}
       <Route component={NotFound} />
     </Switch>
