@@ -119,11 +119,11 @@ export const insertPricingSchema = z.object({
 
 export const insertHomeContentSchema = z.object({
   section: z.string(),
-  title: z.string().optional(),
-  subtitle: z.string().optional(),
-  description: z.string().optional(),
-  content: z.array(z.string()).optional(),
-  image: z.string().optional(),
+  title: z.string().nullable().optional(),
+  subtitle: z.string().nullable().optional(),
+  description: z.string().nullable().optional(),
+  content: z.union([z.string(), z.array(z.string())]).nullable().optional(),
+  image: z.string().nullable().optional(),
   isActive: z.boolean().optional(),
 });
 
