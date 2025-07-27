@@ -666,11 +666,28 @@ export const Admin = (): JSX.Element => {
                 </div>
               </CardHeader>
               <CardContent>
-                <div className="flex justify-between items-center">
-                  <span className="text-sm text-gray-600 dark:text-gray-400">
-                    {t.fields.category}: {item.category}
-                  </span>
-                  <span className="text-sm text-gray-500">Order: {item.sortOrder}</span>
+                <div className="flex gap-4">
+                  {/* Image Display */}
+                  <div className="w-20 h-20 bg-gray-100 dark:bg-gray-700 rounded-lg overflow-hidden flex-shrink-0">
+                    <OptimizedImage 
+                      src={item.image || ''} 
+                      alt={item.title}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  
+                  {/* Content */}
+                  <div className="flex-1">
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm text-gray-600 dark:text-gray-400">
+                        {t.fields.category}: {item.category || 'Uncategorized'}
+                      </span>
+                      <span className="text-sm text-gray-500">Order: {item.sortOrder}</span>
+                    </div>
+                    <p className="text-xs text-gray-500 mt-1 line-clamp-2">
+                      {item.description}
+                    </p>
+                  </div>
                 </div>
               </CardContent>
             </Card>
@@ -967,23 +984,80 @@ export const Admin = (): JSX.Element => {
                   placeholder="Gallery item description"
                 />
               </div>
+              <div>
+                <label className="text-sm font-medium">{t.fields.image}</label>
+                <Input 
+                  value={formData.image || ''} 
+                  onChange={(e) => setFormData({...formData, image: convertGoogleDriveUrl(e.target.value)})}
+                  placeholder="https://drive.google.com/file/d/YOUR_FILE_ID/preview (must be public) or https://imgur.com/image.jpg"
+                  type="url"
+                />
+                <p className="text-xs text-gray-500 mt-1">
+                  <strong>For Google Drive:</strong> Make sure the file is set to "Anyone with the link can view" for it to display properly.
+                  <br />
+                  <strong>Alternative:</strong> Upload to imgur.com, unsplash.com, or another image hosting service for better reliability.
+                </p>
+                {formData.image && (
+                  <div className="mt-2">
+                    <div className="w-20 h-20 bg-gray-100 dark:bg-gray-700 rounded-lg overflow-hidden">
+                      <img 
+                        src={getImageUrl(formData.image)} 
+                        alt="Preview"
+                        className="w-full h-full object-cover"
+                        onError={(e) => {
+                          e.currentTarget.src = '/api/placeholder-image';
+                        }}
+                        onLoad={() => {
+                          console.log('Image loaded successfully:', getImageUrl(formData.image));
+                        }}
+                      />
+                    </div>
+                    <p className="text-xs text-gray-500 mt-1">
+                      {convertGoogleDriveUrl(formData.image).includes('drive.google.com') 
+                        ? 'Using Google Drive URL' 
+                        : 'Direct image URL'}
+                    </p>
+                  </div>
+                )}
+              </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="text-sm font-medium">{t.fields.category}</label>
-                  <Input 
-                    value={formData.category || ''} 
-                    onChange={(e) => setFormData({...formData, category: e.target.value})}
-                    placeholder="Category"
-                  />
+                  <Select value={formData.category || ''} onValueChange={(value) => setFormData({...formData, category: value})}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select category" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Nail Art">Nail Art</SelectItem>
+                      <SelectItem value="Pedicure">Pedicure</SelectItem>
+                      <SelectItem value="Manicure">Manicure</SelectItem>
+                      <SelectItem value="Gel">Gel</SelectItem>
+                      <SelectItem value="Polish">Polish</SelectItem>
+                      <SelectItem value="Design">Design</SelectItem>
+                      <SelectItem value="Before/After">Before/After</SelectItem>
+                      <SelectItem value="Other">Other</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
                 <div>
-                  <label className="text-sm font-medium">{t.fields.image}</label>
+                  <label className="text-sm font-medium">{t.fields.sortOrder}</label>
                   <Input 
-                    value={formData.image || ''} 
-                    onChange={(e) => setFormData({...formData, image: convertGoogleDriveUrl(e.target.value)})}
-                    placeholder="Image URL"
+                    type="number"
+                    value={formData.sortOrder || 0} 
+                    onChange={(e) => setFormData({...formData, sortOrder: parseInt(e.target.value) || 0})}
+                    placeholder="Display order (0-100)"
                   />
                 </div>
+              </div>
+              <div className="flex items-center space-x-2">
+                <input 
+                  type="checkbox"
+                  id="isActive"
+                  checked={formData.isActive !== false}
+                  onChange={(e) => setFormData({...formData, isActive: e.target.checked})}
+                  className="rounded"
+                />
+                <label htmlFor="isActive" className="text-sm font-medium">{t.fields.active}</label>
               </div>
             </>
           )}
