@@ -9,10 +9,11 @@ import { useLocation } from "wouter";
 import logoPath from "@assets/image_1752511415001.png";
 
 interface LoginResponse {
-  success: boolean;
-  message: string;
-  token: string;
-  user: {
+  success?: boolean;
+  message?: string;
+  error?: string;
+  token?: string;
+  user?: {
     id: number;
     username: string;
     customerId: number;
@@ -56,12 +57,13 @@ export const Login = (): JSX.Element => {
         headers: {
           'Content-Type': 'application/json',
         },
+        credentials: 'include', // Include cookies for CORS
         body: JSON.stringify(formData),
       });
 
       const data: LoginResponse = await response.json();
 
-      if (response.ok && data.success) {
+      if (response.ok && data.success && data.token && data.user) {
         // Store token and user info in localStorage
         localStorage.setItem('adminToken', data.token);
         localStorage.setItem('adminUser', JSON.stringify(data.user));
@@ -76,7 +78,7 @@ export const Login = (): JSX.Element => {
       } else {
         toast({
           title: "Login Failed",
-          description: data.message || "Invalid credentials",
+          description: data.message || data.error || "Invalid credentials. Please check your username and password.",
           variant: "destructive",
         });
       }

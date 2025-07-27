@@ -1,17 +1,37 @@
 import { storage, loginSchema } from './utils.js';
 import jwt from 'jsonwebtoken';
 
-// Simple JWT secret - in production, use environment variable
-const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-in-production';
+// JWT secret from environment variable - required for production
+const JWT_SECRET = process.env.JWT_SECRET || process.env.SUPABASE_JWT_SECRET || 'dev-fallback-key-not-for-production';
 
 export default async (req, res) => {
   try {
     console.log(`${req.method} request to /api/login`);
     
-    // Enable CORS
-    res.setHeader('Access-Control-Allow-Origin', '*');
+    // Validate JWT secret is configured for production
+    if (process.env.NODE_ENV === 'production' && JWT_SECRET === 'dev-fallback-key-not-for-production') {
+      console.error('JWT_SECRET not configured for production!');
+      return res.status(500).json({ 
+        error: 'Server configuration error',
+        message: 'Authentication service unavailable'
+      });
+    }
+    
+    // Enable CORS for production domain
+    const allowedOrigins = [
+      'https://www.nailsofthenetherlands.nl',
+      'https://nailsofthenetherlands.nl',
+      'http://localhost:3000' // Keep for development
+    ];
+    
+    const origin = req.headers.origin;
+    if (allowedOrigins.includes(origin)) {
+      res.setHeader('Access-Control-Allow-Origin', origin);
+    }
+    
     res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
     
     if (req.method === 'OPTIONS') {
       return res.status(200).end();
@@ -63,19 +83,25 @@ export default async (req, res) => {
       user: userWithoutPassword
     });
 
-  } catch (error) {
-    console.error('Login API Error:', error);
-    
-    if (error.name === 'ZodError') {
-      return res.status(400).json({ 
-        error: 'Validation error',
-        details: error.errors
+      } catch (error) {
+      console.error('Login API Error:', error.message || error);
+      
+      if (error.name === 'ZodError') {
+        return res.status(400).json({ 
+          error: 'Validation error',
+          message: 'Invalid username or password format',
+          ...(process.env.NODE_ENV === 'development' && { details: error.errors })
+        });
+      }
+      
+      // Don't expose internal errors in production
+      return res.status(500).json({ 
+        error: 'Internal server error',
+        message: 'Login failed. Please try again.',
+        ...(process.env.NODE_ENV === 'development' && { 
+          stack: error.stack,
+          details: error.message 
+        })
       });
     }
-    
-    return res.status(500).json({ 
-      error: 'Internal server error',
-      message: 'Login failed'
-    });
-  }
 }; 

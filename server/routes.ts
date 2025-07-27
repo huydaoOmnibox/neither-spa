@@ -1,10 +1,77 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { insertProductSchema, insertGallerySchema, insertPricingSchema, insertHomeContentSchema } from "@shared/schema";
+import { insertProductSchema, insertGallerySchema, insertPricingSchema, insertHomeContentSchema, loginSchema } from "@shared/schema";
+import jwt from 'jsonwebtoken';
 // Node.js 22+ has built-in fetch
 
+// JWT secret from environment variable - required for production
+const JWT_SECRET = process.env.JWT_SECRET || process.env.SUPABASE_JWT_SECRET || 'dev-fallback-key-not-for-production';
+
 export async function registerRoutes(app: Express): Promise<Server | Express> {
+  // Authentication routes
+  app.post("/api/login", async (req, res) => {
+    try {
+      console.log(`${req.method} request to /api/login`);
+      
+      // Validate request body
+      const { username, password } = loginSchema.parse(req.body);
+
+      // Find user in database
+      const user = await storage.getUserByUsername(username);
+      
+      if (!user) {
+        return res.status(401).json({ 
+          error: 'Invalid credentials',
+          message: 'Username or password is incorrect'
+        });
+      }
+
+      // Simple password comparison (in production, use bcrypt for hashed passwords)
+      if (user.password !== password) {
+        return res.status(401).json({ 
+          error: 'Invalid credentials',
+          message: 'Username or password is incorrect'
+        });
+      }
+
+      // Create JWT token
+      const token = jwt.sign(
+        { 
+          userId: user.id, 
+          username: user.username
+        },
+        JWT_SECRET,
+        { expiresIn: '24h' }
+      );
+
+      // Return success with token and user info (without password)
+      const { password: _, ...userWithoutPassword } = user;
+      
+      return res.status(200).json({
+        success: true,
+        message: 'Login successful',
+        token,
+        user: userWithoutPassword
+      });
+
+         } catch (error: any) {
+       console.error('Login API Error:', error);
+       
+       if (error.name === 'ZodError') {
+         return res.status(400).json({ 
+           error: 'Validation error',
+           details: error.errors
+         });
+       }
+      
+      return res.status(500).json({ 
+        error: 'Internal server error',
+        message: 'Login failed'
+      });
+    }
+  });
+
   // Product routes
   app.get("/api/products", async (req, res) => {
     try {

@@ -13,6 +13,11 @@ export const insertUserSchema = createInsertSchema(users).pick({
   password: true,
 });
 
+export const loginSchema = z.object({
+  username: z.string().min(1, "Username is required"),
+  password: z.string().min(1, "Password is required"),
+});
+
 export type InsertUser = z.infer<typeof insertUserSchema>;
 export type User = typeof users.$inferSelect;
 
