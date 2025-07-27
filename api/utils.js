@@ -2,7 +2,7 @@ import 'dotenv/config';
 import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
 import { pgTable, text, serial, integer, boolean, timestamp } from "drizzle-orm/pg-core";
-import { eq, desc, asc } from "drizzle-orm";
+import { eq, desc, asc } from "drizzle-orm/expressions";
 import { z } from "zod";
 
 // Database connection
