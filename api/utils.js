@@ -22,14 +22,9 @@ export const users = pgTable("users", {
   id: serial("id").primaryKey(),
   username: text("username").notNull().unique(),
   password: text("password").notNull(),
-  customerId: integer("customer_id"),
 });
 
-export const customer = pgTable("customer", {
-  id: serial("id").primaryKey(),
-  name: text("name").notNull(),
-  url: text("url"),
-});
+
 
 export const products = pgTable("products", {
   id: serial("id").primaryKey(),
@@ -48,7 +43,7 @@ export const gallery = pgTable("gallery", {
   id: serial("id").primaryKey(),
   title: text("title").notNull(),
   description: text("description"),
-  image: text("image"),
+  image: text("image").notNull(),
   category: text("category"),
   isActive: boolean("is_active").default(true),
   sortOrder: integer("sort_order").default(0),
@@ -58,10 +53,11 @@ export const gallery = pgTable("gallery", {
 
 export const pricing = pgTable("pricing", {
   id: serial("id").primaryKey(),
-  title: text("title").notNull(),
+  serviceName: text("service_name").notNull(),
+  price: text("price").notNull(),
+  category: text("category").notNull(),
   description: text("description"),
-  price: text("price"),
-  category: text("category"),
+  duration: text("duration"),
   isActive: boolean("is_active").default(true),
   sortOrder: integer("sort_order").default(0),
   createdAt: timestamp("created_at").defaultNow(),
@@ -70,7 +66,6 @@ export const pricing = pgTable("pricing", {
 
 export const homeContent = pgTable("home_content", {
   id: serial("id").primaryKey(),
-  customerId: integer("customer_id"),
   section: text("section").notNull(),
   title: text("title"),
   subtitle: text("subtitle"),
@@ -78,7 +73,6 @@ export const homeContent = pgTable("home_content", {
   content: text("content"), // JSON content as text
   image: text("image"),
   isActive: boolean("is_active").default(true),
-  sortOrder: integer("sort_order").default(0),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });
@@ -92,7 +86,6 @@ export const loginSchema = z.object({
 export const insertUserSchema = z.object({
   username: z.string().min(3, "Username must be at least 3 characters"),
   password: z.string().min(6, "Password must be at least 6 characters"),
-  customerId: z.number().optional(),
 });
 
 export const insertProductSchema = z.object({
@@ -115,16 +108,16 @@ export const insertGallerySchema = z.object({
 });
 
 export const insertPricingSchema = z.object({
-  title: z.string(),
+  serviceName: z.string(),
+  price: z.string(),
+  category: z.string(),
   description: z.string().optional(),
-  price: z.string().optional(),
-  category: z.string().optional(),
+  duration: z.string().optional(),
   isActive: z.boolean().optional(),
   sortOrder: z.number().optional(),
 });
 
 export const insertHomeContentSchema = z.object({
-  customerId: z.number().optional(),
   section: z.string(),
   title: z.string().optional(),
   subtitle: z.string().optional(),
@@ -233,7 +226,7 @@ export const storage = {
 
   // Home Content
   async getHomeContent() {
-    return await db.select().from(homeContent).orderBy(asc(homeContent.sortOrder || sql`0`));
+    return await db.select().from(homeContent).orderBy(asc(homeContent.id));
   },
   
   async getHomeContentItem(id) {
@@ -268,7 +261,7 @@ export const storage = {
     if (id) {
       return this.getHomeContentItem(id);
     }
-    return await db.select().from(homeContent).orderBy(asc(homeContent.sortOrder));
+    return await db.select().from(homeContent).orderBy(asc(homeContent.id));
   },
   
   async createHomeContent(item) {
