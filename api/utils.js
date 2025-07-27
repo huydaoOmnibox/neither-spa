@@ -1,9 +1,8 @@
 import 'dotenv/config';
-import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
-import { pgTable, text, serial, integer, boolean, timestamp } from "drizzle-orm/pg-core";
-import { eq } from "drizzle-orm/pg-core";
-import { asc, desc } from "drizzle-orm";
+import { drizzle } from "drizzle-orm/postgres-js";
+import { sql } from "drizzle-orm";
+import { pgTable, text, serial, integer, boolean, timestamp, eq, asc, desc } from "drizzle-orm/pg-core";
 import { z } from "zod";
 
 // Database connection
@@ -79,6 +78,7 @@ export const homeContent = pgTable("home_content", {
   content: text("content"), // JSON content as text
   image: text("image"),
   isActive: boolean("is_active").default(true),
+  sortOrder: integer("sort_order").default(0),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });
@@ -233,7 +233,7 @@ export const storage = {
 
   // Home Content
   async getHomeContent() {
-    return await db.select().from(homeContent).orderBy(asc(homeContent.sortOrder));
+    return await db.select().from(homeContent).orderBy(asc(homeContent.sortOrder || sql`0`));
   },
   
   async getHomeContentItem(id) {
