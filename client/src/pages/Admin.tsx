@@ -416,7 +416,7 @@ export const Admin = (): JSX.Element => {
       }
 
       // For sections with array content, always stringify before sending
-      const sectionsWithArrayContent = ['styled-by', 'products', 'lookbook'];
+      const sectionsWithArrayContent = ['styled-by', 'products', 'lookbook', 'services', 'hero'];
       if (sectionsWithArrayContent.includes(processedFormData.section) && Array.isArray(processedFormData.content)) {
         processedFormData.content = JSON.stringify(processedFormData.content);
       }
