@@ -128,7 +128,7 @@ export const insertHomeContentSchema = z.object({
   title: z.string().optional(),
   subtitle: z.string().optional(),
   description: z.string().optional(),
-  content: z.string().optional(),
+  content: z.array(z.string()).optional(),
   image: z.string().optional(),
   isActive: z.boolean().optional(),
 });
