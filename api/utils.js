@@ -23,16 +23,12 @@ export const users = pgTable("users", {
   username: text("username").notNull().unique(),
   password: text("password").notNull(),
   customerId: integer("customer_id"),
-  createdAt: timestamp("created_at").defaultNow(),
-  updatedAt: timestamp("updated_at").defaultNow(),
 });
 
 export const customer = pgTable("customer", {
   id: serial("id").primaryKey(),
   name: text("name").notNull(),
   url: text("url"),
-  createdAt: timestamp("created_at").defaultNow(),
-  updatedAt: timestamp("updated_at").defaultNow(),
 });
 
 export const products = pgTable("products", {
