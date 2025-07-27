@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useMemo } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { 
   Plus, 
@@ -21,12 +21,13 @@ import {
   Settings,
   Users,
   User,
-  BarChart3,
-  Upload,
   Eye,
   EyeOff,
   Loader2,
-  Image as ImageIcon
+  Image as ImageIcon,
+  CheckCircle,
+  Heart,
+  Star
 } from "lucide-react";
 import { Link, useLocation } from "wouter";
 import logoPath from "@assets/image_1752511415001.png";
@@ -107,7 +108,6 @@ const OptimizedImage = ({ src, alt, className, ...props }: { src: string | null;
   const [imageSrc, setImageSrc] = useState<string>('');
   const [hasError, setHasError] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const [retryCount, setRetryCount] = useState(0);
 
   useEffect(() => {
     if (src) {
@@ -123,7 +123,6 @@ const OptimizedImage = ({ src, alt, className, ...props }: { src: string | null;
       setImageSrc(imageUrl);
       setHasError(false);
       setIsLoading(true);
-      setRetryCount(0);
     } else {
       setImageSrc('');
       setHasError(false);
@@ -383,7 +382,15 @@ export const Admin = (): JSX.Element => {
   const handleOpenDialog = useCallback((section: 'products' | 'gallery' | 'pricing' | 'home', item?: any) => {
     setCurrentSection(section);
     setEditingItem(item || null);
-    setFormData(item || {});
+    
+    // For home sections that don't use content field, exclude it from form data
+    let cleanFormData = item || {};
+    if (item && item.section && ['about', 'safety', 'feel-better'].includes(item.section)) {
+      const { content, ...dataWithoutContent } = item;
+      cleanFormData = dataWithoutContent;
+    }
+    
+    setFormData(cleanFormData);
     setIsDialogOpen(true);
   }, []);
 
@@ -391,20 +398,27 @@ export const Admin = (): JSX.Element => {
     setSaving(true);
     try {
       const endpoint = `/api/${currentSection === 'home' ? 'home-content' : currentSection}`;
-      const method = editingItem ? 'PUT' : 'POST';
-      const url = editingItem ? `${endpoint}?id=${editingItem.id}` : endpoint;
+      const method = editingItem?.id ? 'PUT' : 'POST';
+      const url = editingItem?.id ? `${endpoint}/${editingItem.id}` : endpoint;
+
 
       // Prepare form data with proper formatting
       const processedFormData = { ...formData };
-      
+
       // Convert Google Drive URLs and ensure image URLs are properly formatted
       if (processedFormData.image) {
         processedFormData.image = convertGoogleDriveUrl(processedFormData.image);
       }
-      
+
       // Ensure price has Euro symbol for products and pricing
       if ((currentSection === 'products' || currentSection === 'pricing') && processedFormData.price) {
         processedFormData.price = formatPriceForBackend(processedFormData.price);
+      }
+
+      // For sections with array content, always stringify before sending
+      const sectionsWithArrayContent = ['styled-by', 'products', 'lookbook'];
+      if (sectionsWithArrayContent.includes(processedFormData.section) && Array.isArray(processedFormData.content)) {
+        processedFormData.content = JSON.stringify(processedFormData.content);
       }
 
       const response = await fetch(url, {
@@ -457,7 +471,7 @@ export const Admin = (): JSX.Element => {
   const handleDelete = useCallback(async (section: string, id: number) => {
     try {
       const endpoint = section === 'home' ? 'home-content' : section;
-      const response = await fetch(`/api/${endpoint}?id=${id}`, {
+      const response = await fetch(`/api/${endpoint}/${id}`, {
         method: 'DELETE',
       });
 
@@ -787,22 +801,17 @@ export const Admin = (): JSX.Element => {
   const renderHomeTab = () => {
     const heroSection = homeContent.find(item => item.section === 'hero');
     const aboutSection = homeContent.find(item => item.section === 'about');
-    const otherSections = homeContent.filter(item => !['hero', 'about'].includes(item.section));
+    const safetySection = homeContent.find(item => item.section === 'safety');
+    const lookbookSection = homeContent.find(item => item.section === 'lookbook');
+    const feelBetterSection = homeContent.find(item => item.section === 'feel-better');
+    const servicesSection = homeContent.find(item => item.section === 'services');
+    const productsSection = homeContent.find(item => item.section === 'products');
+    const styledBySection = homeContent.find(item => item.section === 'styled-by');
 
     return (
       <div className="space-y-8">
         <div className="flex justify-between items-center">
           <h2 className="text-2xl font-bold text-beige-800 dark:text-beige-200">{t.tabs.home}</h2>
-          <div className="flex gap-2">
-            <Button 
-              onClick={() => handleOpenDialog('home')}
-              variant="outline"
-              disabled={loading}
-            >
-              <Plus className="w-4 h-4 mr-2" />
-              Add Custom Section
-            </Button>
-          </div>
         </div>
 
         {loading ? (
@@ -836,42 +845,9 @@ export const Admin = (): JSX.Element => {
                 </div>
               </CardHeader>
               <CardContent>
-                                 {heroSection?.content ? (
-                   <div className="grid grid-cols-5 gap-2">
-                     {Array.from({ length: 5 }, (_, index) => {
-                       let images = [];
-                       try {
-                         images = heroSection.content ? JSON.parse(heroSection.content) : [];
-                         if (!Array.isArray(images)) images = [];
-                       } catch (e) {
-                         images = [];
-                       }
-                       const imageUrl = images[index] || '';
-                       return (
-                         <div key={index} className="aspect-video bg-gray-100 dark:bg-gray-700 rounded-lg overflow-hidden">
-                           {imageUrl ? (
-                             <img 
-                               src={getImageUrl(imageUrl)} 
-                               alt={`Hero ${index + 1}`}
-                               className="w-full h-full object-cover"
-                               onError={(e) => {
-                                 e.currentTarget.src = '/api/placeholder-image';
-                               }}
-                             />
-                           ) : (
-                             <div className="w-full h-full flex items-center justify-center text-gray-400">
-                               <ImageIcon className="w-8 h-8" />
-                             </div>
-                           )}
-                         </div>
-                       );
-                     })}
-                   </div>
-                 ) : (
-                  <div className="text-center py-4">
-                    <p className="text-gray-500">No hero images configured. Click "Setup Hero" to add images.</p>
-                  </div>
-                )}
+                <p className="text-gray-500 dark:text-gray-400">
+                  {heroSection?.content ? 'Hero banner configured' : 'No hero banner images configured'}
+                </p>
               </CardContent>
             </Card>
 
@@ -936,75 +912,378 @@ export const Admin = (): JSX.Element => {
               </CardContent>
             </Card>
 
-            {/* Other Custom Sections */}
-            {otherSections.length > 0 && (
-              <Card className="bg-white dark:bg-gray-800">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Settings className="w-5 h-5" />
-                    Custom Sections
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="grid gap-4">
-                    {otherSections.map((item) => (
-                      <Card key={item.id} className="bg-gray-50 dark:bg-gray-700">
-                        <CardHeader className="pb-4">
-                          <div className="flex justify-between items-start">
-                            <div>
-                              <CardTitle className="text-lg">{item.title}</CardTitle>
-                              <CardDescription>
-                                {t.fields.section}: {item.section}
-                                {item.subtitle && ` • ${item.subtitle}`}
-                              </CardDescription>
-                            </div>
-                            <div className="flex gap-2">
-                              <Badge variant={item.isActive ? "default" : "secondary"}>
-                                {item.isActive ? <Eye className="w-3 h-3 mr-1" /> : <EyeOff className="w-3 h-3 mr-1" />}
-                                {item.isActive ? "Active" : "Inactive"}
-                              </Badge>
-                              <Button 
-                                size="sm" 
-                                variant="outline"
-                                onClick={() => handleOpenDialog('home', item)}
-                              >
-                                <Edit2 className="w-3 h-3" />
-                              </Button>
-                              <AlertDialog>
-                                <AlertDialogTrigger asChild>
-                                  <Button size="sm" variant="destructive">
-                                    <Trash2 className="w-3 h-3" />
-                                  </Button>
-                                </AlertDialogTrigger>
-                                <AlertDialogContent>
-                                  <AlertDialogHeader>
-                                    <AlertDialogTitle>Delete Content Section</AlertDialogTitle>
-                                    <AlertDialogDescription>
-                                      Are you sure you want to delete the "{item.section}" section? This action cannot be undone.
-                                    </AlertDialogDescription>
-                                  </AlertDialogHeader>
-                                  <AlertDialogFooter>
-                                    <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                    <AlertDialogAction onClick={() => handleDelete('home', item.id)}>
-                                      Delete
-                                    </AlertDialogAction>
-                                  </AlertDialogFooter>
-                                </AlertDialogContent>
-                              </AlertDialog>
-                            </div>
-                          </div>
-                        </CardHeader>
-                        <CardContent>
-                          <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-2">
-                            {item.description}
-                          </p>
-                        </CardContent>
-                      </Card>
-                    ))}
+            {/* Safety Section */}
+            <Card className="bg-white dark:bg-gray-800">
+              <CardHeader>
+                <div className="flex justify-between items-center">
+                  <div>
+                    <CardTitle className="flex items-center gap-2">
+                      <CheckCircle className="w-5 h-5" />
+                      Safety Section
+                    </CardTitle>
+                    <CardDescription>
+                      Manage the "You're in Safe Hands" section with professional image and experience details
+                    </CardDescription>
                   </div>
-                </CardContent>
-              </Card>
-            )}
+                  <Button 
+                    size="sm" 
+                    onClick={() => handleOpenDialog('home', safetySection || { section: 'safety' })}
+                    className="bg-gradient-to-r from-beige-500 to-beige-600 hover:from-beige-600 hover:to-beige-700"
+                  >
+                    {safetySection ? <Edit2 className="w-3 h-3 mr-1" /> : <Plus className="w-3 h-3 mr-1" />}
+                    {safetySection ? 'Edit' : 'Setup'} Safety
+                  </Button>
+                </div>
+              </CardHeader>
+              <CardContent>
+                {safetySection ? (
+                  <div className="flex gap-4">
+                    <div className="w-24 h-24 bg-gray-100 dark:bg-gray-700 rounded-lg overflow-hidden flex-shrink-0">
+                      <img 
+                        src={getImageUrl(safetySection.image || '')}
+                        alt="Safety Section"
+                        className="w-full h-full object-cover"
+                        onError={(e) => {
+                          e.currentTarget.src = '/api/placeholder-image';
+                        }}
+                      />
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="font-semibold text-lg text-beige-800 dark:text-beige-200">
+                        {safetySection.title || 'Professional Safety'}
+                      </h3>
+                      <p className="text-beige-600 dark:text-beige-300">
+                        Experience: {safetySection.subtitle || 'Not set'}
+                      </p>
+                      {safetySection.content && (
+                        <p className="text-sm text-gray-500 mt-1 line-clamp-2">
+                          {safetySection.content}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                ) : (
+                  <div className="text-center py-4">
+                    <div className="w-24 h-24 bg-gray-100 dark:bg-gray-700 rounded-lg overflow-hidden mx-auto mb-2 flex items-center justify-center">
+                      <CheckCircle className="w-8 h-8 text-gray-400" />
+                    </div>
+                    <p className="text-gray-500">No safety section configured. Click "Setup Safety" to add content.</p>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+
+            {/* Lookbook Section */}
+            <Card className="bg-white dark:bg-gray-800">
+              <CardHeader>
+                <div className="flex justify-between items-center">
+                  <div>
+                    <CardTitle className="flex items-center gap-2">
+                      <Eye className="w-5 h-5" />
+                      Lookbook Section
+                    </CardTitle>
+                    <CardDescription>
+                      Manage the lookbook gallery with 3 showcase images
+                    </CardDescription>
+                  </div>
+                  <Button 
+                    size="sm" 
+                    onClick={() => handleOpenDialog('home', lookbookSection || { section: 'lookbook' })}
+                    className="bg-gradient-to-r from-beige-500 to-beige-600 hover:from-beige-600 hover:to-beige-700"
+                  >
+                    {lookbookSection ? <Edit2 className="w-3 h-3 mr-1" /> : <Plus className="w-3 h-3 mr-1" />}
+                    {lookbookSection ? 'Edit' : 'Setup'} Lookbook
+                  </Button>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <p className="text-gray-500 dark:text-gray-400">
+                  {lookbookSection?.content ? 'Lookbook configured' : 'No lookbook images configured'}
+                </p>
+              </CardContent>
+            </Card>
+
+            {/* Feel Better Section */}
+            <Card className="bg-white dark:bg-gray-800">
+              <CardHeader>
+                <div className="flex justify-between items-center">
+                  <div>
+                    <CardTitle className="flex items-center gap-2">
+                      <Heart className="w-5 h-5" />
+                      Feel Better Section
+                    </CardTitle>
+                    <CardDescription>
+                      Manage the "Look Good, Feel Better" section with relaxing salon image
+                    </CardDescription>
+                  </div>
+                  <Button 
+                    size="sm" 
+                    onClick={() => handleOpenDialog('home', feelBetterSection || { section: 'feel-better' })}
+                    className="bg-gradient-to-r from-beige-500 to-beige-600 hover:from-beige-600 hover:to-beige-700"
+                  >
+                    {feelBetterSection ? <Edit2 className="w-3 h-3 mr-1" /> : <Plus className="w-3 h-3 mr-1" />}
+                    {feelBetterSection ? 'Edit' : 'Setup'} Feel Better
+                  </Button>
+                </div>
+              </CardHeader>
+              <CardContent>
+                {feelBetterSection ? (
+                  <div className="flex gap-4">
+                    <div className="w-24 h-24 bg-gray-100 dark:bg-gray-700 rounded-lg overflow-hidden flex-shrink-0">
+                      <img 
+                        src={getImageUrl(feelBetterSection.image || '')}
+                        alt="Feel Better Section"
+                        className="w-full h-full object-cover"
+                        onError={(e) => {
+                          e.currentTarget.src = '/api/placeholder-image';
+                        }}
+                      />
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="font-semibold text-lg text-beige-800 dark:text-beige-200">
+                        {feelBetterSection.title || 'Feel Better Section'}
+                      </h3>
+                      <p className="text-beige-600 dark:text-beige-300">
+                        {feelBetterSection.subtitle || 'No subtitle'}
+                      </p>
+                      {feelBetterSection.content && (
+                        <p className="text-sm text-gray-500 mt-1 line-clamp-2">
+                          {feelBetterSection.content}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                ) : (
+                  <div className="text-center py-4">
+                    <div className="w-24 h-24 bg-gray-100 dark:bg-gray-700 rounded-lg overflow-hidden mx-auto mb-2 flex items-center justify-center">
+                      <Heart className="w-8 h-8 text-gray-400" />
+                    </div>
+                    <p className="text-gray-500">No feel better section configured. Click "Setup Feel Better" to add content.</p>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+
+            {/* Services Section */}
+            <Card className="bg-white dark:bg-gray-800">
+              <CardHeader>
+                <div className="flex justify-between items-center">
+                  <div>
+                    <CardTitle className="flex items-center gap-2">
+                      <Settings className="w-5 h-5" />
+                      Services Section
+                    </CardTitle>
+                    <CardDescription>
+                      Manage the services section with main image and 4 service icons
+                    </CardDescription>
+                  </div>
+                  <Button 
+                    size="sm" 
+                    onClick={() => handleOpenDialog('home', servicesSection || { section: 'services' })}
+                    className="bg-gradient-to-r from-beige-500 to-beige-600 hover:from-beige-600 hover:to-beige-700"
+                  >
+                    {servicesSection ? <Edit2 className="w-3 h-3 mr-1" /> : <Plus className="w-3 h-3 mr-1" />}
+                    {servicesSection ? 'Edit' : 'Setup'} Services
+                  </Button>
+                </div>
+              </CardHeader>
+              <CardContent>
+                {servicesSection ? (
+                  <div className="space-y-4">
+                    <div className="flex gap-4">
+                      <div className="w-24 h-24 bg-gray-100 dark:bg-gray-700 rounded-lg overflow-hidden flex-shrink-0">
+                        <img 
+                          src={getImageUrl(servicesSection.image || '')}
+                          alt="Services Section"
+                          className="w-full h-full object-cover"
+                          onError={(e) => {
+                            e.currentTarget.src = '/api/placeholder-image';
+                          }}
+                        />
+                      </div>
+                      <div className="flex-1">
+                        <h3 className="font-semibold text-lg text-beige-800 dark:text-beige-200">
+                          {servicesSection.title || 'Services Section'}
+                        </h3>
+                        <p className="text-beige-600 dark:text-beige-300">
+                          {servicesSection.subtitle || 'No subtitle'}
+                        </p>
+                      </div>
+                    </div>
+                    {servicesSection.content && (
+                      <div>
+                        <p className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Service Icons:</p>
+                        <div className="grid grid-cols-4 gap-2">
+                          {Array.from({ length: 4 }, (_, index) => {
+                            let images = [];
+                            try {
+                              images = servicesSection.content ? JSON.parse(servicesSection.content) : [];
+                              if (!Array.isArray(images)) images = [];
+                            } catch (e) {
+                              images = [];
+                            }
+                            const imageUrl = images[index] || '';
+                            return (
+                              <div key={index} className="aspect-square bg-gray-100 dark:bg-gray-700 rounded-lg overflow-hidden">
+                                {imageUrl ? (
+                                  <img 
+                                    src={getImageUrl(imageUrl)} 
+                                    alt={`Service ${index + 1}`}
+                                    className="w-full h-full object-cover"
+                                    onError={(e) => {
+                                      e.currentTarget.src = '/api/placeholder-image';
+                                    }}
+                                  />
+                                ) : (
+                                  <div className="w-full h-full flex items-center justify-center text-gray-400">
+                                    <Settings className="w-6 h-6" />
+                                  </div>
+                                )}
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <div className="text-center py-4">
+                    <div className="w-24 h-24 bg-gray-100 dark:bg-gray-700 rounded-lg overflow-hidden mx-auto mb-2 flex items-center justify-center">
+                      <Settings className="w-8 h-8 text-gray-400" />
+                    </div>
+                    <p className="text-gray-500">No services section configured. Click "Setup Services" to add content.</p>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+
+
+            {/* Products Section */}
+            <Card className="bg-white dark:bg-gray-800">
+              <CardHeader>
+                <div className="flex justify-between items-center">
+                  <div>
+                    <CardTitle className="flex items-center gap-2">
+                      <Package className="w-5 h-5" />
+                      Products Section
+                    </CardTitle>
+                    <CardDescription>
+                      Manage the featured products section with 4 product category images
+                    </CardDescription>
+                  </div>
+                  <Button 
+                    size="sm" 
+                    onClick={() => handleOpenDialog('home', productsSection || { section: 'products' })}
+                    className="bg-gradient-to-r from-beige-500 to-beige-600 hover:from-beige-600 hover:to-beige-700"
+                  >
+                    {productsSection ? <Edit2 className="w-3 h-3 mr-1" /> : <Plus className="w-3 h-3 mr-1" />}
+                    {productsSection ? 'Edit' : 'Setup'} Products
+                  </Button>
+                </div>
+              </CardHeader>
+              <CardContent>
+                {productsSection?.content ? (
+                  <div className="grid grid-cols-4 gap-2">
+                    {Array.from({ length: 4 }, (_, index) => {
+                      let images = [];
+                      try {
+                        images = productsSection.content ? JSON.parse(productsSection.content) : [];
+                        if (!Array.isArray(images)) images = [];
+                      } catch (e) {
+                        images = [];
+                      }
+                      const imageUrl = images[index] || '';
+                      return (
+                        <div key={index} className="aspect-square bg-gray-100 dark:bg-gray-700 rounded-lg overflow-hidden">
+                          {imageUrl ? (
+                            <img 
+                              src={getImageUrl(imageUrl)} 
+                              alt={`Product ${index + 1}`}
+                              className="w-full h-full object-cover"
+                              onError={(e) => {
+                                e.currentTarget.src = '/api/placeholder-image';
+                              }}
+                            />
+                          ) : (
+                            <div className="w-full h-full flex items-center justify-center text-gray-400">
+                              <Package className="w-6 h-6" />
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                ) : (
+                  <div className="text-center py-4">
+                    <p className="text-gray-500">No product images configured. Click "Setup Products" to add images.</p>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+
+            {/* Styled by Us Section */}
+            <Card className="bg-white dark:bg-gray-800">
+              <CardHeader>
+                <div className="flex justify-between items-center">
+                  <div>
+                    <CardTitle className="flex items-center gap-2">
+                      <Star className="w-5 h-5" />
+                      Styled by Us Section
+                    </CardTitle>
+                    <CardDescription>
+                      Manage the client showcase section with 4 before/after images
+                    </CardDescription>
+                  </div>
+                  <Button 
+                    size="sm" 
+                    onClick={() => handleOpenDialog('home', styledBySection || { section: 'styled-by' })}
+                    className="bg-gradient-to-r from-beige-500 to-beige-600 hover:from-beige-600 hover:to-beige-700"
+                  >
+                    {styledBySection ? <Edit2 className="w-3 h-3 mr-1" /> : <Plus className="w-3 h-3 mr-1" />}
+                    {styledBySection ? 'Edit' : 'Setup'} Styled by Us
+                  </Button>
+                </div>
+              </CardHeader>
+              <CardContent>
+                {styledBySection?.content ? (
+                  <div className="grid grid-cols-4 gap-2">
+                    {Array.from({ length: 4 }, (_, index) => {
+                      let images = [];
+                      try {
+                        images = styledBySection.content ? JSON.parse(styledBySection.content) : [];
+                        if (!Array.isArray(images)) images = [];
+                      } catch (e) {
+                        images = [];
+                      }
+                      const imageUrl = images[index] || '';
+                      return (
+                        <div key={index} className="aspect-square bg-gray-100 dark:bg-gray-700 rounded-lg overflow-hidden">
+                          {imageUrl ? (
+                            <img 
+                              src={getImageUrl(imageUrl)} 
+                              alt={`Client Work ${index + 1}`}
+                              className="w-full h-full object-cover"
+                              onError={(e) => {
+                                e.currentTarget.src = '/api/placeholder-image';
+                              }}
+                            />
+                          ) : (
+                            <div className="w-full h-full flex items-center justify-center text-gray-400">
+                              <Star className="w-6 h-6" />
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                ) : (
+                  <div className="text-center py-4">
+                    <p className="text-gray-500">No client work images configured. Click "Setup Styled by Us" to add images.</p>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+
           </div>
         )}
       </div>
@@ -1307,7 +1586,7 @@ export const Admin = (): JSX.Element => {
                                  newImages[index] = convertGoogleDriveUrl(e.target.value);
                                  // Ensure array is exactly 5 elements
                                  while (newImages.length < 5) newImages.push('');
-                                 setFormData({...formData, content: JSON.stringify(newImages.slice(0, 5))});
+                                 setFormData({...formData, content: newImages.slice(0, 5)});
                                }}
                                placeholder="https://drive.google.com/file/d/YOUR_FILE_ID/view or direct image URL"
                                className="flex-1"
@@ -1342,7 +1621,7 @@ export const Admin = (): JSX.Element => {
                     />
                   </div>
                   <div>
-                    <label className="text-sm font-medium">{t.fields.title}</label>
+                    <label className="text-sm font-medium">Image Overlay Name</label>
                     <Input 
                       value={formData.title || ''} 
                       onChange={(e) => setFormData({
@@ -1351,11 +1630,11 @@ export const Admin = (): JSX.Element => {
                         section: 'about',
                         isActive: true
                       })}
-                      placeholder="About section title (e.g., About Us)"
+                      placeholder="Name shown on image overlay"
                     />
                   </div>
                   <div>
-                    <label className="text-sm font-medium">{t.fields.subtitle}</label>
+                    <label className="text-sm font-medium">Image Overlay Subtitle</label>
                     <Input 
                       value={formData.subtitle || ''} 
                       onChange={(e) => setFormData({
@@ -1364,7 +1643,7 @@ export const Admin = (): JSX.Element => {
                         section: 'about',
                         isActive: true
                       })}
-                      placeholder="About section subtitle"
+                      placeholder="Subtitle shown on image overlay"
                     />
                   </div>
                   <div>
@@ -1400,40 +1679,41 @@ export const Admin = (): JSX.Element => {
                     )}
                   </div>
                 </>
-              ) : (
-                // Custom Section Form
+              ) : formData.section === 'safety' ? (
+                // Safety Section Form
                 <>
                   <div>
-                    <label className="text-sm font-medium">{t.fields.section}</label>
+                    <label className="text-sm font-medium">Section</label>
                     <Input 
-                      value={formData.section || ''} 
-                      onChange={(e) => setFormData({...formData, section: e.target.value})}
-                      placeholder="services, testimonials, etc."
+                      value="safety" 
+                      disabled
+                      className="bg-gray-100"
                     />
                   </div>
                   <div>
-                    <label className="text-sm font-medium">{t.fields.title}</label>
+                    <label className="text-sm font-medium">Experience Number</label>
                     <Input 
                       value={formData.title || ''} 
-                      onChange={(e) => setFormData({...formData, title: e.target.value})}
-                      placeholder="Section title"
+                      onChange={(e) => setFormData({
+                        ...formData, 
+                        title: e.target.value,
+                        section: 'safety',
+                        isActive: true
+                      })}
+                      placeholder="5+ Years"
                     />
                   </div>
                   <div>
-                    <label className="text-sm font-medium">{t.fields.subtitle}</label>
+                    <label className="text-sm font-medium">Experience Label</label>
                     <Input 
                       value={formData.subtitle || ''} 
-                      onChange={(e) => setFormData({...formData, subtitle: e.target.value})}
-                      placeholder="Section subtitle"
-                    />
-                  </div>
-                  <div>
-                    <label className="text-sm font-medium">{t.fields.description}</label>
-                    <Textarea 
-                      value={formData.description || ''} 
-                      onChange={(e) => setFormData({...formData, description: e.target.value})}
-                      placeholder="Section description"
-                      rows={4}
+                      onChange={(e) => setFormData({
+                        ...formData, 
+                        subtitle: e.target.value,
+                        section: 'safety',
+                        isActive: true
+                      })}
+                      placeholder="Years Experience"
                     />
                   </div>
                   <div>
@@ -1441,38 +1721,419 @@ export const Admin = (): JSX.Element => {
                     <Input 
                       value={formData.image || ''} 
                       onChange={(e) => setFormData({...formData, image: convertGoogleDriveUrl(e.target.value)})}
-                      placeholder="Optional section image"
+                      placeholder="Professional nail technician image URL"
+                      type="url"
+                    />
+                    {formData.image && (
+                      <div className="mt-3">
+                        <div className="w-32 h-32 bg-gray-100 dark:bg-gray-700 rounded-lg overflow-hidden">
+                          <img 
+                            src={getImageUrl(formData.image)} 
+                            alt="Safety section preview"
+                            className="w-full h-full object-cover"
+                            onError={(e) => {
+                              e.currentTarget.src = '/api/placeholder-image';
+                            }}
+                          />
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </>
+              ) : formData.section === 'lookbook' ? (
+                // Lookbook Section Form (3 images)
+                <>
+                  <div>
+                    <label className="text-sm font-medium">Section</label>
+                    <Input 
+                      value="lookbook" 
+                      disabled
+                      className="bg-gray-100"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium">Lookbook Images (3 required)</label>
+                    <p className="text-xs text-gray-500 mb-2">Add 3 images for the lookbook showcase</p>
+                    <div className="space-y-3">
+                      {Array.from({ length: 3 }, (_, index) => {
+                        let lookbookItems = [];
+                        try {
+                          if (typeof formData.content === 'string') {
+                            lookbookItems = JSON.parse(formData.content);
+                          } else if (Array.isArray(formData.content)) {
+                            lookbookItems = formData.content;
+                          }
+                          if (!Array.isArray(lookbookItems)) lookbookItems = [];
+                        } catch (e) {
+                          lookbookItems = [];
+                        }
+                        
+                        // Ensure each item is an object with image, title, subtitle
+                        const currentItem = lookbookItems[index] || {};
+                        const imageValue = typeof currentItem === 'string' ? currentItem : (currentItem.image || '');
+                        const titleValue = typeof currentItem === 'object' ? (currentItem.title || '') : '';
+                        const subtitleValue = typeof currentItem === 'object' ? (currentItem.subtitle || '') : '';
+                        
+                        return (
+                          <div key={index} className="space-y-3 p-4 border rounded-lg">
+                            <h4 className="text-sm font-semibold">Lookbook Item {index + 1}</h4>
+                            <div>
+                              <label className="text-xs font-medium text-gray-600">Image URL</label>
+                              <Input 
+                                value={imageValue}
+                                onChange={(e) => {
+                                  const newItems = [...lookbookItems];
+                                  while (newItems.length <= index) newItems.push({});
+                                  newItems[index] = {
+                                    ...newItems[index],
+                                    image: convertGoogleDriveUrl(e.target.value),
+                                    title: newItems[index]?.title || '',
+                                    subtitle: newItems[index]?.subtitle || ''
+                                  };
+                                  while (newItems.length < 3) newItems.push({image: '', title: '', subtitle: ''});
+                                  setFormData({...formData, content: newItems.slice(0, 3)});
+                                }}
+                                placeholder="Lookbook image URL"
+                                className="text-sm"
+                              />
+                            </div>
+                            <div>
+                              <label className="text-xs font-medium text-gray-600">Title</label>
+                              <Input 
+                                value={titleValue}
+                                onChange={(e) => {
+                                  const newItems = [...lookbookItems];
+                                  while (newItems.length <= index) newItems.push({});
+                                  newItems[index] = {
+                                    ...newItems[index],
+                                    image: newItems[index]?.image || '',
+                                    title: e.target.value,
+                                    subtitle: newItems[index]?.subtitle || ''
+                                  };
+                                  while (newItems.length < 3) newItems.push({image: '', title: '', subtitle: ''});
+                                  setFormData({...formData, content: newItems.slice(0, 3)});
+                                }}
+                                placeholder="Image title"
+                                className="text-sm"
+                              />
+                            </div>
+                            <div>
+                              <label className="text-xs font-medium text-gray-600">Subtitle</label>
+                              <Input 
+                                value={subtitleValue}
+                                onChange={(e) => {
+                                  const newItems = [...lookbookItems];
+                                  while (newItems.length <= index) newItems.push({});
+                                  newItems[index] = {
+                                    ...newItems[index],
+                                    image: newItems[index]?.image || '',
+                                    title: newItems[index]?.title || '',
+                                    subtitle: e.target.value
+                                  };
+                                  while (newItems.length < 3) newItems.push({image: '', title: '', subtitle: ''});
+                                  setFormData({...formData, content: newItems.slice(0, 3)});
+                                }}
+                                placeholder="Image subtitle"
+                                className="text-sm"
+                              />
+                            </div>
+                            {imageValue && (
+                              <div className="w-16 h-16 bg-gray-100 dark:bg-gray-700 rounded overflow-hidden">
+                                <img 
+                                  src={getImageUrl(imageValue)} 
+                                  alt={`Lookbook ${index + 1}`}
+                                  className="w-full h-full object-cover"
+                                  onError={(e) => {
+                                    e.currentTarget.src = '/api/placeholder-image';
+                                  }}
+                                />
+                              </div>
+                            )}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </>
+              ) : formData.section === 'feel-better' ? (
+                // Feel Better Section Form
+                <>
+                  <div>
+                    <label className="text-sm font-medium">Section</label>
+                    <Input 
+                      value="feel-better" 
+                      disabled
+                      className="bg-gray-100"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium">Image Overlay Title</label>
+                    <Input 
+                      value={formData.title || ''} 
+                      onChange={(e) => setFormData({
+                        ...formData, 
+                        title: e.target.value,
+                        section: 'feel-better',
+                        isActive: true
+                      })}
+                      placeholder="Years of Experience (e.g., 5+)"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium">Image Overlay Subtitle</label>
+                    <Input 
+                      value={formData.subtitle || ''} 
+                      onChange={(e) => setFormData({
+                        ...formData, 
+                        subtitle: e.target.value,
+                        section: 'feel-better',
+                        isActive: true
+                      })}
+                      placeholder="Description (e.g., Years Experience)"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium">{t.fields.image}</label>
+                    <Input 
+                      value={formData.image || ''} 
+                      onChange={(e) => setFormData({
+                        ...formData, 
+                        image: convertGoogleDriveUrl(e.target.value),
+                        section: 'feel-better',
+                        isActive: true
+                      })}
+                      placeholder="https://drive.google.com/file/d/YOUR_FILE_ID/view or direct image URL"
+                      type="url"
+                    />
+                    <p className="text-xs text-gray-500 mt-1">
+                      <strong>For Google Drive:</strong> Make sure the file is set to "Anyone with the link can view"
+                    </p>
+                    {formData.image && (
+                      <div className="mt-3">
+                        <div className="w-32 h-32 bg-gray-100 dark:bg-gray-700 rounded-lg overflow-hidden">
+                          <img 
+                            src={getImageUrl(formData.image)} 
+                            alt="Feel better section preview"
+                            className="w-full h-full object-cover"
+                            onError={(e) => {
+                              e.currentTarget.src = '/api/placeholder-image';
+                            }}
+                          />
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </>
+              ) : formData.section === 'services' ? (
+                // Services Section Form
+                <>
+                  <div>
+                    <label className="text-sm font-medium">Section</label>
+                    <Input 
+                      value="services" 
+                      disabled
+                      className="bg-gray-100"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium">{t.fields.title}</label>
+                    <Input 
+                      value={formData.title || ''} 
+                      onChange={(e) => setFormData({...formData, title: e.target.value})}
+                      placeholder="Services section title"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium">{t.fields.subtitle}</label>
+                    <Input 
+                      value={formData.subtitle || ''} 
+                      onChange={(e) => setFormData({...formData, subtitle: e.target.value})}
+                      placeholder="Services section subtitle"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium">Main Services Image</label>
+                    <Input 
+                      value={formData.image || ''} 
+                      onChange={(e) => setFormData({...formData, image: convertGoogleDriveUrl(e.target.value)})}
+                      placeholder="Main services section image URL"
                       type="url"
                     />
                   </div>
+                  <div>
+                    <label className="text-sm font-medium">Service Icons (4 required)</label>
+                    <p className="text-xs text-gray-500 mb-2">Add 4 service icons</p>
+                    <div className="space-y-3">
+                      {Array.from({ length: 4 }, (_, index) => {
+                        let images = [];
+                        try {
+                          if (typeof formData.content === 'string') {
+                            images = JSON.parse(formData.content);
+                          } else if (Array.isArray(formData.content)) {
+                            images = formData.content;
+                          }
+                          if (!Array.isArray(images)) images = [];
+                        } catch (e) {
+                          images = [];
+                        }
+                        const imageValue = images[index] || '';
+                        
+                        return (
+                          <div key={index} className="flex gap-2 items-center">
+                            <span className="text-sm font-medium w-16">Icon {index + 1}:</span>
+                            <Input 
+                              value={imageValue}
+                              onChange={(e) => {
+                                const newImages = [...images];
+                                newImages[index] = convertGoogleDriveUrl(e.target.value);
+                                while (newImages.length < 4) newImages.push('');
+                                setFormData({...formData, content: newImages.slice(0, 4)});
+                              }}
+                              placeholder="Service icon image URL"
+                              className="flex-1"
+                            />
+                            {imageValue && (
+                              <div className="w-12 h-12 bg-gray-100 dark:bg-gray-700 rounded overflow-hidden">
+                                <img 
+                                  src={getImageUrl(imageValue)} 
+                                  alt={`Service ${index + 1}`}
+                                  className="w-full h-full object-cover"
+                                  onError={(e) => {
+                                    e.currentTarget.src = '/api/placeholder-image';
+                                  }}
+                                />
+                              </div>
+                            )}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
                 </>
-              )}
+              ) : formData.section === 'products' ? (
+                // Products Section Form (4 images)
+                <>
+                  <div>
+                    <label className="text-sm font-medium">Section</label>
+                    <Input 
+                      value="products" 
+                      disabled
+                      className="bg-gray-100"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium">Product Category Images (4 required)</label>
+                    <p className="text-xs text-gray-500 mb-2">Add 4 images for featured product categories</p>
+                    <div className="space-y-3">
+                      {Array.from({ length: 4 }, (_, index) => {
+                        let images = [];
+                        try {
+                          if (typeof formData.content === 'string') {
+                            images = JSON.parse(formData.content);
+                          } else if (Array.isArray(formData.content)) {
+                            images = formData.content;
+                          }
+                          if (!Array.isArray(images)) images = [];
+                        } catch (e) {
+                          images = [];
+                        }
+                        const imageValue = images[index] || '';
+                        
+                        return (
+                          <div key={index} className="flex gap-2 items-center">
+                            <span className="text-sm font-medium w-16">Product {index + 1}:</span>
+                            <Input 
+                              value={imageValue}
+                              onChange={(e) => {
+                                const newImages = [...images];
+                                newImages[index] = convertGoogleDriveUrl(e.target.value);
+                                while (newImages.length < 4) newImages.push('');
+                                setFormData({...formData, content: newImages.slice(0, 4)});
+                              }}
+                              placeholder="Product category image URL"
+                              className="flex-1"
+                            />
+                            {imageValue && (
+                              <div className="w-12 h-12 bg-gray-100 dark:bg-gray-700 rounded overflow-hidden">
+                                <img 
+                                  src={getImageUrl(imageValue)} 
+                                  alt={`Product ${index + 1}`}
+                                  className="w-full h-full object-cover"
+                                  onError={(e) => {
+                                    e.currentTarget.src = '/api/placeholder-image';
+                                  }}
+                                />
+                              </div>
+                            )}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </>
+              ) : formData.section === 'styled-by' ? (
+                // Styled by Us Section Form (4 images)
+                <>
+                  <div>
+                    <label className="text-sm font-medium">Section</label>
+                    <Input 
+                      value="styled-by" 
+                      disabled
+                      className="bg-gray-100"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium">Client Showcase Images (4 required)</label>
+                    <p className="text-xs text-gray-500 mb-2">Add 4 client work showcase images</p>
+                    <div className="space-y-3">
+                      {Array.from({ length: 4 }, (_, index) => {
+                        let images = [];
+                        try {
+                          if (typeof formData.content === 'string') {
+                            images = JSON.parse(formData.content);
+                          } else if (Array.isArray(formData.content)) {
+                            images = formData.content;
+                          }
+                          if (!Array.isArray(images)) images = [];
+                        } catch (e) {
+                          images = [];
+                        }
+                        const imageValue = images[index] || '';
+                        
+                        return (
+                          <div key={index} className="flex gap-2 items-center">
+                            <span className="text-sm font-medium w-16">Client {index + 1}:</span>
+                            <Input 
+                              value={imageValue}
+                              onChange={(e) => {
+                                const newImages = [...images];
+                                newImages[index] = convertGoogleDriveUrl(e.target.value);
+                                while (newImages.length < 4) newImages.push('');
+                                setFormData({...formData, content: newImages.slice(0, 4)});
+                              }}
+                              placeholder="Client work image URL"
+                              className="flex-1"
+                            />
+                            {imageValue && (
+                              <div className="w-12 h-12 bg-gray-100 dark:bg-gray-700 rounded overflow-hidden">
+                                <img 
+                                  src={getImageUrl(imageValue)} 
+                                  alt={`Client Work ${index + 1}`}
+                                  className="w-full h-full object-cover"
+                                  onError={(e) => {
+                                    e.currentTarget.src = '/api/placeholder-image';
+                                  }}
+                                />
+                              </div>
+                            )}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </>
+              ) : null}
             </>
-          )}
-          
-          {/* Only show sort order and active for non-About sections */}
-          {formData.section !== 'about' && (
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="text-sm font-medium">{t.fields.sortOrder}</label>
-                <Input 
-                  type="number"
-                  value={formData.sortOrder || 0} 
-                  onChange={(e) => setFormData({...formData, sortOrder: parseInt(e.target.value) || 0})}
-                  placeholder="0"
-                />
-              </div>
-              <div className="flex items-center space-x-2 pt-6">
-                <input
-                  type="checkbox"
-                  id="isActive"
-                  checked={formData.isActive !== false}
-                  onChange={(e) => setFormData({...formData, isActive: e.target.checked})}
-                  className="rounded"
-                />
-                <label htmlFor="isActive" className="text-sm font-medium">{t.fields.active}</label>
-              </div>
-            </div>
           )}
         </div>
         

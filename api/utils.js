@@ -256,5 +256,29 @@ export const storage = {
   async deleteHomeContentItem(id) {
     await db.delete(homeContent).where(eq(homeContent.id, id));
     return true;
+  },
+
+  // Aliases for API compatibility
+  async getHomeContents() {
+    return this.getHomeContent();
+  },
+  
+  async getHomeContent(id) {
+    if (id) {
+      return this.getHomeContentItem(id);
+    }
+    return await db.select().from(homeContent).orderBy(asc(homeContent.sortOrder));
+  },
+  
+  async createHomeContent(item) {
+    return this.createHomeContentItem(item);
+  },
+  
+  async updateHomeContent(id, item) {
+    return this.updateHomeContentItem(id, item);
+  },
+  
+  async deleteHomeContent(id) {
+    return this.deleteHomeContentItem(id);
   }
 }; 

@@ -7,11 +7,47 @@ import { Link } from "wouter";
 import logoPath from "@assets/image_1752511415001.png";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { NO_IMAGE } from "@/lib/constants";
+import type { HomeContent } from "@shared/schema";
+
+// Helper function to convert Google Drive URLs to direct image URLs
+const convertGoogleDriveUrl = (url: string | null): string => {
+  if (!url) return NO_IMAGE;
+  
+  // If it's already a direct Google Drive URL, return as is
+  if (url.includes('drive.google.com/uc')) {
+    return url;
+  }
+
+  // Extract the file ID from the sharing URL
+  const match = url.match(/\/d\/(.*?)\/view/);
+  if (match && match[1]) {
+    return `https://drive.google.com/uc?export=view&id=${match[1]}`;
+  }
+
+  return url;
+};
+
+// Helper function to get image URL (proxy for Google Drive)
+const getImageUrl = (url: string | null): string => {
+  if (!url) return NO_IMAGE;
+  
+  const convertedUrl = convertGoogleDriveUrl(url);
+  
+  // If it's a Google Drive URL, use our proxy
+  if (convertedUrl.includes('drive.google.com')) {
+    return `/api/proxy-image?url=${encodeURIComponent(convertedUrl)}`;
+  } else {
+    // For other URLs, use directly
+    return convertedUrl;
+  }
+};
 
 export const Box = (): JSX.Element => {
   const [activeTab, setActiveTab] = useState<'services' | 'pricing'>('services');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [homeContent, setHomeContent] = useState<HomeContent[]>([]);
+  const [loading, setLoading] = useState(true);
   const { currentLanguage, setCurrentLanguage } = useLanguage();
 
   // Translation content
@@ -35,7 +71,7 @@ export const Box = (): JSX.Element => {
       },
              about: {
          title: "OVER ONS",
-         description: "Welkom bij Nails of The Netherlands – Jouw nagelbestemming in het hart van Leeuwarden!\n\nGelegen in het bruisende stadscentrum van Leeuwarden, op slechts een paar stappen van McDonald's, ICI Paris en Kruidvat, biedt onze nagelsalon de perfecte combinatie van gemak, comfort en kwaliteit. Of je nu op zoek bent naar een snelle manicure, een ontspannende pedicure of een unieke nail art – ons proffesionele en vriendelijke team staat voor je klaar.\n\nHeb je moeite om een keuze te maken? Geen zorgen – ons ervaren team adviseert je graag!\n\nIn een moderne, schone omgeving met oog voor detail en hygiëne zorgen wij ervoor dat jij niet alleen prachtige nagels krijgt, maar ook een ontspannen en fijne ervaring beleeft.\n\nKom langs en laat je nagels stralen!",
+         description: "Welkom bij Nails of The Netherlands – Jouw nagelbestemming in het hart van Leeuwarden!\n\nGelegen in het bruisende stadscentrum van Leeuwarden, op slechts een paar stappen van McDonald's, ICI Paris en Kruidvat, biedt onze nagelsalon de perfecte combinatie van gemak, comfort en kwaliteit. Of je nu op zoek bent naar een snelle manicure, een ontspannende pedicure of een unieke nail art – ons professionele en vriendelijke team staat voor je klaar.\n\nHeb je moeite om een keuze te maken? Geen zorgen – ons ervaren team adviseert je graag!\n\nIn een moderne, schone omgeving met oog voor detail en hygiëne zorgen wij ervoor dat jij niet alleen prachtige nagels krijgt, maar ook een ontspannen en fijne ervaring beleeft.\n\nKom langs en laat je nagels stralen!",
          address: "Adres",
          addressValue: "Wirdumerdijk 29, 8911 CC Leeuwarden",
          hotline: "Telefoon",
@@ -272,14 +308,131 @@ export const Box = (): JSX.Element => {
 
   const t = translations[currentLanguage];
 
-  // Hero images
-  const heroImages = [
-    NO_IMAGE,
-    NO_IMAGE,
-    NO_IMAGE,
-    NO_IMAGE,
-    NO_IMAGE
-  ];
+  // Fetch home content from API
+  useEffect(() => {
+    const fetchHomeContent = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch('/api/home-content');
+        if (response.ok) {
+          const data = await response.json();
+          setHomeContent(data);
+        }
+      } catch (error) {
+        console.error('Failed to fetch home content:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchHomeContent();
+  }, []);
+
+  // Get content sections from API data
+  const heroSection = homeContent.find(item => item.section === 'hero');
+  const aboutSection = homeContent.find(item => item.section === 'about');
+  const safetySection = homeContent.find(item => item.section === 'safety');
+  const lookbookSection = homeContent.find(item => item.section === 'lookbook');
+  const feelBetterSection = homeContent.find(item => item.section === 'feel-better');
+  const servicesSection = homeContent.find(item => item.section === 'services');
+  const productsSection = homeContent.find(item => item.section === 'products');
+  const styledBySection = homeContent.find(item => item.section === 'styled-by');
+
+  // Helper function to get images from section content
+  const getSectionImages = (section: HomeContent | undefined, count: number): string[] => {
+    if (section?.content) {
+      try {
+        let images;
+        // Handle both string (JSON) and already-parsed array
+        if (typeof section.content === 'string') {
+          images = JSON.parse(section.content);
+        } else if (Array.isArray(section.content)) {
+          images = section.content;
+        }
+        
+        if (Array.isArray(images)) {
+          const processedImages = images.slice(0, count).map(img => {
+            // Handle both string URLs and objects with image property
+            const imageUrl = typeof img === 'string' ? img : (img?.image || '');
+            return getImageUrl(imageUrl);
+          });
+          // Fill remaining slots with NO_IMAGE if needed
+          while (processedImages.length < count) {
+            processedImages.push(NO_IMAGE);
+          }
+          return processedImages;
+        }
+      } catch (e) {
+        console.error('Failed to parse section images:', e);
+      }
+    }
+    // Fallback to placeholder images
+    return Array(count).fill(NO_IMAGE);
+  };
+
+  // Helper function to get lookbook items with titles and subtitles
+  const getLookbookItems = (section: HomeContent | undefined): Array<{image: string, title: string, subtitle: string}> => {
+    if (section?.content) {
+      try {
+        let items;
+        // Handle both string (JSON) and already-parsed array
+        if (typeof section.content === 'string') {
+          items = JSON.parse(section.content);
+        } else if (Array.isArray(section.content)) {
+          items = section.content;
+        }
+        
+        if (Array.isArray(items)) {
+          return items.slice(0, 3).map(item => {
+            if (typeof item === 'string') {
+              // Old format - just image URL
+              return {
+                image: getImageUrl(item),
+                title: 'Title',
+                subtitle: 'Sub-Title'
+              };
+            } else if (typeof item === 'object') {
+              // New format - object with image, title, subtitle
+              return {
+                image: getImageUrl(item?.image || ''),
+                title: item?.title || 'Title',
+                subtitle: item?.subtitle || 'Sub-Title'
+              };
+            }
+            return {
+              image: NO_IMAGE,
+              title: 'Title',
+              subtitle: 'Sub-Title'
+            };
+          });
+        }
+      } catch (e) {
+        console.error('Failed to parse lookbook items:', e);
+      }
+    }
+    // Fallback to placeholder items
+    return Array(3).fill(null).map(() => ({
+      image: NO_IMAGE,
+      title: 'Title',
+      subtitle: 'Sub-Title'
+    }));
+  };
+
+  // Hero images - use API data if available, fallback to NO_IMAGE placeholders
+  const heroImages = getSectionImages(heroSection, 5);
+  
+  // Lookbook items (3 items with image, title, subtitle)
+  const lookbookItems = getLookbookItems(lookbookSection);
+  
+  
+  // Products images (4 images)
+  const productsImages = getSectionImages(productsSection, 4);
+  
+  // Styled by Us images (4 images)
+  const styledByImages = getSectionImages(styledBySection, 4);
+  
+  // Services images (4 service icons)
+  const serviceImages = getSectionImages(servicesSection, 4);
 
   // Auto-cycle through carousel images
   useEffect(() => {
@@ -599,7 +752,9 @@ export const Box = (): JSX.Element => {
         <div className="max-w-7xl mx-auto px-6 relative z-10">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             <div className="animate-fade-in-up">
-              <h2 className="text-5xl font-bold text-beige-800 dark:text-beige-200 mb-8">{t.about.title}</h2>
+              <h2 className="text-5xl font-bold text-beige-800 dark:text-beige-200 mb-8">
+                {t.about.title}
+              </h2>
               <p className="text-lg text-beige-700 dark:text-beige-300 mb-8 leading-relaxed">
                 {t.about.description}
               </p>
@@ -647,7 +802,7 @@ export const Box = (): JSX.Element => {
             <div className="relative animate-fade-in-up animation-delay-200">
               <div className="w-full h-96 bg-gradient-to-br from-beige-200 to-beige-300 rounded-3xl shadow-2xl overflow-hidden">
                 <img 
-                  src={NO_IMAGE} 
+                  src={getImageUrl(aboutSection?.image)} 
                   alt="Elegant spa room with modern décor and relaxing ambiance" 
                   className="w-full h-full object-cover"
                 />
@@ -655,8 +810,12 @@ export const Box = (): JSX.Element => {
               {/* Elegant overlay with spa room details */}
               <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent rounded-3xl"></div>
               <div className="absolute bottom-6 left-6 text-white">
-                <h3 className="text-2xl font-bold mb-2 drop-shadow-lg">Title</h3>
-                <p className="text-beige-100 drop-shadow-md">Sub Title</p>
+                <h3 className="text-2xl font-bold mb-2 drop-shadow-lg">
+                  {aboutSection?.title || "Image Title"}
+                </h3>
+                <p className="text-beige-100 drop-shadow-md">
+                  {aboutSection?.subtitle || "Image Subtitle"}
+                </p>
               </div>
             </div>
           </div>
@@ -669,13 +828,13 @@ export const Box = (): JSX.Element => {
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             <div className="relative">
               <img 
-                src={NO_IMAGE}
+                src={getImageUrl(safetySection?.image)}
                 alt="Professional nail technician at work" 
                 className="w-full h-96 object-cover rounded-2xl shadow-2xl"
               />
               <div className="absolute -bottom-6 -right-6 bg-beige-500 text-white p-6 rounded-2xl shadow-xl">
-                <div className="text-4xl font-bold"></div>
-                <div className="text-sm uppercase tracking-wide">{t.safety.experience}</div>
+                <div className="text-4xl font-bold">{safetySection?.title || ""}</div>
+                <div className="text-sm uppercase tracking-wide">{safetySection?.subtitle || t.safety.experience}</div>
               </div>
             </div>
             
@@ -714,47 +873,21 @@ export const Box = (): JSX.Element => {
           </div>
           
           <div className="grid md:grid-cols-3 gap-8">
-            <div className="group relative overflow-hidden rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-500">
-              <img 
-                src={NO_IMAGE}
-                alt="Elegant nail art designs" 
-                className="w-full h-80 object-cover transition-transform duration-500 group-hover:scale-110"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent">
-                <div className="absolute bottom-6 left-6 text-white">
-                  <h3 className="text-2xl font-bold mb-2">{t.lookbook.artistic}</h3>
-                  <p className="text-beige-100">{t.lookbook.artisticDesc}</p>
+            {lookbookItems.map((item, index) => (
+              <div key={index} className="group relative overflow-hidden rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-500">
+                <img 
+                  src={item.image}
+                  alt={`Lookbook ${index + 1}: ${item.title}`} 
+                  className="w-full h-80 object-cover transition-transform duration-500 group-hover:scale-110"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent">
+                  <div className="absolute bottom-6 left-6 text-white">
+                    <h3 className="text-2xl font-bold mb-2">{item.title}</h3>
+                    <p className="text-beige-100">{item.subtitle}</p>
+                  </div>
                 </div>
               </div>
-            </div>
-            
-            <div className="group relative overflow-hidden rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-500">
-              <img 
-                src={NO_IMAGE}
-                alt="Classic nail styles" 
-                className="w-full h-80 object-cover transition-transform duration-500 group-hover:scale-110"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent">
-                <div className="absolute bottom-6 left-6 text-white">
-                  <h3 className="text-2xl font-bold mb-2">{t.lookbook.classic}</h3>
-                  <p className="text-beige-100">{t.lookbook.classicDesc}</p>
-                </div>
-              </div>
-            </div>
-            
-            <div className="group relative overflow-hidden rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-500">
-              <img 
-                src={NO_IMAGE}
-                alt="Seasonal nail trends" 
-                className="w-full h-80 object-cover transition-transform duration-500 group-hover:scale-110"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent">
-                <div className="absolute bottom-6 left-6 text-white">
-                  <h3 className="text-2xl font-bold mb-2">{t.lookbook.seasonal}</h3>
-                  <p className="text-beige-100">{t.lookbook.seasonalDesc}</p>
-                </div>
-              </div>
-            </div>
+            ))}
           </div>
           
           <div className="text-center mt-12">
@@ -786,13 +919,13 @@ export const Box = (): JSX.Element => {
             
             <div className="relative">
               <img 
-                src={NO_IMAGE}
+                src={getImageUrl(feelBetterSection?.image)}
                 alt="Relaxing salon interior" 
                 className="w-full h-96 object-cover rounded-2xl shadow-2xl"
               />
               <div className="absolute -top-6 -left-6 bg-beige-500 text-white p-6 rounded-2xl shadow-xl">
-                <div className="text-4xl font-bold"></div>
-                <div className="text-sm uppercase tracking-wide"></div>
+                <div className="text-4xl font-bold">{feelBetterSection?.title || ""}</div>
+                <div className="text-sm uppercase tracking-wide">{feelBetterSection?.subtitle || ""}</div>
               </div>
             </div>
           </div>
@@ -863,7 +996,7 @@ export const Box = (): JSX.Element => {
               <div className="flex justify-center mb-4">
                 <div className="w-24 h-24 bg-gradient-to-br from-beige-100 to-beige-200 rounded-full flex items-center justify-center group-hover:animate-bounce-gentle overflow-hidden">
                   <img 
-                    src={NO_IMAGE} 
+                    src={serviceImages[0]} 
                     alt="Nail care" 
                     className="w-16 h-16 object-cover rounded-full"
                   />
@@ -882,7 +1015,7 @@ export const Box = (): JSX.Element => {
               <div className="flex justify-center mb-4">
                 <div className="w-24 h-24 bg-gradient-to-br from-blue-100 to-cyan-200 rounded-full flex items-center justify-center group-hover:animate-bounce-gentle overflow-hidden">
                   <img 
-                    src={NO_IMAGE} 
+                    src={serviceImages[1]} 
                     alt="Foot care spa" 
                     className="w-20 h-16 object-cover rounded-full"
                   />
@@ -901,7 +1034,7 @@ export const Box = (): JSX.Element => {
               <div className="flex justify-center mb-6">
                 <div className="w-20 h-20 bg-beige-500 rounded-full flex items-center justify-center group-hover:animate-bounce-gentle overflow-hidden">
                   <img 
-                    src={NO_IMAGE} 
+                    src={serviceImages[2]} 
                     alt="Eyelash extensions" 
                     className="w-10 h-10 object-cover rounded-full"
                   />
@@ -920,7 +1053,7 @@ export const Box = (): JSX.Element => {
               <div className="flex justify-center mb-6">
                 <div className="w-20 h-20 bg-beige-500 rounded-full flex items-center justify-center group-hover:animate-bounce-gentle overflow-hidden">
                   <img 
-                    src={NO_IMAGE} 
+                    src={serviceImages[3]} 
                     alt="Waxing services" 
                     className="w-10 h-10 object-cover rounded-full"
                   />
@@ -1008,15 +1141,19 @@ export const Box = (): JSX.Element => {
                   <div className="relative animate-fade-in-up">
                       <div className="w-full h-80 bg-gradient-to-br from-beige-200 to-beige-300 rounded-3xl shadow-2xl overflow-hidden">
                       <img 
-                          src={NO_IMAGE} 
+                          src={getImageUrl(servicesSection?.image)} 
                         alt="Elegant spa room with modern décor and relaxing ambiance" 
                         className="w-full h-full object-cover"
                       />
                       {/* Elegant overlay with spa room details */}
                       <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
                       <div className="absolute bottom-6 left-6 text-white">
-                          <h3 className="text-2xl font-bold mb-2 drop-shadow-lg">Title</h3>
-                          <p className="text-beige-100 drop-shadow-md">Sub-Title</p>
+                          <h3 className="text-2xl font-bold mb-2 drop-shadow-lg">
+                            {servicesSection?.title || "Title"}
+                          </h3>
+                          <p className="text-beige-100 drop-shadow-md">
+                            {servicesSection?.subtitle || "Sub-Title"}
+                          </p>
                       </div>
                     </div>
                   </div>
@@ -1035,71 +1172,6 @@ export const Box = (): JSX.Element => {
         </div>
       </section>
 
-      {/* Our Gallery Section */}
-      <section className="py-20 bg-gradient-to-bl from-beige-50 via-beige-100 to-beige-200 dark:from-gray-900 dark:to-gray-800 relative overflow-hidden">
-        {/* Radial Gradient Overlays */}
-        <div className="absolute inset-0">
-          <div className="absolute top-10 left-10 w-72 h-72 bg-gradient-radial from-beige-200/30 to-transparent rounded-full animate-pulse-slow"></div>
-          <div className="absolute bottom-10 right-10 w-96 h-96 bg-gradient-radial from-beige-300/20 to-transparent rounded-full animate-pulse-slow animation-delay-3000"></div>
-          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-gradient-radial from-beige-200/25 to-transparent rounded-full animate-pulse-slow animation-delay-1500"></div>
-        </div>
-        
-        {/* Sparkle Elements */}
-        <div className="absolute inset-0 pointer-events-none">
-          <Sparkles className="absolute top-16 left-1/4 text-beige-300 w-4 h-4 animate-twinkle opacity-40" />
-          <Sparkles className="absolute top-24 right-1/3 text-beige-400 w-3 h-3 animate-twinkle animation-delay-1000 opacity-50" />
-          <Sparkles className="absolute bottom-24 left-1/3 text-beige-300 w-5 h-5 animate-twinkle animation-delay-2000 opacity-30" />
-          <Sparkles className="absolute bottom-16 right-1/4 text-beige-300 w-4 h-4 animate-twinkle animation-delay-500 opacity-45" />
-          <Star className="absolute top-32 left-2/3 text-beige-400 w-3 h-3 animate-twinkle animation-delay-3000 opacity-35" />
-          <Star className="absolute bottom-32 left-1/5 text-beige-300 w-4 h-4 animate-twinkle animation-delay-1500 opacity-40" />
-        </div>
-
-        <div className="max-w-7xl mx-auto px-6 relative z-10">
-          <h2 className="text-5xl font-bold text-beige-800 dark:text-beige-200 text-center mb-16">{t.gallery.title}</h2>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="group relative overflow-hidden rounded-2xl shadow-xl hover:shadow-3xl transition-all duration-300">
-              <img 
-                src={NO_IMAGE} 
-                alt="Creative nail art designs" 
-                className="w-full h-72 object-cover transition-transform duration-500 group-hover:scale-110"
-              />
-              <div className="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                <p className="text-white text-xl font-bold">{t.gallery.creative}</p>
-              </div>
-            </div>
-            <div className="group relative overflow-hidden rounded-2xl shadow-xl hover:shadow-3xl transition-all duration-300">
-              <img 
-                src={NO_IMAGE} 
-                alt="Elegant nail styles" 
-                className="w-full h-72 object-cover transition-transform duration-500 group-hover:scale-110"
-              />
-               <div className="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                <p className="text-white text-xl font-bold">{t.gallery.elegant}</p>
-              </div>
-            </div>
-            <div className="group relative overflow-hidden rounded-2xl shadow-xl hover:shadow-3xl transition-all duration-300">
-              <img 
-                src={NO_IMAGE} 
-                alt="Modern nail looks" 
-                className="w-full h-72 object-cover transition-transform duration-500 group-hover:scale-110"
-              />
-               <div className="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                <p className="text-white text-xl font-bold">{t.gallery.modern}</p>
-              </div>
-            </div>
-            <div className="group relative overflow-hidden rounded-2xl shadow-xl hover:shadow-3xl transition-all duration-300">
-              <img 
-                src={NO_IMAGE} 
-                alt="Vibrant nail colors" 
-                className="w-full h-72 object-cover transition-transform duration-500 group-hover:scale-110"
-              />
-               <div className="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                <p className="text-white text-xl font-bold">{t.gallery.vibrant}</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* Featured Products Section */}
       <section className="py-20 bg-gradient-to-r from-amber-50 via-beige-50 to-beige-100 dark:from-gray-900 dark:to-gray-800 relative overflow-hidden">
@@ -1128,7 +1200,7 @@ export const Box = (): JSX.Element => {
             <div className="relative group overflow-hidden rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105">
               <div className="aspect-square bg-gradient-to-br from-beige-100 to-beige-200 overflow-hidden">
                 <img 
-                  src={NO_IMAGE} 
+                  src={productsImages[0]} 
                   alt="Premium nail polish collection" 
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                 />
@@ -1144,7 +1216,7 @@ export const Box = (): JSX.Element => {
             <div className="relative group overflow-hidden rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105">
               <div className="aspect-square bg-gradient-to-br from-beige-100 to-beige-200 overflow-hidden">
                 <img 
-                  src={NO_IMAGE} 
+                  src={productsImages[1]} 
                   alt="Professional nail care tools" 
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                 />
@@ -1160,7 +1232,7 @@ export const Box = (): JSX.Element => {
             <div className="relative group overflow-hidden rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105">
               <div className="aspect-square bg-gradient-to-br from-beige-100 to-beige-200 overflow-hidden">
                 <img 
-                  src={NO_IMAGE} 
+                  src={productsImages[2]} 
                   alt="Gel polish collection" 
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                 />
@@ -1176,7 +1248,7 @@ export const Box = (): JSX.Element => {
             <div className="relative group overflow-hidden rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105">
               <div className="aspect-square bg-gradient-to-br from-orange-100 to-amber-200 overflow-hidden">
                 <img 
-                  src={NO_IMAGE} 
+                  src={productsImages[3]} 
                   alt="Nail art accessories and decorations" 
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                 />
@@ -1208,7 +1280,7 @@ export const Box = (): JSX.Element => {
           <div className="grid md:grid-cols-4 gap-6">
             <div className="group relative overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300">
               <img 
-                src={NO_IMAGE}
+                src={styledByImages[0]}
                 alt="Client nail work showcase" 
                 className="w-full h-80 object-cover transition-transform duration-300 group-hover:scale-110"
               />
@@ -1221,7 +1293,7 @@ export const Box = (): JSX.Element => {
             
             <div className="group relative overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300">
               <img 
-                src={NO_IMAGE}
+                src={styledByImages[1]}
                 alt="Pedicure results showcase" 
                 className="w-full h-80 object-cover transition-transform duration-300 group-hover:scale-110"
               />
@@ -1234,7 +1306,7 @@ export const Box = (): JSX.Element => {
             
             <div className="group relative overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300">
               <img 
-                src={NO_IMAGE}
+                src={styledByImages[2]}
                 alt="Nail art showcase" 
                 className="w-full h-80 object-cover transition-transform duration-300 group-hover:scale-110"
               />
@@ -1247,7 +1319,7 @@ export const Box = (): JSX.Element => {
             
             <div className="group relative overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300">
               <img 
-                src={NO_IMAGE}
+                src={styledByImages[3]}
                 alt="Classic nail style showcase" 
                 className="w-full h-80 object-cover transition-transform duration-300 group-hover:scale-110"
               />

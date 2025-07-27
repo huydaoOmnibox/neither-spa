@@ -277,10 +277,44 @@ export async function registerRoutes(app: Express): Promise<Server | Express> {
 
   app.post("/api/home-content", async (req, res) => {
     try {
-      const contentData = insertHomeContentSchema.parse(req.body);
-      const content = await storage.createHomeContent(contentData);
+      // Validate and clean content before saving
+      let contentData = { ...req.body };
+      if (contentData.content) {
+        // Sections that use content as plain text (not JSON)
+        const plainTextSections = ['about'];
+        
+        if (plainTextSections.includes(contentData.section)) {
+          // For plain text sections, keep content as string
+          if (typeof contentData.content !== 'string') {
+            contentData.content = String(contentData.content);
+          }
+        } else {
+          // For other sections, ensure content is valid JSON
+          if (typeof contentData.content === 'string') {
+            try {
+              JSON.parse(contentData.content);
+            } catch {
+              return res.status(400).json({ message: "Invalid JSON in content field" });
+            }
+          } else if (Array.isArray(contentData.content)) {
+            // Convert array to JSON string for proper storage
+            contentData.content = JSON.stringify(contentData.content);
+          } else if (typeof contentData.content === 'object') {
+            // Convert object to JSON string
+            contentData.content = JSON.stringify(contentData.content);
+          }
+        }
+      }
+      
+      // Validate after content processing
+      const validatedData = insertHomeContentSchema.parse(contentData);
+      const content = await storage.createHomeContent(validatedData);
       res.status(201).json(content);
     } catch (error) {
+      console.error('Home content creation error:', error);
+      if (error.name === 'ZodError') {
+        return res.status(400).json({ message: "Validation error", details: error.errors });
+      }
       res.status(400).json({ message: "Invalid home content data" });
     }
   });
@@ -288,13 +322,50 @@ export async function registerRoutes(app: Express): Promise<Server | Express> {
   app.put("/api/home-content/:id", async (req, res) => {
     try {
       const id = parseInt(req.params.id);
-      const contentData = insertHomeContentSchema.partial().parse(req.body);
-      const content = await storage.updateHomeContent(id, contentData);
+      
+      // Validate and clean content before saving
+      let contentData = { ...req.body };
+      console.log('PUT /api/home-content - Original contentData:', JSON.stringify(contentData, null, 2));
+      if (contentData.content) {
+        // Sections that use content as plain text (not JSON)
+        const plainTextSections = ['about'];
+        
+        if (plainTextSections.includes(contentData.section)) {
+          // For plain text sections, keep content as string
+          if (typeof contentData.content !== 'string') {
+            contentData.content = String(contentData.content);
+          }
+        } else {
+          // For other sections, ensure content is valid JSON
+          if (typeof contentData.content === 'string') {
+            try {
+              JSON.parse(contentData.content);
+            } catch {
+              return res.status(400).json({ message: "Invalid JSON in content field" });
+            }
+          } else if (Array.isArray(contentData.content)) {
+            // Convert array to JSON string for proper storage
+            contentData.content = JSON.stringify(contentData.content);
+          } else if (typeof contentData.content === 'object') {
+            // Convert object to JSON string
+            contentData.content = JSON.stringify(contentData.content);
+          }
+        }
+      }
+      
+      console.log('PUT /api/home-content - After processing:', JSON.stringify(contentData, null, 2));
+      // Validate after content processing
+      const validatedData = insertHomeContentSchema.partial().parse(contentData);
+      const content = await storage.updateHomeContent(id, validatedData);
       if (!content) {
         return res.status(404).json({ message: "Home content not found" });
       }
       res.json(content);
     } catch (error) {
+      console.error('Home content update error:', error);
+      if (error.name === 'ZodError') {
+        return res.status(400).json({ message: "Validation error", details: error.errors });
+      }
       res.status(400).json({ message: "Invalid home content data" });
     }
   });
