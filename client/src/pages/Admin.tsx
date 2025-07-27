@@ -20,11 +20,13 @@ import {
   Package,
   Settings,
   Users,
+  User,
   BarChart3,
   Upload,
   Eye,
   EyeOff,
-  Loader2
+  Loader2,
+  Image as ImageIcon
 } from "lucide-react";
 import { Link, useLocation } from "wouter";
 import logoPath from "@assets/image_1752511415001.png";
@@ -782,85 +784,232 @@ export const Admin = (): JSX.Element => {
     </div>
   );
 
-  const renderHomeTab = () => (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-bold text-beige-800 dark:text-beige-200">{t.tabs.home}</h2>
-        <Button 
-          onClick={() => handleOpenDialog('home')}
-          className="bg-gradient-to-r from-beige-500 to-beige-600 hover:from-beige-600 hover:to-beige-700"
-          disabled={loading}
-        >
-          <Plus className="w-4 h-4 mr-2" />
-          {t.actions.add}
-        </Button>
-      </div>
-      
-      {loading ? (
-        <div className="flex items-center justify-center py-8">
-          <Loader2 className="w-8 h-8 animate-spin text-beige-500" />
-          <span className="ml-2">{t.messages.loading}</span>
+  const renderHomeTab = () => {
+    const heroSection = homeContent.find(item => item.section === 'hero');
+    const aboutSection = homeContent.find(item => item.section === 'about');
+    const otherSections = homeContent.filter(item => !['hero', 'about'].includes(item.section));
+
+    return (
+      <div className="space-y-8">
+        <div className="flex justify-between items-center">
+          <h2 className="text-2xl font-bold text-beige-800 dark:text-beige-200">{t.tabs.home}</h2>
+          <div className="flex gap-2">
+            <Button 
+              onClick={() => handleOpenDialog('home')}
+              variant="outline"
+              disabled={loading}
+            >
+              <Plus className="w-4 h-4 mr-2" />
+              Add Custom Section
+            </Button>
+          </div>
         </div>
-      ) : (
-        <div className="grid gap-4">
-          {homeContent.map((item) => (
-            <Card key={item.id} className="bg-white dark:bg-gray-800">
-              <CardHeader className="pb-4">
-                <div className="flex justify-between items-start">
+
+        {loading ? (
+          <div className="flex items-center justify-center py-8">
+            <Loader2 className="w-8 h-8 animate-spin text-beige-500" />
+            <span className="ml-2">{t.messages.loading}</span>
+          </div>
+        ) : (
+          <div className="space-y-8">
+            {/* Hero Banner Section */}
+            <Card className="bg-white dark:bg-gray-800">
+              <CardHeader>
+                <div className="flex justify-between items-center">
                   <div>
-                    <CardTitle className="text-lg">{item.title}</CardTitle>
+                    <CardTitle className="flex items-center gap-2">
+                      <ImageIcon className="w-5 h-5" />
+                      Hero Banner (5 Images)
+                    </CardTitle>
                     <CardDescription>
-                      {t.fields.section}: {item.section}
-                      {item.subtitle && ` • ${item.subtitle}`}
+                      Manage the hero banner carousel images (exactly 5 images required)
                     </CardDescription>
                   </div>
-                  <div className="flex gap-2">
-                    <Badge variant={item.isActive ? "default" : "secondary"}>
-                      {item.isActive ? <Eye className="w-3 h-3 mr-1" /> : <EyeOff className="w-3 h-3 mr-1" />}
-                      {item.isActive ? "Active" : "Inactive"}
-                    </Badge>
-                    <Button 
-                      size="sm" 
-                      variant="outline"
-                      onClick={() => handleOpenDialog('home', item)}
-                    >
-                      <Edit2 className="w-3 h-3" />
-                    </Button>
-                    <AlertDialog>
-                      <AlertDialogTrigger asChild>
-                        <Button size="sm" variant="destructive">
-                          <Trash2 className="w-3 h-3" />
-                        </Button>
-                      </AlertDialogTrigger>
-                      <AlertDialogContent>
-                        <AlertDialogHeader>
-                          <AlertDialogTitle>Delete Content Section</AlertDialogTitle>
-                          <AlertDialogDescription>
-                            Are you sure you want to delete the "{item.section}" section? This action cannot be undone.
-                          </AlertDialogDescription>
-                        </AlertDialogHeader>
-                        <AlertDialogFooter>
-                          <AlertDialogCancel>Cancel</AlertDialogCancel>
-                          <AlertDialogAction onClick={() => handleDelete('home', item.id)}>
-                            Delete
-                          </AlertDialogAction>
-                        </AlertDialogFooter>
-                      </AlertDialogContent>
-                    </AlertDialog>
-                  </div>
+                  <Button 
+                    size="sm" 
+                    onClick={() => handleOpenDialog('home', heroSection || { section: 'hero' })}
+                    className="bg-gradient-to-r from-beige-500 to-beige-600 hover:from-beige-600 hover:to-beige-700"
+                  >
+                    {heroSection ? <Edit2 className="w-3 h-3 mr-1" /> : <Plus className="w-3 h-3 mr-1" />}
+                    {heroSection ? 'Edit' : 'Setup'} Hero
+                  </Button>
                 </div>
               </CardHeader>
               <CardContent>
-                <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-2">
-                  {item.description}
-                </p>
+                                 {heroSection?.content ? (
+                   <div className="grid grid-cols-5 gap-2">
+                     {Array.from({ length: 5 }, (_, index) => {
+                       let images = [];
+                       try {
+                         images = heroSection.content ? JSON.parse(heroSection.content) : [];
+                         if (!Array.isArray(images)) images = [];
+                       } catch (e) {
+                         images = [];
+                       }
+                       const imageUrl = images[index] || '';
+                       return (
+                         <div key={index} className="aspect-video bg-gray-100 dark:bg-gray-700 rounded-lg overflow-hidden">
+                           {imageUrl ? (
+                             <img 
+                               src={getImageUrl(imageUrl)} 
+                               alt={`Hero ${index + 1}`}
+                               className="w-full h-full object-cover"
+                               onError={(e) => {
+                                 e.currentTarget.src = '/api/placeholder-image';
+                               }}
+                             />
+                           ) : (
+                             <div className="w-full h-full flex items-center justify-center text-gray-400">
+                               <ImageIcon className="w-8 h-8" />
+                             </div>
+                           )}
+                         </div>
+                       );
+                     })}
+                   </div>
+                 ) : (
+                  <div className="text-center py-4">
+                    <p className="text-gray-500">No hero images configured. Click "Setup Hero" to add images.</p>
+                  </div>
+                )}
               </CardContent>
             </Card>
-          ))}
-        </div>
-      )}
-    </div>
-  );
+
+            {/* About Section */}
+            <Card className="bg-white dark:bg-gray-800">
+              <CardHeader>
+                <div className="flex justify-between items-center">
+                                     <div>
+                     <CardTitle className="flex items-center gap-2">
+                       <User className="w-5 h-5" />
+                       About Section
+                     </CardTitle>
+                     <CardDescription>
+                       Manage the about section with image, title, and subtitle
+                     </CardDescription>
+                   </div>
+                  <Button 
+                    size="sm" 
+                    onClick={() => handleOpenDialog('home', aboutSection || { section: 'about' })}
+                    className="bg-gradient-to-r from-beige-500 to-beige-600 hover:from-beige-600 hover:to-beige-700"
+                  >
+                    {aboutSection ? <Edit2 className="w-3 h-3 mr-1" /> : <Plus className="w-3 h-3 mr-1" />}
+                    {aboutSection ? 'Edit' : 'Setup'} About
+                  </Button>
+                </div>
+              </CardHeader>
+              <CardContent>
+                                 {aboutSection ? (
+                   <div className="flex gap-4">
+                     <div className="w-24 h-24 bg-gray-100 dark:bg-gray-700 rounded-lg overflow-hidden flex-shrink-0">
+                       <img 
+                         src={getImageUrl(aboutSection.image || '')}
+                         alt="About Section"
+                         className="w-full h-full object-cover"
+                         onError={(e) => {
+                           e.currentTarget.src = '/api/placeholder-image';
+                         }}
+                       />
+                     </div>
+                     <div className="flex-1">
+                       <h3 className="font-semibold text-lg text-beige-800 dark:text-beige-200">
+                         {aboutSection.title || 'No title'}
+                       </h3>
+                       <p className="text-beige-600 dark:text-beige-300">
+                         {aboutSection.subtitle || 'No subtitle'}
+                       </p>
+                       {aboutSection.description && (
+                         <p className="text-sm text-gray-500 mt-1 line-clamp-2">
+                           {aboutSection.description}
+                         </p>
+                       )}
+                     </div>
+                   </div>
+                 ) : (
+                   <div className="text-center py-4">
+                     <div className="w-24 h-24 bg-gray-100 dark:bg-gray-700 rounded-lg overflow-hidden mx-auto mb-2 flex items-center justify-center">
+                       <ImageIcon className="w-8 h-8 text-gray-400" />
+                     </div>
+                     <p className="text-gray-500">No about section configured. Click "Setup About" to add content.</p>
+                   </div>
+                 )}
+              </CardContent>
+            </Card>
+
+            {/* Other Custom Sections */}
+            {otherSections.length > 0 && (
+              <Card className="bg-white dark:bg-gray-800">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Settings className="w-5 h-5" />
+                    Custom Sections
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid gap-4">
+                    {otherSections.map((item) => (
+                      <Card key={item.id} className="bg-gray-50 dark:bg-gray-700">
+                        <CardHeader className="pb-4">
+                          <div className="flex justify-between items-start">
+                            <div>
+                              <CardTitle className="text-lg">{item.title}</CardTitle>
+                              <CardDescription>
+                                {t.fields.section}: {item.section}
+                                {item.subtitle && ` • ${item.subtitle}`}
+                              </CardDescription>
+                            </div>
+                            <div className="flex gap-2">
+                              <Badge variant={item.isActive ? "default" : "secondary"}>
+                                {item.isActive ? <Eye className="w-3 h-3 mr-1" /> : <EyeOff className="w-3 h-3 mr-1" />}
+                                {item.isActive ? "Active" : "Inactive"}
+                              </Badge>
+                              <Button 
+                                size="sm" 
+                                variant="outline"
+                                onClick={() => handleOpenDialog('home', item)}
+                              >
+                                <Edit2 className="w-3 h-3" />
+                              </Button>
+                              <AlertDialog>
+                                <AlertDialogTrigger asChild>
+                                  <Button size="sm" variant="destructive">
+                                    <Trash2 className="w-3 h-3" />
+                                  </Button>
+                                </AlertDialogTrigger>
+                                <AlertDialogContent>
+                                  <AlertDialogHeader>
+                                    <AlertDialogTitle>Delete Content Section</AlertDialogTitle>
+                                    <AlertDialogDescription>
+                                      Are you sure you want to delete the "{item.section}" section? This action cannot be undone.
+                                    </AlertDialogDescription>
+                                  </AlertDialogHeader>
+                                  <AlertDialogFooter>
+                                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                    <AlertDialogAction onClick={() => handleDelete('home', item.id)}>
+                                      Delete
+                                    </AlertDialogAction>
+                                  </AlertDialogFooter>
+                                </AlertDialogContent>
+                              </AlertDialog>
+                            </div>
+                          </div>
+                        </CardHeader>
+                        <CardContent>
+                          <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-2">
+                            {item.description}
+                          </p>
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+          </div>
+        )}
+      </div>
+    );
+  };
 
   const renderEditDialog = () => (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
@@ -1119,63 +1268,212 @@ export const Admin = (): JSX.Element => {
           
           {currentSection === 'home' && (
             <>
-              <div>
-                <label className="text-sm font-medium">{t.fields.section}</label>
-                <Input 
-                  value={formData.section || ''} 
-                  onChange={(e) => setFormData({...formData, section: e.target.value})}
-                  placeholder="hero, about, services, etc."
-                />
-              </div>
-              <div>
-                <label className="text-sm font-medium">{t.fields.title}</label>
-                <Input 
-                  value={formData.title || ''} 
-                  onChange={(e) => setFormData({...formData, title: e.target.value})}
-                  placeholder="Section title"
-                />
-              </div>
-              <div>
-                <label className="text-sm font-medium">{t.fields.subtitle}</label>
-                <Input 
-                  value={formData.subtitle || ''} 
-                  onChange={(e) => setFormData({...formData, subtitle: e.target.value})}
-                  placeholder="Section subtitle"
-                />
-              </div>
-              <div>
-                <label className="text-sm font-medium">{t.fields.description}</label>
-                <Textarea 
-                  value={formData.description || ''} 
-                  onChange={(e) => setFormData({...formData, description: e.target.value})}
-                  placeholder="Section description"
-                  rows={4}
-                />
-              </div>
+              {formData.section === 'hero' ? (
+                // Hero Banner Form
+                <>
+                  <div>
+                    <label className="text-sm font-medium">Section</label>
+                    <Input 
+                      value="hero" 
+                      disabled
+                      className="bg-gray-100"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium">Hero Images (5 required)</label>
+                    <p className="text-xs text-gray-500 mb-2">Add exactly 5 images for the hero banner carousel</p>
+                                         <div className="space-y-3">
+                       {Array.from({ length: 5 }, (_, index) => {
+                         let images = [];
+                         try {
+                           if (typeof formData.content === 'string') {
+                             images = JSON.parse(formData.content);
+                           } else if (Array.isArray(formData.content)) {
+                             images = formData.content;
+                           }
+                           if (!Array.isArray(images)) images = [];
+                         } catch (e) {
+                           images = [];
+                         }
+                         const imageValue = images[index] || '';
+                         
+                         return (
+                           <div key={index} className="flex gap-2 items-center">
+                             <span className="text-sm font-medium w-16">Image {index + 1}:</span>
+                             <Input 
+                               value={imageValue}
+                               onChange={(e) => {
+                                 const newImages = [...images];
+                                 newImages[index] = convertGoogleDriveUrl(e.target.value);
+                                 // Ensure array is exactly 5 elements
+                                 while (newImages.length < 5) newImages.push('');
+                                 setFormData({...formData, content: JSON.stringify(newImages.slice(0, 5))});
+                               }}
+                               placeholder="https://drive.google.com/file/d/YOUR_FILE_ID/view or direct image URL"
+                               className="flex-1"
+                             />
+                             {imageValue && (
+                               <div className="w-12 h-12 bg-gray-100 dark:bg-gray-700 rounded overflow-hidden">
+                                 <img 
+                                   src={getImageUrl(imageValue)} 
+                                   alt={`Hero ${index + 1}`}
+                                   className="w-full h-full object-cover"
+                                   onError={(e) => {
+                                     e.currentTarget.src = '/api/placeholder-image';
+                                   }}
+                                 />
+                               </div>
+                             )}
+                           </div>
+                         );
+                       })}
+                    </div>
+                  </div>
+                </>
+              ) : formData.section === 'about' ? (
+                // About Section Form - Image, Title, and Subtitle
+                <>
+                  <div>
+                    <label className="text-sm font-medium">Section</label>
+                    <Input 
+                      value="about" 
+                      disabled
+                      className="bg-gray-100"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium">{t.fields.title}</label>
+                    <Input 
+                      value={formData.title || ''} 
+                      onChange={(e) => setFormData({
+                        ...formData, 
+                        title: e.target.value,
+                        section: 'about',
+                        isActive: true
+                      })}
+                      placeholder="About section title (e.g., About Us)"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium">{t.fields.subtitle}</label>
+                    <Input 
+                      value={formData.subtitle || ''} 
+                      onChange={(e) => setFormData({
+                        ...formData, 
+                        subtitle: e.target.value,
+                        section: 'about',
+                        isActive: true
+                      })}
+                      placeholder="About section subtitle"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium">{t.fields.image}</label>
+                    <Input 
+                      value={formData.image || ''} 
+                      onChange={(e) => setFormData({
+                        ...formData, 
+                        image: convertGoogleDriveUrl(e.target.value),
+                        section: 'about',
+                        isActive: true
+                      })}
+                      placeholder="https://drive.google.com/file/d/YOUR_FILE_ID/view or direct image URL"
+                      type="url"
+                    />
+                    <p className="text-xs text-gray-500 mt-1">
+                      <strong>For Google Drive:</strong> Make sure the file is set to "Anyone with the link can view"
+                    </p>
+                    {formData.image && (
+                      <div className="mt-3">
+                        <div className="w-32 h-32 bg-gray-100 dark:bg-gray-700 rounded-lg overflow-hidden">
+                          <img 
+                            src={getImageUrl(formData.image)} 
+                            alt="About preview"
+                            className="w-full h-full object-cover"
+                            onError={(e) => {
+                              e.currentTarget.src = '/api/placeholder-image';
+                            }}
+                          />
+                        </div>
+                        <p className="text-xs text-gray-500 mt-1">Preview of About section image</p>
+                      </div>
+                    )}
+                  </div>
+                </>
+              ) : (
+                // Custom Section Form
+                <>
+                  <div>
+                    <label className="text-sm font-medium">{t.fields.section}</label>
+                    <Input 
+                      value={formData.section || ''} 
+                      onChange={(e) => setFormData({...formData, section: e.target.value})}
+                      placeholder="services, testimonials, etc."
+                    />
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium">{t.fields.title}</label>
+                    <Input 
+                      value={formData.title || ''} 
+                      onChange={(e) => setFormData({...formData, title: e.target.value})}
+                      placeholder="Section title"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium">{t.fields.subtitle}</label>
+                    <Input 
+                      value={formData.subtitle || ''} 
+                      onChange={(e) => setFormData({...formData, subtitle: e.target.value})}
+                      placeholder="Section subtitle"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium">{t.fields.description}</label>
+                    <Textarea 
+                      value={formData.description || ''} 
+                      onChange={(e) => setFormData({...formData, description: e.target.value})}
+                      placeholder="Section description"
+                      rows={4}
+                    />
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium">{t.fields.image}</label>
+                    <Input 
+                      value={formData.image || ''} 
+                      onChange={(e) => setFormData({...formData, image: convertGoogleDriveUrl(e.target.value)})}
+                      placeholder="Optional section image"
+                      type="url"
+                    />
+                  </div>
+                </>
+              )}
             </>
           )}
           
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="text-sm font-medium">{t.fields.sortOrder}</label>
-              <Input 
-                type="number"
-                value={formData.sortOrder || 0} 
-                onChange={(e) => setFormData({...formData, sortOrder: parseInt(e.target.value) || 0})}
-                placeholder="0"
-              />
+          {/* Only show sort order and active for non-About sections */}
+          {formData.section !== 'about' && (
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="text-sm font-medium">{t.fields.sortOrder}</label>
+                <Input 
+                  type="number"
+                  value={formData.sortOrder || 0} 
+                  onChange={(e) => setFormData({...formData, sortOrder: parseInt(e.target.value) || 0})}
+                  placeholder="0"
+                />
+              </div>
+              <div className="flex items-center space-x-2 pt-6">
+                <input
+                  type="checkbox"
+                  id="isActive"
+                  checked={formData.isActive !== false}
+                  onChange={(e) => setFormData({...formData, isActive: e.target.checked})}
+                  className="rounded"
+                />
+                <label htmlFor="isActive" className="text-sm font-medium">{t.fields.active}</label>
+              </div>
             </div>
-            <div className="flex items-center space-x-2 pt-6">
-              <input
-                type="checkbox"
-                id="isActive"
-                checked={formData.isActive !== false}
-                onChange={(e) => setFormData({...formData, isActive: e.target.checked})}
-                className="rounded"
-              />
-              <label htmlFor="isActive" className="text-sm font-medium">{t.fields.active}</label>
-            </div>
-          </div>
+          )}
         </div>
         
         <DialogFooter>

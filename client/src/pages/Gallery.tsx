@@ -1,13 +1,50 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Menu, X, Sparkles } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Menu, X, Sparkles, Loader2, Image as ImageIcon } from "lucide-react";
 import { Link } from "wouter";
 import logoPath from "@assets/image_1752511415001.png";
 import { useLanguage } from "@/contexts/LanguageContext";
+import type { Gallery as GalleryItem } from "@shared/schema";
+
+// Helper function to convert Google Drive URLs to direct image URLs
+const convertGoogleDriveUrl = (url: string | null): string => {
+  if (!url) return '';
+  
+  // If it's already a direct Google Drive URL, return as is
+  if (url.includes('drive.google.com/uc')) {
+    return url;
+  }
+
+  // Extract the file ID from the sharing URL
+  const match = url.match(/\/d\/(.*?)\/view/);
+  if (match && match[1]) {
+    return `https://drive.google.com/uc?export=view&id=${match[1]}`;
+  }
+
+  return url;
+};
+
+// Helper function to get the appropriate image URL (proxy for Google Drive)
+const getImageUrl = (imageSrc: string): string => {
+  if (!imageSrc) return '/api/placeholder-image';
+  
+  const convertedUrl = convertGoogleDriveUrl(imageSrc);
+  
+  // If it's a Google Drive URL, use our proxy
+  if (convertedUrl.includes('drive.google.com')) {
+    return `/api/proxy-image?url=${encodeURIComponent(convertedUrl)}`;
+  }
+  
+  return convertedUrl;
+};
 
 export const Gallery = (): JSX.Element => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [galleryItems, setGalleryItems] = useState<GalleryItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const { currentLanguage, setCurrentLanguage } = useLanguage();
 
   // Translation content
@@ -45,6 +82,38 @@ export const Gallery = (): JSX.Element => {
   };
 
   const t = translations[currentLanguage];
+
+  // Fetch gallery items from API
+  useEffect(() => {
+    const fetchGalleryItems = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch('/api/gallery');
+        if (response.ok) {
+          const data = await response.json();
+          // Only show active items and sort by sortOrder
+          const activeItems = data
+            .filter((item: GalleryItem) => item.isActive !== false)
+            .sort((a: GalleryItem, b: GalleryItem) => (a.sortOrder || 0) - (b.sortOrder || 0));
+          setGalleryItems(activeItems);
+        }
+      } catch (error) {
+        console.error('Failed to fetch gallery items:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchGalleryItems();
+  }, []);
+
+  // Get unique categories
+  const categories = ['all', ...Array.from(new Set(galleryItems.map(item => item.category).filter((cat): cat is string => Boolean(cat))))];
+
+  // Filter items by category
+  const filteredItems = selectedCategory === 'all' 
+    ? galleryItems 
+    : galleryItems.filter(item => item.category === selectedCategory);
 
   const scrollToSection = (sectionId: string) => {
     if (sectionId === 'pricing') {
@@ -256,17 +325,99 @@ export const Gallery = (): JSX.Element => {
         </div>
       </div>
 
-      {/* Gallery Grid - Empty State */}
+      {/* Gallery Content */}
       <section className="py-20">
         <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center py-12">
-            <p className="text-lg text-beige-600 dark:text-beige-300">
-              {currentLanguage === 'nl' 
-                ? 'Galerij wordt binnenkort bijgewerkt met nieuwe afbeeldingen.'
-                : 'Gallery will be updated with new images soon.'
-              }
-            </p>
-          </div>
+          {loading ? (
+            <div className="flex items-center justify-center py-12">
+              <Loader2 className="w-8 h-8 animate-spin text-beige-500" />
+              <span className="ml-2 text-beige-600 dark:text-beige-300">
+                {currentLanguage === 'nl' ? 'Laden...' : 'Loading...'}
+              </span>
+            </div>
+          ) : galleryItems.length === 0 ? (
+            <div className="text-center py-12">
+              <ImageIcon className="w-16 h-16 text-beige-300 mx-auto mb-4" />
+              <p className="text-lg text-beige-600 dark:text-beige-300">
+                {currentLanguage === 'nl' 
+                  ? 'Galerij wordt binnenkort bijgewerkt met nieuwe afbeeldingen.'
+                  : 'Gallery will be updated with new images soon.'
+                }
+              </p>
+            </div>
+          ) : (
+            <>
+              {/* Category Filter */}
+              {categories.length > 1 && (
+                <div className="mb-8">
+                  <div className="flex flex-wrap justify-center gap-2">
+                    {categories.map((category) => (
+                      <Button
+                        key={category}
+                        variant={selectedCategory === category ? "default" : "outline"}
+                        size="sm"
+                        onClick={() => setSelectedCategory(category)}
+                        className={selectedCategory === category 
+                          ? "bg-beige-500 hover:bg-beige-600" 
+                          : "border-beige-300 text-beige-600 hover:bg-beige-50"
+                        }
+                      >
+                        {category === 'all' 
+                          ? (currentLanguage === 'nl' ? 'Alle' : 'All')
+                          : category
+                        }
+                      </Button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Gallery Grid */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                {filteredItems.map((item) => (
+                  <Card key={item.id} className="bg-white dark:bg-gray-800 hover:shadow-lg transition-shadow duration-300 overflow-hidden group">
+                    <div className="aspect-square relative overflow-hidden">
+                      <img 
+                        src={getImageUrl(item.image || '')}
+                        alt={item.title}
+                        className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                        onError={(e) => {
+                          e.currentTarget.src = '/api/placeholder-image';
+                        }}
+                      />
+                      {item.category && (
+                        <Badge className="absolute top-2 left-2 bg-beige-500 text-white">
+                          {item.category}
+                        </Badge>
+                      )}
+                    </div>
+                    
+                    <CardContent className="p-4">
+                      <h3 className="font-semibold text-lg text-beige-800 dark:text-beige-200 mb-2">
+                        {item.title}
+                      </h3>
+                      {item.description && (
+                        <p className="text-sm text-beige-600 dark:text-beige-300 line-clamp-2">
+                          {item.description}
+                        </p>
+                      )}
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+
+              {filteredItems.length === 0 && selectedCategory !== 'all' && (
+                <div className="text-center py-8">
+                  <p className="text-beige-600 dark:text-beige-300">
+                    {currentLanguage === 'nl' 
+                      ? `Geen afbeeldingen gevonden in categorie "${selectedCategory}".`
+                      : `No images found in category "${selectedCategory}".`
+                    }
+                  </p>
+                </div>
+              )}
+            </>
+          )}
         </div>
       </section>
 

@@ -70,12 +70,14 @@ export const pricing = pgTable("pricing", {
 
 export const homeContent = pgTable("home_content", {
   id: serial("id").primaryKey(),
+  customerId: integer("customer_id"),
   section: text("section").notNull(),
   title: text("title"),
-  content: text("content"),
+  subtitle: text("subtitle"),
+  description: text("description"),
+  content: text("content"), // JSON content as text
   image: text("image"),
   isActive: boolean("is_active").default(true),
-  sortOrder: integer("sort_order").default(0),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });
@@ -121,12 +123,14 @@ export const insertPricingSchema = z.object({
 });
 
 export const insertHomeContentSchema = z.object({
+  customerId: z.number().optional(),
   section: z.string(),
   title: z.string().optional(),
+  subtitle: z.string().optional(),
+  description: z.string().optional(),
   content: z.string().optional(),
   image: z.string().optional(),
   isActive: z.boolean().optional(),
-  sortOrder: z.number().optional(),
 });
 
 // Storage functions

@@ -104,11 +104,12 @@ export type Pricing = typeof pricing.$inferSelect;
 // Home page content table
 export const homeContent = pgTable("home_content", {
   id: serial("id").primaryKey(),
-  section: text("section").notNull().unique(), // hero, about, services, etc.
+  customerId: integer("customer_id"),
+  section: text("section").notNull(), // hero, about, services, etc.
   title: text("title"),
   subtitle: text("subtitle"),
   description: text("description"),
-  content: jsonb("content"), // For flexible content structure
+  content: text("content"), // JSON content as text to match database
   image: text("image"),
   isActive: boolean("is_active").default(true),
   createdAt: timestamp("created_at").defaultNow(),
@@ -116,6 +117,7 @@ export const homeContent = pgTable("home_content", {
 });
 
 export const insertHomeContentSchema = createInsertSchema(homeContent).pick({
+  customerId: true,
   section: true,
   title: true,
   subtitle: true,
