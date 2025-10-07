@@ -10,6 +10,7 @@ import { Products } from "@/pages/Products";
 import { Gallery } from "@/pages/Gallery";
 import { Pricelist } from "@/pages/Pricelist";
 import { Contact } from "@/pages/Contact";
+import { Policy } from "@/pages/Policy";
 import { Admin } from "@/pages/Admin";
 import { Login } from "@/pages/Login";
 import { LanguageProvider } from "@/contexts/LanguageContext";
@@ -55,6 +56,7 @@ function Router() {
         <Route path="/products" component={Products} />
         <Route path="/gallery" component={Gallery} />
         <Route path="/pricelist" component={Pricelist} />
+        <Route path="/klantenbeleid" component={Policy} />
         <Route path="/contact" component={Contact} />
         <Route path="/login" component={Login} />
         <Route path="/admin" component={() => <ProtectedRoute component={Admin} />} />

@@ -21,6 +21,7 @@ export const Contact = (): JSX.Element => {
         gallery: "Galerij",
         pricing: "Prijzen",
         pricelist: "Prijslijst",
+        policy: "Klantenbeleid",
         contact: "Contact",
         bookNow: "AFSPRAAK MAKEN"
       },
@@ -75,6 +76,7 @@ export const Contact = (): JSX.Element => {
         gallery: "Gallery",
         pricing: "Pricing",
         pricelist: "Price List",
+        policy: "Policy",
         contact: "Contact",
         bookNow: "BOOK NOW"
       },
@@ -190,6 +192,11 @@ export const Contact = (): JSX.Element => {
                   {t.nav.products}
                 </button>
               </Link>
+              <Link href="/klantenbeleid">
+                <button className="text-beige-700 dark:text-beige-300 hover:text-beige-500 dark:hover:text-beige-400 font-medium transition-colors duration-200">
+                  {t.nav.policy}
+                </button>
+              </Link>
               <Link href="/contact">
                 <button className="text-beige-500 dark:text-beige-400 font-semibold transition-colors duration-200 border-b-2 border-beige-500">
                   {t.nav.contact}
@@ -277,8 +284,16 @@ export const Contact = (): JSX.Element => {
                   <button 
                     onClick={() => setMobileMenuOpen(false)}
                     className="text-beige-700 dark:text-beige-300 hover:text-beige-500 dark:hover:text-beige-400 font-medium text-left transition-colors duration-200"
+                >
+                  {t.nav.products}
+                </button>
+                </Link>
+                <Link href="/klantenbeleid">
+                  <button 
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="text-beige-700 dark:text-beige-300 hover:text-beige-500 dark:hover:text-beige-400 font-medium text-left transition-colors duration-200"
                   >
-                    {t.nav.products}
+                    {t.nav.policy}
                   </button>
                 </Link>
                 <Link href="/contact">
